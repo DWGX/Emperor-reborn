@@ -2,8 +2,8 @@ package net.minecraft.block;
 
 import java.util.List;
 
-import dev.robin.Client;
-import dev.robin.module.modules.misc.PacketFix;
+import dev.emperor.Client;
+import dev.emperor.module.modules.misc.PacketFix;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;

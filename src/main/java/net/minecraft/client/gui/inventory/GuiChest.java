@@ -1,8 +1,7 @@
 package net.minecraft.client.gui.inventory;
 
-import dev.robin.module.modules.player.ChestStealer;
+import dev.emperor.module.modules.player.ChestStealer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;

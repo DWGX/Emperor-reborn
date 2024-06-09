@@ -1,15 +1,14 @@
 package net.minecraft.inventory;
 
+import lombok.Getter;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerChest
 extends Container {
-    private IInventory lowerChestInventory;
-    private int numRows;
+    @Getter
+    private final IInventory lowerChestInventory;
+    private final int numRows;
 
     public ContainerChest(IInventory playerInventory, IInventory chestInventory, EntityPlayer player) {
         this.lowerChestInventory = chestInventory;
@@ -39,7 +38,7 @@ extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
@@ -61,8 +60,5 @@ extends Container {
         this.lowerChestInventory.closeInventory(playerIn);
     }
 
-    public IInventory getLowerChestInventory() {
-        return this.lowerChestInventory;
-    }
 }
 

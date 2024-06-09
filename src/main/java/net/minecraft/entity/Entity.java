@@ -5,12 +5,12 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-import dev.robin.Client;
-import dev.robin.event.EventManager;
-import dev.robin.event.world.EventStep;
-import dev.robin.event.world.EventStrafe;
-import dev.robin.module.modules.combat.AutoClicker;
-import dev.robin.utils.vec.Vector3d;
+import dev.emperor.Client;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.world.EventStep;
+import dev.emperor.event.world.EventStrafe;
+import dev.emperor.module.modules.combat.AutoClicker;
+import dev.emperor.utils.vec.Vector3d;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;

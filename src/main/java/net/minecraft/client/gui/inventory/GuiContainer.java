@@ -1,19 +1,16 @@
 package net.minecraft.client.gui.inventory;
 
 import com.google.common.collect.Sets;
-import dev.robin.Client;
-import dev.robin.module.modules.player.ChestStealer;
-import dev.robin.utils.render.RenderUtil;
-import dev.robin.utils.render.fontRender.FontManager;
+import dev.emperor.Client;
+import dev.emperor.module.modules.player.ChestStealer;
+import dev.emperor.utils.render.RenderUtil;
+import dev.emperor.utils.render.fontRender.FontManager;
 import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiBrewingStand;
-import net.minecraft.client.gui.inventory.GuiChest;
-import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;

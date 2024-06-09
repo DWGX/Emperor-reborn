@@ -2,8 +2,8 @@ package net.minecraft.client.settings;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import dev.robin.event.EventManager;
-import dev.robin.event.misc.EventKey;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.misc.EventKey;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.client.resources.I18n;

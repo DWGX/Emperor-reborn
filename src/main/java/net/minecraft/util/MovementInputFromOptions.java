@@ -1,9 +1,8 @@
 package net.minecraft.util;
 
-import dev.robin.event.EventManager;
-import dev.robin.event.world.EventMoveInput;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.world.EventMoveInput;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.MovementInput;
 
 public class MovementInputFromOptions
 extends MovementInput {

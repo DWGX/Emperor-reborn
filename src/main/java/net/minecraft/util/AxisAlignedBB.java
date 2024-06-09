@@ -1,10 +1,5 @@
 package net.minecraft.util;
 
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
-
 public class AxisAlignedBB {
     public final double minX;
     public final double minY;
@@ -139,11 +134,11 @@ public class AxisAlignedBB {
     }
 
     public boolean intersectsWith(AxisAlignedBB other) {
-        return other.maxX > this.minX && other.minX < this.maxX ? (other.maxY > this.minY && other.minY < this.maxY ? other.maxZ > this.minZ && other.minZ < this.maxZ : false) : false;
+        return other.maxX > this.minX && other.minX < this.maxX && (other.maxY > this.minY && other.minY < this.maxY && other.maxZ > this.minZ && other.minZ < this.maxZ);
     }
 
     public boolean isVecInside(Vec3 vec) {
-        return vec.xCoord > this.minX && vec.xCoord < this.maxX ? (vec.yCoord > this.minY && vec.yCoord < this.maxY ? vec.zCoord > this.minZ && vec.zCoord < this.maxZ : false) : false;
+        return vec.xCoord > this.minX && vec.xCoord < this.maxX && (vec.yCoord > this.minY && vec.yCoord < this.maxY && vec.zCoord > this.minZ && vec.zCoord < this.maxZ);
     }
 
     public double getAverageEdgeLength() {
@@ -210,21 +205,21 @@ public class AxisAlignedBB {
         if (vec36 == null) {
             return null;
         }
-        EnumFacing enumfacing = null;
+        EnumFacing enumfacing;
         enumfacing = vec36 == vec3 ? EnumFacing.WEST : (vec36 == vec31 ? EnumFacing.EAST : (vec36 == vec32 ? EnumFacing.DOWN : (vec36 == vec33 ? EnumFacing.UP : (vec36 == vec34 ? EnumFacing.NORTH : EnumFacing.SOUTH))));
         return new MovingObjectPosition(vec36, enumfacing);
     }
 
     private boolean isVecInYZ(Vec3 vec) {
-        return vec == null ? false : vec.yCoord >= this.minY && vec.yCoord <= this.maxY && vec.zCoord >= this.minZ && vec.zCoord <= this.maxZ;
+        return vec != null && vec.yCoord >= this.minY && vec.yCoord <= this.maxY && vec.zCoord >= this.minZ && vec.zCoord <= this.maxZ;
     }
 
     private boolean isVecInXZ(Vec3 vec) {
-        return vec == null ? false : vec.xCoord >= this.minX && vec.xCoord <= this.maxX && vec.zCoord >= this.minZ && vec.zCoord <= this.maxZ;
+        return vec != null && vec.xCoord >= this.minX && vec.xCoord <= this.maxX && vec.zCoord >= this.minZ && vec.zCoord <= this.maxZ;
     }
 
     private boolean isVecInXY(Vec3 vec) {
-        return vec == null ? false : vec.xCoord >= this.minX && vec.xCoord <= this.maxX && vec.yCoord >= this.minY && vec.yCoord <= this.maxY;
+        return vec != null && vec.xCoord >= this.minX && vec.xCoord <= this.maxX && vec.yCoord >= this.minY && vec.yCoord <= this.maxY;
     }
 
     public String toString() {

@@ -1,7 +1,7 @@
 package net.minecraft.client.renderer.entity;
 
-import dev.robin.event.EventManager;
-import dev.robin.event.rendering.EventRenderNameTag;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.rendering.EventRenderNameTag;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

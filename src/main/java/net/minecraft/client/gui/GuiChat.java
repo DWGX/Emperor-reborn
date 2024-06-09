@@ -1,12 +1,11 @@
 package net.minecraft.client.gui;
 
 import com.google.common.collect.Lists;
-import dev.robin.Client;
+import dev.emperor.Client;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
+
 import net.minecraft.network.play.client.C14PacketTabComplete;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;

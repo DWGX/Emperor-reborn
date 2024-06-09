@@ -1,10 +1,10 @@
 package net.minecraft.client.entity;
 
 import com.mojang.authlib.GameProfile;
-import dev.robin.Client;
-import dev.robin.event.EventManager;
-import dev.robin.event.world.EventLook;
-import dev.robin.module.modules.render.Camera;
+import dev.emperor.Client;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.world.EventLook;
+import dev.emperor.module.modules.render.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.ImageBufferDownload;

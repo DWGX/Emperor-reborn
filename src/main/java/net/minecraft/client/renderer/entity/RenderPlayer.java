@@ -1,8 +1,8 @@
 package net.minecraft.client.renderer.entity;
 
-import dev.robin.event.EventManager;
-import dev.robin.event.rendering.EventPostRenderPlayer;
-import dev.robin.event.rendering.EventRenderArm;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.rendering.EventPostRenderPlayer;
+import dev.emperor.event.rendering.EventRenderArm;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelPlayer;

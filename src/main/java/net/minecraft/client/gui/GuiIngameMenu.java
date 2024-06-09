@@ -1,6 +1,6 @@
 package net.minecraft.client.gui;
 
-import dev.robin.utils.client.menu.BetterMainMenu;
+import dev.emperor.utils.client.menu.BetterMainMenu;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 import net.minecraft.client.gui.achievement.GuiAchievements;

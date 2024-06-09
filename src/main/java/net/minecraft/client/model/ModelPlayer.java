@@ -1,9 +1,7 @@
 package net.minecraft.client.model;
 
-import dev.robin.Client;
-import dev.robin.module.modules.render.Skeletal;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelRenderer;
+import dev.emperor.Client;
+import dev.emperor.module.modules.render.Skeletal;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

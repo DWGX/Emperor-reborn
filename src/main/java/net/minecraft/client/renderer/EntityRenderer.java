@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
-import dev.robin.event.EventManager;
-import dev.robin.event.rendering.EventRender3D;
-import dev.robin.utils.client.menu.BetterMainMenu;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.rendering.EventRender3D;
+import dev.emperor.utils.client.menu.BetterMainMenu;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;

@@ -1,6 +1,6 @@
 package net.minecraftforge.client.model;
 
-import dev.robin.utils.waveycapes.util.Matrix4f;
+import dev.emperor.utils.waveycapes.util.Matrix4f;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class TRSRTransformation
@@ -14,7 +14,7 @@ public class TRSRTransformation
     {
         return false;
     }
-    public static boolean isInteger(dev.robin.utils.Matrix4f matrix)
+    public static boolean isInteger(dev.emperor.utils.Matrix4f matrix)
     {
         return false;
     }

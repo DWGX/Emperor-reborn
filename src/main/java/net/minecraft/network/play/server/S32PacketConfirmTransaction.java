@@ -1,6 +1,6 @@
 package net.minecraft.network.play.server;
 
-import dev.robin.module.modules.misc.Disabler;
+import dev.emperor.module.modules.misc.Disabler;
 import java.io.IOException;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;

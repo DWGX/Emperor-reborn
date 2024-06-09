@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import dev.robin.Client;
-import dev.robin.event.EventManager;
-import dev.robin.event.api.events.Event;
-import dev.robin.event.world.EventJump;
-import dev.robin.module.modules.misc.PacketFix;
+import dev.emperor.Client;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.api.events.Event;
+import dev.emperor.event.world.EventJump;
+import dev.emperor.module.modules.misc.PacketFix;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

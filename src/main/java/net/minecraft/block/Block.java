@@ -3,10 +3,10 @@ package net.minecraft.block;
 import java.util.List;
 import java.util.Random;
 
-import dev.robin.event.EventManager;
-import dev.robin.event.misc.EventCollideWithBlock;
-import dev.robin.event.rendering.EventBlockRenderSide;
-import dev.robin.module.modules.render.XRay;
+import dev.emperor.event.EventManager;
+import dev.emperor.event.misc.EventCollideWithBlock;
+import dev.emperor.event.rendering.EventBlockRenderSide;
+import dev.emperor.module.modules.render.XRay;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;

@@ -1,10 +1,7 @@
 package net.minecraft.client.gui;
 
-import dev.robin.utils.SmoothScrollingEverywhere;
+import dev.emperor.utils.SmoothScrollingEverywhere;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiResourcePackList;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;

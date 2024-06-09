@@ -1,11 +1,8 @@
 package net.minecraft.client.gui;
 
-import dev.robin.utils.client.menu.BetterMainMenu;
+import dev.emperor.utils.client.menu.BetterMainMenu;
 import java.io.IOException;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiYesNo;
-import net.minecraft.client.gui.GuiYesNoCallback;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.EnumChatFormatting;
