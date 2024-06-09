@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="client">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/client/api-4.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/viaback.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/asm-commons-9.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/asm-9.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/viaver.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/fastjson-1.2.79.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/ViaRewind-3.0.6-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/lombok.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/annotations-1.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/ViaSnakeYaml-1.30.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/asm-tree-9.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/discord-rpc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/jsr305-3.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/annotations-18.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/config-1.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/checker-3.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/Fastreflection.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/ViaRewind.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/FaithsLWJGL.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/client/json-20220924.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
