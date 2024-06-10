@@ -16,7 +16,7 @@ import net.minecraft.util.BlockPos;
 
 public class NoWeb
 extends Module {
-    private final ModeValue<noWebMode> modeValue = new ModeValue("Mode", (Enum[])noWebMode.values(), (Enum)noWebMode.Grim);
+    private final ModeValue<noWebMode> modeValue = new ModeValue("Mode", noWebMode.values(), noWebMode.Grim);
 
     public NoWeb() {
         super("NoWeb", Category.Movement);
@@ -35,11 +35,11 @@ extends Module {
         if (e.isPost()) {
             return;
         }
-        this.setSuffix(((noWebMode)((Object)this.modeValue.getValue())).name());
+        this.setSuffix(this.modeValue.getValue().name());
         if (!NoWeb.mc.thePlayer.isInWeb) {
             return;
         }
-        switch ((noWebMode)((Object)this.modeValue.getValue())) {
+        switch ((noWebMode) this.modeValue.getValue()) {
             case Vanilla: {
                 NoWeb.mc.thePlayer.isInWeb = false;
                 break;
@@ -80,12 +80,12 @@ extends Module {
         }
     }
 
-    private static enum noWebMode {
+    private enum noWebMode {
         Vanilla,
         Grim,
         AAC,
         LowAAC,
-        Rewind;
+        Rewind
 
     }
 }

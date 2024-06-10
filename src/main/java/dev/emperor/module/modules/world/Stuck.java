@@ -54,7 +54,7 @@ extends Module {
 
     @Override
     public void onDisable() {
-        if (((Boolean)this.antiSB.getValue()).booleanValue() && !Stuck.mc.thePlayer.onGround) {
+        if (this.antiSB.getValue() && !Stuck.mc.thePlayer.onGround) {
             NotificationManager.post(NotificationType.WARNING, "Stuck", "You can't disable this module now!");
             this.setState(true);
         }
@@ -62,8 +62,7 @@ extends Module {
 
     @EventTarget
     public void onPacket(EventPacketSend event) {
-        if (event.getPacket() instanceof C08PacketPlayerBlockPlacement) {
-            C08PacketPlayerBlockPlacement packet = (C08PacketPlayerBlockPlacement)event.getPacket();
+        if (event.getPacket() instanceof C08PacketPlayerBlockPlacement packet) {
             Vector2f current = new Vector2f(Stuck.mc.thePlayer.rotationYaw, Stuck.mc.thePlayer.rotationPitch);
             float f = Stuck.mc.gameSettings.mouseSensitivity * 0.6f + 0.2f;
             float gcd = f * f * f * 1.2f;

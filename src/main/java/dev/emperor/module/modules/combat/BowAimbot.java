@@ -74,9 +74,9 @@ extends Module {
 
     private EntityLivingBase getTarget() {
         Stream<EntityPlayer> stream = BowAimbot.mc.theWorld.playerEntities.stream().filter(e -> !Teams.isSameTeam(e)).filter(e -> !AntiBot.isServerBot(e)).filter(BowAimbot.mc.thePlayer::canEntityBeSeen).filter(e -> BowAimbot.isFovInRange(e, fov.getValue().floatValue()));
-        if (((PRIORITY)((Object)priority.getValue())).name().equals("Range")) {
+        if (priority.getValue().name().equals("Range")) {
             stream = stream.sorted(Comparator.comparingDouble(e -> e.getDistanceToEntity(BowAimbot.mc.thePlayer)));
-        } else if (((PRIORITY)((Object)priority.getValue())).name().equals("Angle")) {
+        } else if (priority.getValue().name().equals("Angle")) {
             stream = stream.sorted(Comparator.comparingDouble(RotationUtil::getBowRot));
         }
         List list = stream.collect(Collectors.toList());
@@ -89,12 +89,12 @@ extends Module {
     static {
         fov = new NumberValue("FoV", 180.0, 10.0, 360.0, 10.0);
         range = new NumberValue("Range", 100.0, 1.0, 200.0, 10.0);
-        priority = new ModeValue("Priority", (Enum[])PRIORITY.values(), (Enum)PRIORITY.Angle);
+        priority = new ModeValue("Priority", PRIORITY.values(), PRIORITY.Angle);
     }
 
-    private static enum PRIORITY {
+    private enum PRIORITY {
         Angle,
-        Range;
+        Range
 
     }
 }

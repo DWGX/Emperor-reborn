@@ -18,7 +18,7 @@ extends Module {
     @EventTarget
     public void onTick(EventTick e) {
         if (FastPlace.mc.thePlayer.getHeldItem().getItem() instanceof ItemBlock) {
-            FastPlace.mc.rightClickDelayTimer = Math.min(0, ((Double)this.ticks.getValue()).intValue());
+            FastPlace.mc.rightClickDelayTimer = Math.min(0, this.ticks.getValue().intValue());
         }
     }
 }

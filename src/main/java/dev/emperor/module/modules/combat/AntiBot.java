@@ -31,9 +31,9 @@ extends Module {
     private static final BoolValue health = new BoolValue("Health", false);
     private static final BoolValue hytGetNames = new BoolValue("HytGetName", false);
     private final BoolValue tips = new BoolValue("HytGetNameTips", false);
-    private static final ModeValue<hytGetNameMode> hytGetNameModes = new ModeValue("HytGetNameMode", (Enum[])hytGetNameMode.values(), (Enum)hytGetNameMode.HytBedWars4v4);
-    private static final List<Integer> groundBotList = new ArrayList<Integer>();
-    private static final List<String> playerName = new ArrayList<String>();
+    private static final ModeValue<hytGetNameMode> hytGetNameModes = new ModeValue("HytGetNameMode", hytGetNameMode.values(), hytGetNameMode.HytBedWars4v4);
+    private static final List<Integer> groundBotList = new ArrayList<>();
+    private static final List<String> playerName = new ArrayList<>();
 
     public AntiBot() {
         super("AntiBot", Category.Combat);
@@ -55,15 +55,14 @@ extends Module {
             return;
         }
         Packet<?> packet = event.getPacket();
-        if (event.getPacket() instanceof S14PacketEntity && ((Boolean)ground.getValue()).booleanValue() && (entity = ((S14PacketEntity)event.getPacket()).getEntity(AntiBot.mc.theWorld)) instanceof EntityPlayer && ((S14PacketEntity)event.getPacket()).onGround && !groundBotList.contains(entity.getEntityId())) {
+        if (event.getPacket() instanceof S14PacketEntity && ground.getValue() && (entity = ((S14PacketEntity)event.getPacket()).getEntity(AntiBot.mc.theWorld)) instanceof EntityPlayer && ((S14PacketEntity)event.getPacket()).onGround && !groundBotList.contains(entity.getEntityId())) {
             groundBotList.add(entity.getEntityId());
         }
-        if (((Boolean)hytGetNames.getValue()).booleanValue() && packet instanceof S02PacketChat) {
-            S02PacketChat s02PacketChat = (S02PacketChat)packet;
+        if (hytGetNames.getValue() && packet instanceof S02PacketChat s02PacketChat) {
             if (s02PacketChat.getChatComponent().getUnformattedText().contains("\u83b7\u5f97\u80dc\u5229!") || s02PacketChat.getChatComponent().getUnformattedText().contains("\u6e38\u620f\u5f00\u59cb ...")) {
                 this.clearAll();
             }
-            switch ((hytGetNameMode)((Object)hytGetNameModes.getValue())) {
+            switch (hytGetNameModes.getValue()) {
                 case HytBedWars4v4: 
                 case HytBedWars1v1: 
                 case HytBedWars32: {
@@ -72,7 +71,7 @@ extends Module {
                     Matcher matcher2 = Pattern.compile("\u8d77\u5e8a\u6218\u4e89>> (.*?) (\\((((.*?) \u6b7b\u4e86!)))").matcher(s02PacketChat.chatComponent.getUnformattedText());
                     if ((matcher.find() && !s02PacketChat.chatComponent.getUnformattedText().contains(": \u8d77\u5e8a\u6218\u4e89>>") || !s02PacketChat.chatComponent.getUnformattedText().contains(": \u6740\u6b7b\u4e86")) && !(name = matcher.group(1).trim()).isEmpty()) {
                         playerName.add(name);
-                        if (((Boolean)this.tips.getValue()).booleanValue()) {
+                        if (this.tips.getValue()) {
                             DebugUtil.log("\u00a78[\u00a7c\u00a7l" + Client.NAME + "Tips\u00a78]\u00a7c\u00a7dAddBot\uff1a" + name);
                         }
                         String finalName = name;
@@ -80,7 +79,7 @@ extends Module {
                             try {
                                 Thread.sleep(6000L);
                                 playerName.remove(finalName);
-                                if (((Boolean)this.tips.getValue()).booleanValue()) {
+                                if (this.tips.getValue()) {
                                     DebugUtil.log("\u00a78[\u00a7c\u00a7l" + Client.NAME + "Tips\u00a78]\u00a7c\u00a7dRemovedBot\uff1a" + finalName);
                                 }
                             }
@@ -91,7 +90,7 @@ extends Module {
                     }
                     if ((!matcher2.find() || s02PacketChat.chatComponent.getUnformattedText().contains(": \u8d77\u5e8a\u6218\u4e89>>")) && s02PacketChat.chatComponent.getUnformattedText().contains(": \u6740\u6b7b\u4e86") || (name = matcher2.group(1).trim()).isEmpty()) break;
                     playerName.add(name);
-                    if (((Boolean)this.tips.getValue()).booleanValue()) {
+                    if (this.tips.getValue()) {
                         DebugUtil.log("\u00a78[\u00a7c\u00a7l" + Client.NAME + "Tips\u00a78]\u00a7c\u00a7dAddBot\uff1a" + name);
                     }
                     String finalName1 = name;
@@ -99,7 +98,7 @@ extends Module {
                         try {
                             Thread.sleep(6000L);
                             playerName.remove(finalName1);
-                            if (((Boolean)this.tips.getValue()).booleanValue()) {
+                            if (this.tips.getValue()) {
                                 DebugUtil.log("\u00a78[\u00a7c\u00a7l" + Client.NAME + "Tips\u00a78]\u00a7c\u00a7dRemovedBot\uff1a" + finalName1);
                             }
                         }
@@ -115,7 +114,7 @@ extends Module {
                     Matcher matcher2 = Pattern.compile("\u73a9\u5bb6 (.*?)\u6b7b\u4e86\uff01").matcher(s02PacketChat.chatComponent.getUnformattedText());
                     if ((matcher.find() && !s02PacketChat.chatComponent.getUnformattedText().contains(": \u51fb\u8d25\u4e86") || !s02PacketChat.chatComponent.getUnformattedText().contains(": \u73a9\u5bb6 ")) && !(name = matcher.group(1).trim()).isEmpty()) {
                         playerName.add(name);
-                        if (((Boolean)this.tips.getValue()).booleanValue()) {
+                        if (this.tips.getValue()) {
                             DebugUtil.log("\u00a78[\u00a7c\u00a7l" + Client.NAME + "Tips\u00a78]\u00a7c\u00a7dAddBot\uff1a" + name);
                         }
                         String finalName = name;
@@ -123,7 +122,7 @@ extends Module {
                             try {
                                 Thread.sleep(10000L);
                                 playerName.remove(finalName);
-                                if (((Boolean)this.tips.getValue()).booleanValue()) {
+                                if (this.tips.getValue()) {
                                     DebugUtil.log("\u00a78[\u00a7c\u00a7l" + Client.NAME + "Tips\u00a78]\u00a7c\u00a7dRemovedBot\uff1a" + finalName);
                                 }
                             }
@@ -154,37 +153,37 @@ extends Module {
 
     public static boolean isServerBot(Entity entity) {
         if (Objects.requireNonNull(Client.instance.moduleManager.getModule(AntiBot.class)).getState() && entity instanceof EntityPlayer) {
-            if (((Boolean)hytGetNames.getValue()).booleanValue() && playerName.contains(entity.getName())) {
+            if (hytGetNames.getValue() && playerName.contains(entity.getName())) {
                 return true;
             }
-            if (((Boolean)height.getValue()).booleanValue() && ((double)entity.height <= 0.5 || ((EntityPlayer)entity).isPlayerSleeping() || entity.ticksExisted < 80)) {
+            if (height.getValue() && ((double)entity.height <= 0.5 || ((EntityPlayer)entity).isPlayerSleeping() || entity.ticksExisted < 80)) {
                 return true;
             }
-            if (((Boolean)dead.getValue()).booleanValue() && entity.isDead) {
+            if (dead.getValue() && entity.isDead) {
                 return true;
             }
-            if (((Boolean)health.getValue()).booleanValue() && ((EntityPlayer)entity).getHealth() == 0.0f) {
+            if (health.getValue() && ((EntityPlayer)entity).getHealth() == 0.0f) {
                 return true;
             }
-            if (((Boolean)sleep.getValue()).booleanValue() && ((EntityPlayer)entity).isPlayerSleeping()) {
+            if (sleep.getValue() && ((EntityPlayer)entity).isPlayerSleeping()) {
                 return true;
             }
-            if (((Boolean)entityID.getValue()).booleanValue() && (entity.getEntityId() >= 1000000000 || entity.getEntityId() <= -1)) {
+            if (entityID.getValue() && (entity.getEntityId() >= 1000000000 || entity.getEntityId() <= -1)) {
                 return true;
             }
-            if (((Boolean)ground.getValue()).booleanValue() && !groundBotList.contains(entity.getEntityId())) {
+            if (ground.getValue() && !groundBotList.contains(entity.getEntityId())) {
                 return true;
             }
-            return (Boolean)noArmor.getValue() != false && ((EntityPlayer)entity).inventory.armorInventory[0] == null && ((EntityPlayer)entity).inventory.armorInventory[1] == null && ((EntityPlayer)entity).inventory.armorInventory[2] == null && ((EntityPlayer)entity).inventory.armorInventory[3] == null;
+            return noArmor.getValue() && ((EntityPlayer)entity).inventory.armorInventory[0] == null && ((EntityPlayer)entity).inventory.armorInventory[1] == null && ((EntityPlayer)entity).inventory.armorInventory[2] == null && ((EntityPlayer)entity).inventory.armorInventory[3] == null;
         }
         return false;
     }
 
-    public static enum hytGetNameMode {
+    public enum hytGetNameMode {
         HytBedWars4v4,
         HytBedWars1v1,
         HytBedWars32,
-        HytBedWars16;
+        HytBedWars16
 
     }
 }

@@ -28,8 +28,8 @@ import org.lwjgl.input.Keyboard;
 
 public class AutoClip
 extends Module {
-    private final ModeValue<mode> modeValue = new ModeValue("Mode", (Enum[])mode.values(), (Enum)mode.Tick);
-    private final ModeValue<upmpdes> upMode = new ModeValue("UP Mode", (Enum[])upmpdes.values(), (Enum)upmpdes.SetPosition);
+    private final ModeValue<mode> modeValue = new ModeValue("Mode", mode.values(), mode.Tick);
+    private final ModeValue<upmpdes> upMode = new ModeValue("UP Mode", upmpdes.values(), upmpdes.SetPosition);
     private final NumberValue high = new NumberValue("High", 2.0, 1.0, 20.0, 1.0);
     private final NumberValue flySpeed = new NumberValue("Fly Speed", 2.0, 1.0, 20.0, 1.0);
     private final NumberValue delay = new NumberValue("Delay", 50.0, 1.0, 2000.0, 1.0);
@@ -77,7 +77,7 @@ extends Module {
     public void onMotion(EventMotion e) {
         if (e.isPre()) {
             if (this.modeValue.is("Tick") && AutoClip.mc.thePlayer.ticksExisted <= 2) {
-                if (((Boolean)this.reSize.getValue()).booleanValue()) {
+                if (this.reSize.getValue().booleanValue()) {
                     AutoClip.mc.displayWidth = 800;
                     AutoClip.mc.displayHeight = 600;
                 }
@@ -91,10 +91,10 @@ extends Module {
                     this.teleporting = false;
                 }
             }
-            if (((Boolean)this.flyValue.getValue()).booleanValue()) {
+            if (this.flyValue.getValue().booleanValue()) {
                 if (AutoClip.mc.thePlayer.capabilities.allowFlying) {
                     if (this.shouldFly) {
-                        double vanillaSpeed = (Double)this.flySpeed.getValue();
+                        double vanillaSpeed = this.flySpeed.getValue();
                         AutoClip.mc.thePlayer.motionY = 0.0;
                         AutoClip.mc.thePlayer.motionX = 0.0;
                         AutoClip.mc.thePlayer.motionZ = 0.0;
@@ -111,15 +111,15 @@ extends Module {
         BlinkUtils.setBlinkState(false, false, true, false, false, false, false, false, false, false, false);
         switch (this.upMode.get()) {
             case SetPosition: {
-                AutoClip.mc.thePlayer.setPosition(AutoClip.mc.thePlayer.posX, AutoClip.mc.thePlayer.posY + (Double)this.high.getValue(), AutoClip.mc.thePlayer.posZ);
+                AutoClip.mc.thePlayer.setPosition(AutoClip.mc.thePlayer.posX, AutoClip.mc.thePlayer.posY + this.high.getValue(), AutoClip.mc.thePlayer.posZ);
                 break;
             }
             case SetPositionRotation: {
-                AutoClip.mc.thePlayer.setPositionAndRotation(AutoClip.mc.thePlayer.posX, AutoClip.mc.thePlayer.posY + (Double)this.high.getValue(), AutoClip.mc.thePlayer.posZ, AutoClip.mc.thePlayer.rotationYaw, AutoClip.mc.thePlayer.rotationPitch);
+                AutoClip.mc.thePlayer.setPositionAndRotation(AutoClip.mc.thePlayer.posX, AutoClip.mc.thePlayer.posY + this.high.getValue(), AutoClip.mc.thePlayer.posZ, AutoClip.mc.thePlayer.rotationYaw, AutoClip.mc.thePlayer.rotationPitch);
                 break;
             }
             case SetPositionRotation2: {
-                AutoClip.mc.thePlayer.setPositionAndRotation2(AutoClip.mc.thePlayer.posX, AutoClip.mc.thePlayer.posY + (Double)this.high.getValue(), AutoClip.mc.thePlayer.posZ, AutoClip.mc.thePlayer.rotationYaw, AutoClip.mc.thePlayer.rotationPitch, 3, true);
+                AutoClip.mc.thePlayer.setPositionAndRotation2(AutoClip.mc.thePlayer.posX, AutoClip.mc.thePlayer.posY + this.high.getValue(), AutoClip.mc.thePlayer.posZ, AutoClip.mc.thePlayer.rotationYaw, AutoClip.mc.thePlayer.rotationPitch, 3, true);
             }
         }
         BlinkUtils.setBlinkState(true, true, false, false, false, false, false, false, false, false, false);
@@ -147,7 +147,7 @@ extends Module {
                 return;
             }
             if (s45.getMessage().getUnformattedText().equals("\u00a7a\u6218\u6597\u5f00\u59cb...")) {
-                if (((Boolean)this.reSize.getValue()).booleanValue()) {
+                if (this.reSize.getValue().booleanValue()) {
                     AutoClip.mc.displayWidth = 800;
                     AutoClip.mc.displayHeight = 600;
                 }
@@ -162,21 +162,21 @@ extends Module {
                         AutoClip.this.teleporting = false;
                     }
                 };
-                timer.schedule(task, ((Double)this.delay.getValue()).intValue());
+                timer.schedule(task, this.delay.getValue().intValue());
             }
         }
     }
 
-    public static enum upmpdes {
+    public enum upmpdes {
         SetPosition,
         SetPositionRotation,
-        SetPositionRotation2;
+        SetPositionRotation2
 
     }
 
-    public static enum mode {
+    public enum mode {
         Delay,
-        Tick;
+        Tick
 
     }
 }

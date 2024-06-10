@@ -11,7 +11,7 @@ import net.minecraft.network.play.client.C0BPacketEntityAction;
 
 public class SuperKnockback
 extends Module {
-    private final ModeValue<KnockBackMode> modeValue = new ModeValue("Mode", (Enum[])KnockBackMode.values(), (Enum)KnockBackMode.Vanilla);
+    private final ModeValue<KnockBackMode> modeValue = new ModeValue("Mode", KnockBackMode.values(), KnockBackMode.Vanilla);
     private final BoolValue onlyMoveValue = new BoolValue("OnlyMove", true);
     private final BoolValue onlyGroundValue = new BoolValue("OnlyGround", false);
 
@@ -21,10 +21,10 @@ extends Module {
 
     @EventTarget
     public void onAttack(EventAttack event) {
-        if (!MoveUtil.isMoving() && ((Boolean)this.onlyMoveValue.getValue()).booleanValue() || !SuperKnockback.mc.thePlayer.onGround && ((Boolean)this.onlyGroundValue.getValue()).booleanValue()) {
+        if (!MoveUtil.isMoving() && this.onlyMoveValue.getValue().booleanValue() || !SuperKnockback.mc.thePlayer.onGround && this.onlyGroundValue.getValue().booleanValue()) {
             return;
         }
-        switch ((KnockBackMode)((Object)this.modeValue.getValue())) {
+        switch (this.modeValue.getValue()) {
             case Vanilla: {
                 if (SuperKnockback.mc.thePlayer.isSprinting()) {
                     mc.getNetHandler().addToSendQueue(new C0BPacketEntityAction(SuperKnockback.mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
@@ -63,10 +63,10 @@ extends Module {
         }
     }
 
-    public static enum KnockBackMode {
+    public enum KnockBackMode {
         Vanilla,
         SneakPacket,
-        ExtraPacket;
+        ExtraPacket
 
     }
 }

@@ -38,23 +38,23 @@ extends Value<Integer> {
             return new float[]{0.0f, 0.0f, 0.0f};
         }
         float[] hsbValues = new float[3];
-        int cMax = Math.max((Integer)this.value >>> 16 & 0xFF, (Integer)this.value >>> 8 & 0xFF);
-        if (((Integer)this.value & 0xFF) > cMax) {
-            cMax = (Integer)this.value & 0xFF;
+        int cMax = Math.max(this.value >>> 16 & 0xFF, this.value >>> 8 & 0xFF);
+        if ((this.value & 0xFF) > cMax) {
+            cMax = this.value & 0xFF;
         }
-        int cMin = Math.min((Integer)this.value >>> 16 & 0xFF, (Integer)this.value >>> 8 & 0xFF);
-        if (((Integer)this.value & 0xFF) < cMin) {
-            cMin = (Integer)this.value & 0xFF;
+        int cMin = Math.min(this.value >>> 16 & 0xFF, this.value >>> 8 & 0xFF);
+        if ((this.value & 0xFF) < cMin) {
+            cMin = this.value & 0xFF;
         }
         float brightness = (float)cMax / 255.0f;
         float f = saturation = cMax != 0 ? (float)(cMax - cMin) / (float)cMax : 0.0f;
         if (saturation == 0.0f) {
             hue = 0.0f;
         } else {
-            float redC = (float)(cMax - ((Integer)this.value >>> 16 & 0xFF)) / (float)(cMax - cMin);
-            float greenC = (float)(cMax - ((Integer)this.value >>> 8 & 0xFF)) / (float)(cMax - cMin);
-            float blueC = (float)(cMax - ((Integer)this.value & 0xFF)) / (float)(cMax - cMin);
-            hue = (((Integer)this.value >>> 16 & 0xFF) == cMax ? blueC - greenC : (((Integer)this.value >>> 8 & 0xFF) == cMax ? 2.0f + redC - blueC : 4.0f + greenC - redC)) / 6.0f;
+            float redC = (float)(cMax - (this.value >>> 16 & 0xFF)) / (float)(cMax - cMin);
+            float greenC = (float)(cMax - (this.value >>> 8 & 0xFF)) / (float)(cMax - cMin);
+            float blueC = (float)(cMax - (this.value & 0xFF)) / (float)(cMax - cMin);
+            hue = ((this.value >>> 16 & 0xFF) == cMax ? blueC - greenC : ((this.value >>> 8 & 0xFF) == cMax ? 2.0f + redC - blueC : 4.0f + greenC - redC)) / 6.0f;
             if (hue < 0.0f) {
                 hue += 1.0f;
             }

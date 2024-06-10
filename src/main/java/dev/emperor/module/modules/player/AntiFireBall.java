@@ -33,25 +33,25 @@ extends Module {
 
     @EventTarget
     public void onMotion(EventMotion event) {
-        if (((Boolean)this.postValue.getValue()).booleanValue() && event.isPost() || !((Boolean)this.postValue.getValue()).booleanValue() && event.isPre()) {
+        if (this.postValue.getValue().booleanValue() && event.isPost() || !this.postValue.getValue().booleanValue() && event.isPre()) {
             for (Entity entity : AntiFireBall.mc.theWorld.loadedEntityList) {
                 if (!(entity instanceof EntityFireball) || !(AntiFireBall.mc.thePlayer.getDistanceToEntity(entity) < 5.5f) || !this.timerUtil.delay(300.0f)) continue;
                 this.timerUtil.reset();
-                if (((Boolean)this.rotation.getValue()).booleanValue()) {
-                    RotationComponent.setRotations(RotationUtil.getRotationsNonLivingEntity(entity), MathUtil.getRandom(((Double)this.minRotationSpeed.getValue()).intValue(), ((Double)this.maxRotationSpeed.getValue()).intValue()), true);
+                if (this.rotation.getValue().booleanValue()) {
+                    RotationComponent.setRotations(RotationUtil.getRotationsNonLivingEntity(entity), MathUtil.getRandom(this.minRotationSpeed.getValue().intValue(), this.maxRotationSpeed.getValue().intValue()), true);
                 }
-                if (((Boolean)this.sendPostC0FFix.getValue()).booleanValue() && ((Boolean)this.postValue.getValue()).booleanValue()) {
+                if (this.sendPostC0FFix.getValue().booleanValue() && this.postValue.getValue().booleanValue()) {
                     PacketUtil.sendPacketC0F();
                 }
                 PacketUtil.send(new C02PacketUseEntity(entity, C02PacketUseEntity.Action.ATTACK));
-                if (((Boolean)this.noSwing.getValue()).booleanValue()) {
-                    if (((Boolean)this.sendPostC0FFix.getValue()).booleanValue() && ((Boolean)this.postValue.getValue()).booleanValue()) {
+                if (this.noSwing.getValue().booleanValue()) {
+                    if (this.sendPostC0FFix.getValue().booleanValue() && this.postValue.getValue().booleanValue()) {
                         PacketUtil.sendPacketC0F();
                     }
                     PacketUtil.send(new C0APacketAnimation());
                     continue;
                 }
-                if (((Boolean)this.sendPostC0FFix.getValue()).booleanValue() && ((Boolean)this.postValue.getValue()).booleanValue()) {
+                if (this.sendPostC0FFix.getValue().booleanValue() && this.postValue.getValue().booleanValue()) {
                     PacketUtil.sendPacketC0F();
                 }
                 AntiFireBall.mc.thePlayer.swingItem();

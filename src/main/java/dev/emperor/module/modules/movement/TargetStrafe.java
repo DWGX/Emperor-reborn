@@ -43,7 +43,7 @@ import org.lwjgl.compatibility.util.vector.Vector2f;
 
 public final class TargetStrafe
 extends Module {
-    public final ModeValue<RenderMode> renderModeValue = new ModeValue("Mode", (Enum[])RenderMode.values(), (Enum)RenderMode.NORMAL);
+    public final ModeValue<RenderMode> renderModeValue = new ModeValue("Mode", RenderMode.values(), RenderMode.NORMAL);
     public final NumberValue radiusValue = new NumberValue("Radius", 2.0, 0.1, 4.0, 0.1);
     public final NumberValue strafeSpeedValue = new NumberValue("Strafe Speed", 0.15, 0.01, 1.0, 0.05);
     public final BoolValue doTsValue = new BoolValue("Do Strafe", true);
@@ -65,7 +65,7 @@ extends Module {
     private boolean colliding;
     public Point3D currentPoint;
     int flags;
-    private final Predicate<Entity> ENTITY_FILTER = entity -> entity.isEntityAlive() && TargetStrafe.mc.thePlayer.getDistanceSqToEntity((Entity)entity) <= 6.0 && entity != TargetStrafe.mc.thePlayer && AntiBot.isServerBot(entity) && !(entity instanceof EntityArmorStand);
+    private final Predicate<Entity> ENTITY_FILTER = entity -> entity.isEntityAlive() && TargetStrafe.mc.thePlayer.getDistanceSqToEntity(entity) <= 6.0 && entity != TargetStrafe.mc.thePlayer && AntiBot.isServerBot(entity) && !(entity instanceof EntityArmorStand);
 
     public TargetStrafe() {
         super("TargetStrafe", Category.Movement);
@@ -73,7 +73,7 @@ extends Module {
 
     @EventTarget
     public void onMove(EventMoveInput event) {
-        if (!((Boolean)this.doTsValue.getValue()).booleanValue()) {
+        if (!this.doTsValue.getValue().booleanValue()) {
             return;
         }
         if (this.flags != 0) {
@@ -89,7 +89,7 @@ extends Module {
 
     @EventTarget
     public void onJump(EventJump event) {
-        if (!((Boolean)this.doTsValue.getValue()).booleanValue()) {
+        if (!this.doTsValue.getValue().booleanValue()) {
             return;
         }
         if (this.target != null && this.distanceToTarget() <= 3.0) {
@@ -100,7 +100,7 @@ extends Module {
 
     @EventTarget
     public void onStrafe(EventStrafe event) {
-        if (!((Boolean)this.doTsValue.getValue()).booleanValue()) {
+        if (!this.doTsValue.getValue().booleanValue()) {
             return;
         }
         if (this.target != null && this.distanceToTarget() <= 3.0) {
@@ -109,7 +109,7 @@ extends Module {
             if (TargetStrafe.mc.thePlayer.hurtTime != 0) {
                 return;
             }
-            if (TargetStrafe.mc.thePlayer.onGround && ((Boolean)this.AutoJumpValue.getValue()).booleanValue()) {
+            if (TargetStrafe.mc.thePlayer.onGround && this.AutoJumpValue.getValue().booleanValue()) {
                 TargetStrafe.mc.thePlayer.jump();
             }
             float friction = 0.2f;
@@ -122,30 +122,30 @@ extends Module {
         if (this.target == null) {
             return;
         }
-        float yaw = RotationUtil.smooth((Vector2f)RotationUtil.calculate((Vector3d)new Vector3d((double)this.target.posX, (double)this.target.posY, (double)this.target.posZ))).x + 135.0f * (float)(this.left ? -1 : 1);
-        double range = (Double)this.radiusValue.getValue();
+        float yaw = RotationUtil.smooth(RotationUtil.calculate(new Vector3d(this.target.posX, this.target.posY, this.target.posZ))).x + 135.0f * (float)(this.left ? -1 : 1);
+        double range = this.radiusValue.getValue();
         double posX = (double)(-MathHelper.sin((float)Math.toRadians(yaw))) * range + this.target.posX;
         double posZ = (double)MathHelper.cos((float)Math.toRadians(yaw)) * range + this.target.posZ;
-        this.yaw = yaw = RotationUtil.smooth((Vector2f)RotationUtil.calculate((Vector3d)new Vector3d((double)posX, (double)(this.target.posY + (double)this.target.getEyeHeight()), (double)posZ))).x;
+        this.yaw = yaw = RotationUtil.smooth(RotationUtil.calculate(new Vector3d(posX, this.target.posY + (double)this.target.getEyeHeight(), posZ))).x;
     }
 
     @EventTarget
     public void onPacketReceive(EventPacketReceive event) {
-        if (event.getPacket() instanceof S08PacketPlayerPosLook && ((Boolean)this.S08FlagCheckValue.getValue()).booleanValue()) {
-            this.flags = ((Double)this.S08FlagTickValue.getValue()).intValue();
+        if (event.getPacket() instanceof S08PacketPlayerPosLook && this.S08FlagCheckValue.getValue().booleanValue()) {
+            this.flags = this.S08FlagTickValue.getValue().intValue();
         }
     }
 
     @EventTarget
     public void onUpdate(EventUpdate event) {
-        if (!((Boolean)this.doTsValue.getValue()).booleanValue()) {
+        if (!this.doTsValue.getValue().booleanValue()) {
             return;
         }
         this.updateTarget();
-        if (!((Boolean)this.doTsValue.getValue()).booleanValue()) {
+        if (!this.doTsValue.getValue().booleanValue()) {
             return;
         }
-        if (((Boolean)this.S08FlagCheckValue.getValue()).booleanValue() && this.flags > 0) {
+        if (this.S08FlagCheckValue.getValue().booleanValue() && this.flags > 0) {
             --this.flags;
         }
         if (this.flags != 0) {
@@ -218,10 +218,10 @@ extends Module {
             float partialTicks = event.getPartialTicks();
             for (Point3D point : this.currentPoints) {
                 double pointSize = 0.03;
-                int color = this.currentPoint == point ? (Integer)this.activePointColorValue.getValue() : (point.valid ? ((Integer)this.dormantPointColorValue.getValue()).intValue() : ((Integer)this.invalidPointColorValue.getValue()).intValue());
-                double x2 = RenderUtil.interpolate(point.prevX, point.x, (double)partialTicks);
-                double y2 = RenderUtil.interpolate(point.prevY, point.y, (double)partialTicks);
-                double z = RenderUtil.interpolate(point.prevZ, point.z, (double)partialTicks);
+                int color = this.currentPoint == point ? this.activePointColorValue.getValue() : (point.valid ? this.dormantPointColorValue.getValue().intValue() : this.invalidPointColorValue.getValue().intValue());
+                double x2 = RenderUtil.interpolate(point.prevX, point.x, partialTicks);
+                double y2 = RenderUtil.interpolate(point.prevY, point.y, partialTicks);
+                double z = RenderUtil.interpolate(point.prevZ, point.z, partialTicks);
                 AxisAlignedBB bb = new AxisAlignedBB(x2, y2, z, x2 + 0.03, y2 + 0.03, z + 0.03);
                 GLUtil.enableBlending();
                 GLUtil.disableDepth();
@@ -230,9 +230,9 @@ extends Module {
                 double renderX = Minecraft.getMinecraft().getRenderManager().renderPosX;
                 double renderY = Minecraft.getMinecraft().getRenderManager().renderPosY;
                 double renderZ = Minecraft.getMinecraft().getRenderManager().renderPosZ;
-                GL11.glTranslated((double)(-renderX), (double)(-renderY), (double)(-renderZ));
+                GL11.glTranslated(-renderX, -renderY, -renderZ);
                 RenderGlobal.drawSelectionBoundingBox(bb, false, true);
-                GL11.glTranslated((double)renderX, (double)renderY, (double)renderZ);
+                GL11.glTranslated(renderX, renderY, renderZ);
                 GLUtil.disableBlending();
                 GLUtil.enableDepth();
                 GLUtil.enableTexture2D();
@@ -242,14 +242,14 @@ extends Module {
             double x2 = KillAura.getTarget().lastTickPosX + (KillAura.getTarget().posX - KillAura.getTarget().lastTickPosX) * (double)Minecraft.getMinecraft().timer.renderPartialTicks - TargetStrafe.mc.getRenderManager().viewerPosX;
             double y2 = KillAura.getTarget().lastTickPosY + (KillAura.getTarget().posY - KillAura.getTarget().lastTickPosY) * (double)Minecraft.getMinecraft().timer.renderPartialTicks - TargetStrafe.mc.getRenderManager().viewerPosY;
             double z2 = KillAura.getTarget().lastTickPosZ + (KillAura.getTarget().posZ - KillAura.getTarget().lastTickPosZ) * (double)Minecraft.getMinecraft().timer.renderPartialTicks - TargetStrafe.mc.getRenderManager().viewerPosZ;
-            RenderUtil.TScylinder2(KillAura.getTarget(), x2, y2, z2, (Double)this.radiusValue.getValue() - 0.00625, 6.0f, ((Double)this.shapeValue.getValue()).intValue(), new Color(0, 0, 0).getRGB());
-            RenderUtil.TScylinder2(KillAura.getTarget(), x2, y2, z2, (Double)this.radiusValue.getValue() + 0.00625, 6.0f, ((Double)this.shapeValue.getValue()).intValue(), new Color(0, 0, 0).getRGB());
-            if (MoveUtil.isMoving() && KillAura.strict && ((Boolean)this.holdSpaceValue.getValue()).booleanValue() && TargetStrafe.mc.gameSettings.keyBindJump.isKeyDown()) {
-                RenderUtil.drawCircle(KillAura.getTarget(), x2, y2, z2, (Double)this.radiusValue.getValue(), ((Double)this.shapeValue.getValue()).intValue(), 5.0f, (Integer)this.renderColorValue.getValue());
-            } else if (MoveUtil.isMoving() && KillAura.strict && !((Boolean)this.holdSpaceValue.getValue()).booleanValue() && this.canStrafe()) {
-                RenderUtil.drawCircle(KillAura.getTarget(), x2, y2, z2, (Double)this.radiusValue.getValue(), ((Double)this.shapeValue.getValue()).intValue(), 5.0f, (Integer)this.renderColorValue.getValue());
+            RenderUtil.TScylinder2(KillAura.getTarget(), x2, y2, z2, this.radiusValue.getValue() - 0.00625, 6.0f, this.shapeValue.getValue().intValue(), new Color(0, 0, 0).getRGB());
+            RenderUtil.TScylinder2(KillAura.getTarget(), x2, y2, z2, this.radiusValue.getValue() + 0.00625, 6.0f, this.shapeValue.getValue().intValue(), new Color(0, 0, 0).getRGB());
+            if (MoveUtil.isMoving() && KillAura.strict && this.holdSpaceValue.getValue().booleanValue() && TargetStrafe.mc.gameSettings.keyBindJump.isKeyDown()) {
+                RenderUtil.drawCircle(KillAura.getTarget(), x2, y2, z2, this.radiusValue.getValue(), this.shapeValue.getValue().intValue(), 5.0f, this.renderColorValue.getValue());
+            } else if (MoveUtil.isMoving() && KillAura.strict && !this.holdSpaceValue.getValue().booleanValue() && this.canStrafe()) {
+                RenderUtil.drawCircle(KillAura.getTarget(), x2, y2, z2, this.radiusValue.getValue(), this.shapeValue.getValue().intValue(), 5.0f, this.renderColorValue.getValue());
             } else {
-                RenderUtil.drawCircle(KillAura.getTarget(), x2, y2, z2, (Double)this.radiusValue.getValue(), ((Double)this.shapeValue.getValue()).intValue(), 5.0f, new Color(255, 255, 255).getRGB());
+                RenderUtil.drawCircle(KillAura.getTarget(), x2, y2, z2, this.radiusValue.getValue(), this.shapeValue.getValue().intValue(), 5.0f, new Color(255, 255, 255).getRGB());
             }
         }
     }
@@ -275,8 +275,8 @@ extends Module {
     }
 
     private void collectPoints(EntityLivingBase entity) {
-        int size = ((Double)this.pointsValue.getValue()).intValue();
-        double radius = (Double)this.radiusValue.getValue();
+        int size = this.pointsValue.getValue().intValue();
+        double radius = this.radiusValue.getValue();
         this.currentPoints.clear();
         double x2 = entity.posX;
         double y2 = entity.posY;
@@ -316,7 +316,7 @@ extends Module {
             return false;
         }
         boolean bl = active = Minecraft.getMinecraft().thePlayer.movementInput.moveForward != 0.0f;
-        if (((Boolean)this.holdSpaceValue.getValue()).booleanValue()) {
+        if (this.holdSpaceValue.getValue().booleanValue()) {
             return TargetStrafe.mc.gameSettings.keyBindJump.isKeyDown() && active;
         }
         return active;
@@ -326,11 +326,11 @@ extends Module {
         return KillAura.strict && KillAura.target != null && !Minecraft.getMinecraft().thePlayer.isSneaking() && this.keyMode();
     }
 
-    public static enum RenderMode {
+    public enum RenderMode {
         NORMAL,
         POLYGON,
         POINT,
-        OFF;
+        OFF
 
     }
 

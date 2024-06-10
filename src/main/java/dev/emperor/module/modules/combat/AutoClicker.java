@@ -45,16 +45,16 @@ extends Module {
 
     @EventTarget
     public void Tick(EventTick event) {
-        if ((Double)this.minCps.getValue() >= (Double)this.maxCps.getValue()) {
+        if (this.minCps.getValue() >= this.maxCps.getValue()) {
             this.maxCps.setValue(this.minCps.getValue());
         }
-        if ((Double)this.maxCps.getValue() <= (Double)this.minCps.getValue()) {
+        if (this.maxCps.getValue() <= this.minCps.getValue()) {
             this.minCps.setValue(this.maxCps.getValue());
         }
-        if ((Double)this.RminCps.getValue() >= (Double)this.RmaxCps.getValue()) {
+        if (this.RminCps.getValue() >= this.RmaxCps.getValue()) {
             this.RmaxCps.setValue(this.RminCps.getValue());
         }
-        if ((Double)this.RmaxCps.getValue() <= (Double)this.RminCps.getValue()) {
+        if (this.RmaxCps.getValue() <= this.RminCps.getValue()) {
             this.RminCps.setValue(this.RmaxCps.getValue());
         }
     }
@@ -65,7 +65,7 @@ extends Module {
             Minecraft.getMinecraft().thePlayer.swingItem();
             if (Minecraft.getMinecraft().objectMouseOver == null) {
                 if (Minecraft.getMinecraft().playerController.isNotCreative()) {
-                    ReflectionUtil.setFieldValue(Minecraft.getMinecraft(), (Object)10, "leftClickCounter", "field_71429_W");
+                    ReflectionUtil.setFieldValue(Minecraft.getMinecraft(), 10, "leftClickCounter", "field_71429_W");
                 }
             } else {
                 switch (Minecraft.getMinecraft().objectMouseOver.typeOfHit) {
@@ -92,7 +92,7 @@ extends Module {
                     }
                     default: {
                         if (!Minecraft.getMinecraft().playerController.isNotCreative()) break;
-                        ReflectionUtil.setFieldValue(Minecraft.getMinecraft(), (Object)10, "leftClickCounter", "field_71429_W");
+                        ReflectionUtil.setFieldValue(Minecraft.getMinecraft(), 10, "leftClickCounter", "field_71429_W");
                     }
                 }
             }
@@ -105,11 +105,11 @@ extends Module {
         if (!this.state) {
             return;
         }
-        if (AutoClicker.mc.currentScreen == null && Mouse.isButtonDown((int)0)) {
-            if (!((Boolean)this.left.getValue()).booleanValue()) {
+        if (AutoClicker.mc.currentScreen == null && Mouse.isButtonDown(0)) {
+            if (!this.left.getValue().booleanValue()) {
                 return;
             }
-            if (((Boolean)this.weaponOnly.getValue()).booleanValue()) {
+            if (this.weaponOnly.getValue().booleanValue()) {
                 if (AutoClicker.mc.thePlayer.getCurrentEquippedItem() == null) {
                     return;
                 }
@@ -117,14 +117,14 @@ extends Module {
                     return;
                 }
             }
-            if (!((Boolean)this.blockHit.getValue()).booleanValue() && AutoClicker.mc.thePlayer.isUsingItem()) {
+            if (!this.blockHit.getValue().booleanValue() && AutoClicker.mc.thePlayer.isUsingItem()) {
                 return;
             }
-            if (this.shouldAttack(Objects.equals(((Double)this.minCps.getValue()).intValue(), ((Double)this.maxCps.getValue()).intValue()) ? ((Double)this.maxCps.getValue()).intValue() : ThreadLocalRandom.current().nextInt(((Double)this.minCps.getValue()).intValue(), ((Double)this.maxCps.getValue()).intValue()))) {
+            if (this.shouldAttack(Objects.equals(this.minCps.getValue().intValue(), this.maxCps.getValue().intValue()) ? this.maxCps.getValue().intValue() : ThreadLocalRandom.current().nextInt(this.minCps.getValue().intValue(), this.maxCps.getValue().intValue()))) {
                 this.timeUtils.reset();
-                ReflectionUtil.setFieldValue(Minecraft.getMinecraft(), (Object)0, "leftClickCounter", "field_71429_W");
+                ReflectionUtil.setFieldValue(Minecraft.getMinecraft(), 0, "leftClickCounter", "field_71429_W");
                 AutoClicker.clickMouse();
-                if (((Boolean)this.autoUnBlock.getValue()).booleanValue() && Mouse.isButtonDown((int)1) && AutoClicker.mc.thePlayer.getHeldItem() != null && AutoClicker.mc.thePlayer.getHeldItem().getItem() != null && AutoClicker.mc.thePlayer.getHeldItem().getItem() instanceof ItemSword) {
+                if (this.autoUnBlock.getValue().booleanValue() && Mouse.isButtonDown(1) && AutoClicker.mc.thePlayer.getHeldItem() != null && AutoClicker.mc.thePlayer.getHeldItem().getItem() != null && AutoClicker.mc.thePlayer.getHeldItem().getItem() instanceof ItemSword) {
                     if (AutoClicker.mc.thePlayer.isBlocking()) {
                         KeyBinding.setKeyBindState(AutoClicker.mc.gameSettings.keyBindUseItem.getKeyCode(), false);
                         AutoClicker.mc.playerController.onStoppedUsingItem(AutoClicker.mc.thePlayer);
@@ -136,11 +136,11 @@ extends Module {
                 }
             }
         }
-        if (AutoClicker.mc.currentScreen == null && Mouse.isButtonDown((int)1)) {
-            if (!((Boolean)this.right.getValue()).booleanValue()) {
+        if (AutoClicker.mc.currentScreen == null && Mouse.isButtonDown(1)) {
+            if (!this.right.getValue().booleanValue()) {
                 return;
             }
-            if (this.shouldAttack(((Double)this.RminCps.getValue()).intValue() == ((Double)this.RmaxCps.getValue()).intValue() ? ((Double)this.RmaxCps.getValue()).intValue() : ThreadLocalRandom.current().nextInt(((Double)this.RminCps.getValue()).intValue(), ((Double)this.RmaxCps.getValue()).intValue() + 1))) {
+            if (this.shouldAttack(this.RminCps.getValue().intValue() == this.RmaxCps.getValue().intValue() ? this.RmaxCps.getValue().intValue() : ThreadLocalRandom.current().nextInt(this.RminCps.getValue().intValue(), this.RmaxCps.getValue().intValue() + 1))) {
                 this.timeUtils.reset();
                 try {
                     Field rightClickDelay = Minecraft.class.getDeclaredField("field_71467_ac");
@@ -166,8 +166,8 @@ extends Module {
         if (!this.state) {
             return;
         }
-        if (AutoClicker.mc.currentScreen == null && Mouse.isButtonDown((int)0) && (Double)jitter.getValue() > 0.0) {
-            double a = (Double)jitter.getValue() * 0.45;
+        if (AutoClicker.mc.currentScreen == null && Mouse.isButtonDown(0) && jitter.getValue() > 0.0) {
+            double a = jitter.getValue() * 0.45;
             boolean b2 = this.random.nextBoolean();
             Minecraft.getMinecraft().thePlayer.rotationYawHead += AutoClicker.mc.thePlayer.rotationYaw;
             Minecraft.getMinecraft().thePlayer.renderYawOffset += AutoClicker.mc.thePlayer.rotationYaw;

@@ -55,45 +55,45 @@ extends Module {
         if (ChestStealer.mc.thePlayer.openContainer == null) {
             return;
         }
-        if (ChestStealer.mc.thePlayer.openContainer instanceof ContainerFurnace && ((Boolean)this.furnace.getValue()).booleanValue()) {
-            container = (ContainerFurnace)ChestStealer.mc.thePlayer.openContainer;
+        if (ChestStealer.mc.thePlayer.openContainer instanceof ContainerFurnace && this.furnace.getValue().booleanValue()) {
+            container = ChestStealer.mc.thePlayer.openContainer;
             if (this.isFurnaceEmpty((ContainerFurnace)container) && openChestTimer.delay(100.0f) && timer.delay(100.0f)) {
                 ChestStealer.mc.thePlayer.closeScreen();
                 return;
             }
             for (i = 0; i < ((ContainerFurnace)container).tileFurnace.getSizeInventory(); ++i) {
                 if (((ContainerFurnace)container).tileFurnace.getStackInSlot(i) == null || !timer.delay(this.nextDelay)) continue;
-                this.nextDelay = (int)((Double)this.delay.getValue() * MathHelper.getRandomDoubleInRange(0.75, 1.25));
+                this.nextDelay = (int)(this.delay.getValue() * MathHelper.getRandomDoubleInRange(0.75, 1.25));
                 if (new Random().nextInt(100) > 80) continue;
-                ChestStealer.mc.playerController.windowClick(((ContainerFurnace)container).windowId, i, 0, 1, ChestStealer.mc.thePlayer);
+                ChestStealer.mc.playerController.windowClick(container.windowId, i, 0, 1, ChestStealer.mc.thePlayer);
                 timer.reset();
             }
         }
-        if (ChestStealer.mc.thePlayer.openContainer instanceof ContainerBrewingStand && ((Boolean)this.brewingStand.getValue()).booleanValue()) {
-            container = (ContainerBrewingStand)ChestStealer.mc.thePlayer.openContainer;
+        if (ChestStealer.mc.thePlayer.openContainer instanceof ContainerBrewingStand && this.brewingStand.getValue().booleanValue()) {
+            container = ChestStealer.mc.thePlayer.openContainer;
             if (this.isBrewingStandEmpty((ContainerBrewingStand)container) && openChestTimer.delay(100.0f) && timer.delay(100.0f)) {
                 ChestStealer.mc.thePlayer.closeScreen();
                 return;
             }
             for (i = 0; i < ((ContainerBrewingStand)container).tileBrewingStand.getSizeInventory(); ++i) {
                 if (((ContainerBrewingStand)container).tileBrewingStand.getStackInSlot(i) == null || !timer.delay(this.nextDelay)) continue;
-                this.nextDelay = (int)((Double)this.delay.getValue() * MathHelper.getRandomDoubleInRange(0.75, 1.25));
+                this.nextDelay = (int)(this.delay.getValue() * MathHelper.getRandomDoubleInRange(0.75, 1.25));
                 if (new Random().nextInt(100) > 80) continue;
-                ChestStealer.mc.playerController.windowClick(((ContainerBrewingStand)container).windowId, i, 0, 1, ChestStealer.mc.thePlayer);
+                ChestStealer.mc.playerController.windowClick(container.windowId, i, 0, 1, ChestStealer.mc.thePlayer);
                 timer.reset();
             }
         }
-        if (ChestStealer.mc.thePlayer.openContainer instanceof ContainerChest && ((Boolean)this.chest.getValue()).booleanValue() && isChest) {
-            container = (ContainerChest)ChestStealer.mc.thePlayer.openContainer;
+        if (ChestStealer.mc.thePlayer.openContainer instanceof ContainerChest && this.chest.getValue().booleanValue() && isChest) {
+            container = ChestStealer.mc.thePlayer.openContainer;
             if (this.isChestEmpty((ContainerChest)container) && openChestTimer.delay(100.0f) && timer.delay(100.0f)) {
                 ChestStealer.mc.thePlayer.closeScreen();
                 return;
             }
             for (i = 0; i < ((ContainerChest)container).getLowerChestInventory().getSizeInventory(); ++i) {
-                if (((ContainerChest)container).getLowerChestInventory().getStackInSlot(i) == null || !timer.delay(this.nextDelay) || !this.isItemUseful((ContainerChest)container, i) && !((Boolean)this.trash.getValue()).booleanValue()) continue;
-                this.nextDelay = (int)((Double)this.delay.getValue() * MathHelper.getRandomDoubleInRange(0.75, 1.25));
+                if (((ContainerChest)container).getLowerChestInventory().getStackInSlot(i) == null || !timer.delay(this.nextDelay) || !this.isItemUseful((ContainerChest)container, i) && !this.trash.getValue().booleanValue()) continue;
+                this.nextDelay = (int)(this.delay.getValue() * MathHelper.getRandomDoubleInRange(0.75, 1.25));
                 if (new Random().nextInt(100) > 80) continue;
-                ChestStealer.mc.playerController.windowClick(((ContainerChest)container).windowId, i, 0, 1, ChestStealer.mc.thePlayer);
+                ChestStealer.mc.playerController.windowClick(container.windowId, i, 0, 1, ChestStealer.mc.thePlayer);
                 timer.reset();
             }
         }
@@ -101,7 +101,7 @@ extends Module {
 
     private boolean isChestEmpty(ContainerChest c) {
         for (int i = 0; i < c.getLowerChestInventory().getSizeInventory(); ++i) {
-            if (c.getLowerChestInventory().getStackInSlot(i) == null || !this.isItemUseful(c, i) && !((Boolean)this.trash.getValue()).booleanValue()) continue;
+            if (c.getLowerChestInventory().getStackInSlot(i) == null || !this.isItemUseful(c, i) && !this.trash.getValue().booleanValue()) continue;
             return false;
         }
         return true;

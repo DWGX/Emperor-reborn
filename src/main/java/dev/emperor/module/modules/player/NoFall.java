@@ -8,7 +8,7 @@ import dev.emperor.module.values.ModeValue;
 
 public class NoFall
 extends Module {
-    ModeValue<modeEnum> mode = new ModeValue("Mode", (Enum[])modeEnum.values(), (Enum)modeEnum.HypixelSpoof);
+    ModeValue<modeEnum> mode = new ModeValue("Mode", modeEnum.values(), modeEnum.HypixelSpoof);
 
     public NoFall() {
         super("NoFall", Category.Player);
@@ -16,8 +16,8 @@ extends Module {
 
     @EventTarget
     public void onUpdate(EventMotion e) {
-        this.setSuffix(((modeEnum)((Object)this.mode.getValue())).toString());
-        switch ((modeEnum)((Object)this.mode.getValue())) {
+        this.setSuffix(this.mode.getValue().toString());
+        switch (this.mode.getValue()) {
             case HypixelSpoof: {
                 if (NoFall.mc.thePlayer.ticksExisted <= 50 || !(NoFall.mc.thePlayer.fallDistance > 3.0f)) break;
                 e.setOnGround(true);
@@ -30,9 +30,9 @@ extends Module {
         }
     }
 
-    static enum modeEnum {
+    enum modeEnum {
         HypixelSpoof,
-        GroundSpoof;
+        GroundSpoof
 
     }
 }

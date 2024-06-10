@@ -38,7 +38,7 @@ extends Value<Double> {
 
     @Override
     public Double getConfigValue() {
-        return (Double)this.getValue();
+        return this.getValue();
     }
 }
 

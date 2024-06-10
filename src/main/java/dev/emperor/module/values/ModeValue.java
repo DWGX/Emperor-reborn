@@ -26,19 +26,19 @@ extends Value<V> {
     }
 
     public boolean is(String sb) {
-        return ((Enum)this.getValue()).name().equalsIgnoreCase(sb);
+        return this.getValue().name().equalsIgnoreCase(sb);
     }
 
     public void setMode(String mode2) {
         for (V e : this.modes) {
-            if (!((Enum)e).name().equalsIgnoreCase(mode2)) continue;
+            if (!e.name().equalsIgnoreCase(mode2)) continue;
             this.setValue(e);
         }
     }
 
     public boolean isValid(String name) {
         for (V e : this.modes) {
-            if (!((Enum)e).name().equalsIgnoreCase(name)) continue;
+            if (!e.name().equalsIgnoreCase(name)) continue;
             return true;
         }
         return false;
@@ -46,11 +46,11 @@ extends Value<V> {
 
     @Override
     public String getConfigValue() {
-        return ((Enum)this.getValue()).name();
+        return this.getValue().name();
     }
 
     public V get() {
-        return (V)((Enum)this.getValue());
+        return this.getValue();
     }
 }
 

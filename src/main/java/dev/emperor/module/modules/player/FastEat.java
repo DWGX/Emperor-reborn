@@ -18,7 +18,7 @@ import net.minecraft.network.play.client.C03PacketPlayer;
 
 public final class FastEat
 extends Module {
-    public final ModeValue<eatModes> modeValue = new ModeValue("Mode", (Enum[])eatModes.values(), (Enum)eatModes.Grim);
+    public final ModeValue<eatModes> modeValue = new ModeValue("Mode", eatModes.values(), eatModes.Grim);
     private final BoolValue noMoveValue = new BoolValue("NoMove", false);
     private final NumberValue delayValue = new NumberValue("CustomDelay", 0.0, 0.0, 300.0, 1.0);
     private final NumberValue customSpeedValue = new NumberValue("CustomSpeed", 2.0, 1.0, 35.0, 1.0);
@@ -46,7 +46,7 @@ extends Module {
         }
         Item usingItem = FastEat.mc.thePlayer.getItemInUse().getItem();
         if (usingItem instanceof ItemFood || usingItem instanceof ItemBucketMilk || usingItem instanceof ItemPotion && !(FastEat.mc.thePlayer.getHeldItem().getItem() instanceof ItemSword)) {
-            eatModes mode2 = (eatModes)((Object)this.modeValue.getValue());
+            eatModes mode2 = this.modeValue.getValue();
             switch (mode2) {
                 case Instant: {
                     for (int i = 0; i < 35; ++i) {
@@ -88,12 +88,12 @@ extends Module {
                     break;
                 }
                 case CustomDelay: {
-                    FastEat.mc.timer.timerSpeed = ((Double)this.customTimer.getValue()).floatValue();
+                    FastEat.mc.timer.timerSpeed = this.customTimer.getValue().floatValue();
                     this.usedTimer = true;
-                    if (!this.msTimer.hasPassed(((Double)this.delayValue.getValue()).longValue())) {
+                    if (!this.msTimer.hasPassed(this.delayValue.getValue().longValue())) {
                         return;
                     }
-                    for (int i = 0; i < ((Double)this.customSpeedValue.getValue()).intValue(); ++i) {
+                    for (int i = 0; i < this.customSpeedValue.getValue().intValue(); ++i) {
                         mc.getNetHandler().addToSendQueue(new C03PacketPlayer(FastEat.mc.thePlayer.onGround));
                     }
                     this.msTimer.reset();
@@ -107,7 +107,7 @@ extends Module {
         if (FastEat.mc.thePlayer == null || event == null) {
             return;
         }
-        if (!(this.getState() && FastEat.mc.thePlayer.isUsingItem() && ((Boolean)this.noMoveValue.getValue()).booleanValue())) {
+        if (!(this.getState() && FastEat.mc.thePlayer.isUsingItem() && this.noMoveValue.getValue().booleanValue())) {
             return;
         }
         Item usingItem = FastEat.mc.thePlayer.getItemInUse().getItem();
@@ -124,13 +124,13 @@ extends Module {
         }
     }
 
-    public static enum eatModes {
+    public enum eatModes {
         Instant,
         NCP,
         Grim,
         VulCan,
         AAC,
-        CustomDelay;
+        CustomDelay
 
     }
 }

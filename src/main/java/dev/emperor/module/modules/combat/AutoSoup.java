@@ -46,19 +46,19 @@ extends Module {
 
     @EventTarget
     public void onMotion(EventMotion event) {
-        if (((Boolean)this.postValue.getValue()).booleanValue() && event.isPost() || !((Boolean)this.postValue.getValue()).booleanValue() && event.isPre()) {
+        if (this.postValue.getValue() && event.isPost() || !this.postValue.getValue() && event.isPre()) {
             if (this.switchBack) {
-                if (((Boolean)this.sendPostC0FFix.getValue()).booleanValue() && ((Boolean)this.postValue.getValue()).booleanValue()) {
+                if (this.sendPostC0FFix.getValue() && this.postValue.getValue()) {
                     PacketUtil.sendPacketC0F();
                 }
                 PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
-                if (((Boolean)this.dropBowl.getValue()).booleanValue()) {
-                    if (((Boolean)this.sendPostC0FFix.getValue()).booleanValue() && ((Boolean)this.postValue.getValue()).booleanValue()) {
+                if (this.dropBowl.getValue()) {
+                    if (this.sendPostC0FFix.getValue() && this.postValue.getValue()) {
                         PacketUtil.sendPacketC0F();
                     }
                     PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.DROP_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
                 }
-                if (((Boolean)this.Legit.getValue()).booleanValue()) {
+                if (this.Legit.getValue()) {
                     AutoSoup.mc.playerController.updateController();
                 } else {
                     PacketUtil.send(new C09PacketHeldItemChange(AutoSoup.mc.thePlayer.inventory.currentItem));
@@ -66,15 +66,15 @@ extends Module {
                 this.switchBack = false;
                 return;
             }
-            if (this.timer.hasPassed(this.decidedTimer) && AutoSoup.mc.thePlayer.ticksExisted > 10 && AutoSoup.mc.thePlayer.getHealth() < (float)((Double)this.health.getValue()).intValue()) {
+            if (this.timer.hasPassed(this.decidedTimer) && AutoSoup.mc.thePlayer.ticksExisted > 10 && AutoSoup.mc.thePlayer.getHealth() < (float) this.health.getValue().intValue()) {
                 this.soup = PlayerUtil.findSoup() - 36;
                 if (this.soup != -37) {
-                    if (((Boolean)this.Legit.getValue()).booleanValue()) {
+                    if (this.Legit.getValue()) {
                         AutoSoup.mc.thePlayer.inventory.currentItem = this.soup;
                         AutoSoup.mc.gameSettings.keyBindUseItem.setPressed(true);
                     } else {
                         PacketUtil.send(new C09PacketHeldItemChange(this.soup));
-                        if (((Boolean)this.sendPostC0FFix.getValue()).booleanValue() && ((Boolean)this.postValue.getValue()).booleanValue()) {
+                        if (this.sendPostC0FFix.getValue() && this.postValue.getValue()) {
                             PacketUtil.sendPacketC0F();
                         }
                         PacketUtil.send(new C08PacketPlayerBlockPlacement(AutoSoup.mc.thePlayer.inventory.getStackInSlot(this.soup)));
@@ -95,9 +95,9 @@ extends Module {
                         }
                     }
                 }
-                int delayFirst = (int)Math.floor(Math.min(((Double)this.minDelay.getValue()).intValue(), ((Double)this.maxDelay.getValue()).intValue()));
-                int delaySecond = (int)Math.ceil(Math.max(((Double)this.minDelay.getValue()).intValue(), ((Double)this.maxDelay.getValue()).intValue()));
-                this.decidedTimer = RandomUtils.nextInt((int)delayFirst, (int)delaySecond);
+                int delayFirst = (int)Math.floor(Math.min(this.minDelay.getValue().intValue(), this.maxDelay.getValue().intValue()));
+                int delaySecond = (int)Math.ceil(Math.max(this.minDelay.getValue().intValue(), this.maxDelay.getValue().intValue()));
+                this.decidedTimer = RandomUtils.nextInt(delayFirst, delaySecond);
                 this.timer.reset();
             }
         }

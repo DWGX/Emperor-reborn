@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Fly
 extends Module {
-    private final ModeValue<flyModes> flyMode = new ModeValue("FlyMode", (Enum[])flyModes.values(), (Enum)flyModes.Vanilla);
+    private final ModeValue<flyModes> flyMode = new ModeValue("FlyMode", flyModes.values(), flyModes.Vanilla);
     private boolean started;
     private boolean notUnder;
     private boolean clipped;
@@ -104,7 +104,7 @@ extends Module {
         block7: {
             block9: {
                 block8: {
-                    if (!((flyModes)((Object)this.flyMode.getValue())).equals((Object)flyModes.DoMCer)) break block7;
+                    if (!this.flyMode.getValue().equals(flyModes.DoMCer)) break block7;
                     AxisAlignedBB bb = Fly.mc.thePlayer.getEntityBoundingBox().offset(0.0, 1.0, 0.0);
                     if (!Fly.mc.theWorld.getCollidingBoundingBoxes(Fly.mc.thePlayer, bb).isEmpty() && !this.started) break block8;
                     switch (Fly.mc.thePlayer.offGroundTicks) {
@@ -177,36 +177,36 @@ extends Module {
             LinkedList<double[]> linkedList = this.positions;
             synchronized (linkedList) {
                 GL11.glPushMatrix();
-                GL11.glDisable((int)3553);
-                GL11.glBlendFunc((int)770, (int)771);
-                GL11.glEnable((int)2848);
-                GL11.glEnable((int)3042);
-                GL11.glDisable((int)2929);
+                GL11.glDisable(3553);
+                GL11.glBlendFunc(770, 771);
+                GL11.glEnable(2848);
+                GL11.glEnable(3042);
+                GL11.glDisable(2929);
                 Fly.mc.entityRenderer.disableLightmap();
-                GL11.glLineWidth((float)2.0f);
-                GL11.glBegin((int)3);
+                GL11.glLineWidth(2.0f);
+                GL11.glBegin(3);
                 RenderUtil.glColor(new Color(68, 131, 123, 255).getRGB());
                 double renderPosX = Fly.mc.getRenderManager().viewerPosX;
                 double renderPosY = Fly.mc.getRenderManager().viewerPosY;
                 double renderPosZ = Fly.mc.getRenderManager().viewerPosZ;
                 for (double[] pos : this.positions) {
-                    GL11.glVertex3d((double)(pos[0] - renderPosX), (double)(pos[1] - renderPosY), (double)(pos[2] - renderPosZ));
+                    GL11.glVertex3d(pos[0] - renderPosX, pos[1] - renderPosY, pos[2] - renderPosZ);
                 }
-                GL11.glColor4d((double)1.0, (double)1.0, (double)1.0, (double)1.0);
+                GL11.glColor4d(1.0, 1.0, 1.0, 1.0);
                 GL11.glEnd();
-                GL11.glEnable((int)2929);
-                GL11.glDisable((int)2848);
-                GL11.glDisable((int)3042);
-                GL11.glEnable((int)3553);
+                GL11.glEnable(2929);
+                GL11.glDisable(2848);
+                GL11.glDisable(3042);
+                GL11.glEnable(3553);
                 GL11.glPopMatrix();
             }
         }
     }
 
-    public static enum flyModes {
+    public enum flyModes {
         Vanilla,
         DoMCer,
-        GrimGhostBlock;
+        GrimGhostBlock
 
     }
 }

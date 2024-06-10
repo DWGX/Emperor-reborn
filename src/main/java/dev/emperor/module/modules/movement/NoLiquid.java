@@ -17,7 +17,7 @@ import net.minecraft.util.BlockPos;
 
 public class NoLiquid
 extends Module {
-    private final ModeValue<noWaterMode> modeValue = new ModeValue("Mode", (Enum[])noWaterMode.values(), (Enum)noWaterMode.Vanilla);
+    private final ModeValue<noWaterMode> modeValue = new ModeValue("Mode", noWaterMode.values(), noWaterMode.Vanilla);
     public static boolean shouldCancelWater;
 
     public NoLiquid() {
@@ -36,7 +36,7 @@ extends Module {
 
     @EventTarget
     public void onUpdate(EventMotion e) {
-        this.setSuffix(((noWaterMode)((Object)this.modeValue.getValue())).name());
+        this.setSuffix(this.modeValue.getValue().name());
         if (KillAura.target != null) {
             return;
         }
@@ -52,14 +52,14 @@ extends Module {
             boolean checkBlock = NoLiquid.mc.theWorld.getBlockState(block.getKey()).getBlock() == Blocks.water || NoLiquid.mc.theWorld.getBlockState(block.getKey()).getBlock() == Blocks.flowing_water || NoLiquid.mc.theWorld.getBlockState(block.getKey()).getBlock() == Blocks.lava || NoLiquid.mc.theWorld.getBlockState(block.getKey()).getBlock() == Blocks.flowing_lava;
             if (!checkBlock) continue;
             shouldCancelWater = true;
-            if (!((noWaterMode)((Object)this.modeValue.getValue())).equals((Object)noWaterMode.Grim) || !shouldCancelWater) continue;
+            if (!this.modeValue.getValue().equals(noWaterMode.Grim) || !shouldCancelWater) continue;
             PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, block.getKey(), NoLiquid.mc.objectMouseOver.sideHit));
         }
     }
 
-    public static enum noWaterMode {
+    public enum noWaterMode {
         Vanilla,
-        Grim;
+        Grim
 
     }
 }

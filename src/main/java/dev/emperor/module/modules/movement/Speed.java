@@ -45,9 +45,9 @@ extends Module {
 
         @EventTarget
         public void onMove(EventMotion event) {
-            this.setSuffix(((speedMode)((Object)MODE.getValue())).name());
+            this.setSuffix(MODE.getValue().name());
             if (event.isPre()) {
-                switch ((speedMode)((Object)MODE.getValue())) {
+                switch ((speedMode) MODE.getValue()) {
                     case HvH: {
                         if (MoveUtil.isMoving()) {
                             if (Speed.mc.thePlayer.onGround) {
@@ -195,17 +195,17 @@ extends Module {
     }
 
     static {
-        MODE = new ModeValue("Mode", (Enum[])speedMode.values(), (Enum)speedMode.HvH);
+        MODE = new ModeValue("Mode", speedMode.values(), speedMode.HvH);
         wasOnGround = false;
     }
 
-    static enum speedMode {
+    enum speedMode {
         HvH,
         Pika,
         WatchDog,
         Grim,
         Vulcan,
-        AAC4;
+        AAC4
 
     }
 }

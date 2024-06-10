@@ -26,16 +26,16 @@ extends Module {
         if (GuiMove.mc.currentScreen != null) {
             for (KeyBinding k2 : keys) {
                 k2.setPressed(GameSettings.isKeyDown(k2));
-                if (Keyboard.isKeyDown((int)Keyboard.KEY_UP) && GuiMove.mc.thePlayer.rotationPitch > -90.0f) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_UP) && GuiMove.mc.thePlayer.rotationPitch > -90.0f) {
                     GuiMove.mc.thePlayer.rotationPitch -= 5.0f;
                 }
-                if (Keyboard.isKeyDown((int)Keyboard.KEY_DOWN) && GuiMove.mc.thePlayer.rotationPitch < 90.0f) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) && GuiMove.mc.thePlayer.rotationPitch < 90.0f) {
                     GuiMove.mc.thePlayer.rotationPitch += 5.0f;
                 }
-                if (Keyboard.isKeyDown((int)Keyboard.KEY_LEFT)) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
                     GuiMove.mc.thePlayer.rotationYaw -= 5.0f;
                 }
-                if (!Keyboard.isKeyDown((int)Keyboard.KEY_RIGHT)) continue;
+                if (!Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) continue;
                 GuiMove.mc.thePlayer.rotationYaw += 5.0f;
             }
         }

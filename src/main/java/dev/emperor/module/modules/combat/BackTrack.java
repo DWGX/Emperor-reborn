@@ -39,12 +39,12 @@ extends Module {
 
     @EventTarget
     public void onTick(EventTick e) {
-        if ((double)this.tick <= (Double)this.interval.getValue()) {
+        if ((double)this.tick <= this.interval.getValue()) {
             ++this.tick;
         }
-        if (target != null && (double)BackTrack.mc.thePlayer.getDistanceToEntity(target) <= (Double)this.range.getValue()) {
+        if (target != null && (double)BackTrack.mc.thePlayer.getDistanceToEntity(target) <= this.range.getValue()) {
             Vec3 vec3 = new Vec3(BackTrack.target.posX, BackTrack.target.posY, BackTrack.target.posZ);
-            if (vec3.distanceTo(this.realTargetPosition) < (Double)this.amount.getValue() && (double)this.tick > (Double)this.interval.getValue()) {
+            if (vec3.distanceTo(this.realTargetPosition) < this.amount.getValue() && (double)this.tick > this.interval.getValue()) {
                 BackTrack.target.posX = BackTrack.target.lastTickPosX;
                 BackTrack.target.posY = BackTrack.target.lastTickPosY;
                 BackTrack.target.posZ = BackTrack.target.lastTickPosZ;
@@ -66,7 +66,7 @@ extends Module {
 
     @EventTarget
     public void onRender3D(EventRender3D event) {
-        if (((Boolean)this.esp.getValue()).booleanValue() && KillAura.target != null) {
+        if (this.esp.getValue().booleanValue() && KillAura.target != null) {
             RenderUtil.renderBoundingBox(target, HUD.color(2), 60.0f);
             RenderUtil.resetColor();
         }

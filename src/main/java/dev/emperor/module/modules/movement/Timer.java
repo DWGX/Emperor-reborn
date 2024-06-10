@@ -43,12 +43,12 @@ extends Module {
         this.balance = 0;
         this.reset();
         if (this.blinkStart) {
-            if (((Boolean)this.spartanBypass.getValue()).booleanValue()) {
+            if (this.spartanBypass.getValue()) {
                 Timer.mc.timer.timerSpeed = 0.1f;
             }
             BlinkUtils.setBlinkState(true, true, false, false, false, false, false, false, false, false, false);
             BlinkUtils.clearPacket(null, false, -1);
-            if (((Boolean)this.spartanBypass.getValue()).booleanValue()) {
+            if (this.spartanBypass.getValue()) {
                 Timer.mc.timer.timerSpeed = 1.0f;
             }
         }
@@ -61,12 +61,12 @@ extends Module {
 
     @EventTarget
     public void onUpdate(EventUpdate event) {
-        if (((Boolean)this.onMoveValue.getValue()).booleanValue()) {
-            Timer.mc.timer.timerSpeed = MoveUtil.isMoving() ? ((Double)this.speedValue.getValue()).floatValue() : 1.0f;
+        if (this.onMoveValue.getValue()) {
+            Timer.mc.timer.timerSpeed = MoveUtil.isMoving() ? this.speedValue.getValue().floatValue() : 1.0f;
         } else {
-            float f = Timer.mc.timer.timerSpeed = (Boolean)this.spartanBypass.getValue() == false ? ((Double)this.speedValue.getValue()).floatValue() : (float)MathUtil.getRandom(0.1, (Double)this.speedValue.getValue());
+            float f = Timer.mc.timer.timerSpeed = !this.spartanBypass.getValue() ? this.speedValue.getValue().floatValue() : (float)MathUtil.getRandom(0.1, this.speedValue.getValue());
         }
-        if (this.balance > 0 && ((Boolean)this.grimTimer.getValue()).booleanValue() && ((Boolean)this.timerDebug.getValue()).booleanValue() && Timer.mc.thePlayer.ticksExisted % 20 == 0) {
+        if (this.balance > 0 && this.grimTimer.getValue() && this.timerDebug.getValue() && Timer.mc.thePlayer.ticksExisted % 20 == 0) {
             DebugUtil.log("[GrimTimer-Balance]:" + this.balance);
         }
         if (!MoveUtil.isMoving()) {
@@ -83,15 +83,15 @@ extends Module {
     @EventTarget
     public void onPacketReceive(EventPacketReceive event) {
         Packet<?> packet = event.getPacket();
-        if (packet instanceof S08PacketPlayerPosLook && ((Boolean)this.grimTimer.getValue()).booleanValue() && this.balance != 0) {
+        if (packet instanceof S08PacketPlayerPosLook && this.grimTimer.getValue() && this.balance != 0) {
             this.balance = 0;
             if (this.blinkStart) {
-                if (((Boolean)this.spartanBypass.getValue()).booleanValue()) {
+                if (this.spartanBypass.getValue()) {
                     Timer.mc.timer.timerSpeed = 0.1f;
                 }
                 BlinkUtils.setBlinkState(true, true, false, false, false, false, false, false, false, false, false);
                 BlinkUtils.clearPacket(null, false, -1);
-                if (((Boolean)this.spartanBypass.getValue()).booleanValue()) {
+                if (this.spartanBypass.getValue()) {
                     Timer.mc.timer.timerSpeed = 1.0f;
                 }
             }
@@ -100,8 +100,7 @@ extends Module {
 
     @EventTarget
     public void onPacketSend(EventPacketSend event) {
-        if (event.getPacket() instanceof C03PacketPlayer && ((Boolean)this.grimTimer.getValue()).booleanValue()) {
-            C03PacketPlayer c03PacketPlayer = (C03PacketPlayer)event.getPacket();
+        if (event.getPacket() instanceof C03PacketPlayer c03PacketPlayer && this.grimTimer.getValue()) {
             event.setCancelled(!c03PacketPlayer.getRotating() && !c03PacketPlayer.isMoving() && !BadPacketsComponent.bad() && Timer.mc.thePlayer.posX == Timer.mc.thePlayer.lastTickPosX && Timer.mc.thePlayer.posY == Timer.mc.thePlayer.lastTickPosY && Timer.mc.thePlayer.posZ == Timer.mc.thePlayer.lastTickPosZ);
             if (!event.isCancelled()) {
                 this.balance -= 50;

@@ -27,12 +27,12 @@ import net.minecraft.item.ItemStack;
 
 public class AutoPearl
 extends Module {
-    private BoolValue debugValue = new BoolValue("Debug", false);
+    private final BoolValue debugValue = new BoolValue("Debug", false);
     private static final double T = 10.0;
     private static final double T_MIN = 1.0E-4;
     private static final double ALPHA = 0.997;
     private CalculateThread calculateThread;
-    private TimeUtil timer = new TimeUtil();
+    private final TimeUtil timer = new TimeUtil();
     private boolean attempted;
     private boolean calculating;
     private int bestPearlSlot;
@@ -50,7 +50,7 @@ extends Module {
 
     @EventTarget
     public void onRender(EventRender2D event) {
-        if (!((Boolean)this.debugValue.getValue()).booleanValue()) {
+        if (!this.debugValue.getValue()) {
             return;
         }
         FontManager.arial12.drawString("assessment: " + new ProjectileUtil.EnderPearlPredictor(AutoPearl.mc.thePlayer.posX, AutoPearl.mc.thePlayer.posY, AutoPearl.mc.thePlayer.posZ, AutoPearl.mc.thePlayer.motionY - 0.01, AutoPearl.mc.thePlayer.motionY + 0.02).assessRotation(new Vector2f(AutoPearl.mc.thePlayer.rotationYaw, AutoPearl.mc.thePlayer.rotationPitch)), 20.0f, 20.0f, Color.WHITE.getRGB());
@@ -77,7 +77,7 @@ extends Module {
                 ItemStack stack = AutoPearl.mc.thePlayer.inventoryContainer.getSlot(slot).getStack();
                 if (stack == null || !(stack.getItem() instanceof ItemEnderPearl) || slot < 36) continue;
                 this.bestPearlSlot = slot;
-                if (((Boolean)this.debugValue.getValue()).booleanValue()) {
+                if (this.debugValue.getValue()) {
                     DebugUtil.log("Found Pearl:" + (this.bestPearlSlot - 36));
                 }
                 if (this.bestPearlSlot - 36 == -37) continue;

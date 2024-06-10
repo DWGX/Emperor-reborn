@@ -57,7 +57,7 @@ public class Blink1
     @Override
     public void onEnable() {
         this.reset();
-        if ((Boolean) this.chams.getValue()) {
+        if (this.chams.getValue()) {
             this.blinkEntity = new CopyOfPlayer(EntityUtil.getCopiedPlayer(mc.thePlayer), System.currentTimeMillis(), mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ, mc.thePlayer.getSkinType().equals("slim"));
         }
     }
@@ -68,7 +68,7 @@ public class Blink1
     @Override
     public void onDisable() {
         this.reset();
-        if ((Boolean) this.chams.getValue()) {
+        if (this.chams.getValue()) {
             this.blinkEntity = null;
         }
         BlinkComponent.stop();
@@ -88,7 +88,7 @@ public class Blink1
             if (mc.thePlayer.posX != mc.thePlayer.lastTickPosX || mc.thePlayer.posY != mc.thePlayer.lastTickPosY || mc.thePlayer.posZ != mc.thePlayer.lastTickPosZ) {
                 this.position.add(new Vector3d(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ));
             }
-            if ((Boolean) this.pulse.getValue() && this.pulseTimer.hasTimeElapsed(this.pulseDelay.getValue().intValue())) {
+            if (this.pulse.getValue() && this.pulseTimer.hasTimeElapsed(this.pulseDelay.getValue().intValue())) {
                 BlinkComponent.stop();
                 this.updateEntityPosition();
                 this.position.clear();
@@ -99,7 +99,7 @@ public class Blink1
                 this.releaseTimer.reset();
             }
 
-            if ((Boolean) this.antiAttack.getValue()) {
+            if (this.antiAttack.getValue()) {
                 List<Entity> entities = mc.theWorld.getLoadedEntityList();
                 Iterator var7 = entities.iterator();
 
@@ -112,15 +112,14 @@ public class Blink1
                         }
 
                         entity = (Entity) var7.next();
-                        if (entity instanceof EntityArrow) {
-                            EntityArrow entityArrow = (EntityArrow) entity;
+                        if (entity instanceof EntityArrow entityArrow) {
                             if (entityArrow.getTicksInGround() <= 0) {
                                 break;
                             }
                         }
                     } while (!(entity instanceof EntitySnowball) && !(entity instanceof EntityEgg));
 
-                    if (entity.getDistanceToEntity(this.blinkEntity.getPlayer()) <= (Float) this.range.getValue().floatValue()) {
+                    if (entity.getDistanceToEntity(this.blinkEntity.getPlayer()) <= this.range.getValue().floatValue()) {
                         this.should = true;
                         break;
                     }
@@ -156,7 +155,7 @@ public class Blink1
      */
     @EventTarget
     public void onRender3D(EventRender3D event) {
-        if ((Boolean) this.chams.getValue() && this.blinkEntity != null && !RenderUtil.renderPlayerModel(this.blinkEntity, this.boxColor.getColorC(), this.outlineChams.getValue() ? this.outlineColor.getColorC() : null, -1)) {
+        if (this.chams.getValue() && this.blinkEntity != null && !RenderUtil.renderPlayerModel(this.blinkEntity, this.boxColor.getColorC(), this.outlineChams.getValue() ? this.outlineColor.getColorC() : null, -1)) {
             this.blinkEntity = null;
         }
     }
