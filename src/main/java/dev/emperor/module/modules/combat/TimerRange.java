@@ -22,7 +22,7 @@ extends Module {
     private int smartCounter = 0;
     private boolean confirmAttack = false;
     private boolean confirmLagBack = false;
-    private final ModeValue<mode> timerBoostMode = new ModeValue("TimerMode", (Enum[])mode.values(), (Enum)mode.Normal);
+    private final ModeValue<mode> timerBoostMode = new ModeValue("TimerMode", mode.values(), mode.Normal);
     private final NumberValue ticksValue = new NumberValue("Ticks", 10.0, 1.0, 20.0, 1.0);
     private final NumberValue timerBoostValue = new NumberValue("TimerBoost", 1.5, 0.01, 10.0, 0.01);
     private final NumberValue timerChargedValue = new NumberValue("TimerCharged", 0.45, 0.05, 5.0, 0.01);
@@ -52,19 +52,18 @@ extends Module {
     @EventTarget
     public void onAttack(EventAttack event) {
         boolean shouldSlowed;
-        if (!(event.getTarget() instanceof EntityLivingBase) || this.shouldResetTimer()) {
+        if (!(event.getTarget() instanceof EntityLivingBase targetEntity) || this.shouldResetTimer()) {
             this.timerReset();
             return;
         }
         this.confirmAttack = true;
-        EntityLivingBase targetEntity = (EntityLivingBase)event.getTarget();
         double entityDistance = TimerRange.mc.thePlayer.getClosestDistanceToEntity(targetEntity);
-        int randomCounter = MathUtil.getRandomNumberUsingNextInt(((Double)this.minTickDelay.getValue()).intValue(), ((Double)this.maxTickDelay.getValue()).intValue());
-        double randomRange = MathUtil.getRandomInRange((Double)this.minRange.getValue(), (Double)this.maxRange.getValue());
+        int randomCounter = MathUtil.getRandomNumberUsingNextInt(this.minTickDelay.getValue().intValue(), this.maxTickDelay.getValue().intValue());
+        double randomRange = MathUtil.getRandomInRange(this.minRange.getValue(), this.maxRange.getValue());
         ++this.smartCounter;
-        switch (((mode)((Object)this.timerBoostMode.getValue())).name()) {
+        switch (this.timerBoostMode.getValue().name()) {
             case "Normal": {
-                shouldSlowed = entityDistance <= (Double)this.rangeValue.getValue();
+                shouldSlowed = entityDistance <= this.rangeValue.getValue();
                 break;
             }
             case "Smart": {
@@ -77,8 +76,8 @@ extends Module {
         }
         if (shouldSlowed && this.confirmAttack) {
             this.confirmAttack = false;
-            this.playerTicks = ((Double)this.ticksValue.getValue()).intValue();
-            if (((Boolean)this.resetlagBack.getValue()).booleanValue()) {
+            this.playerTicks = this.ticksValue.getValue().intValue();
+            if (this.resetlagBack.getValue().booleanValue()) {
                 this.confirmLagBack = true;
             }
             this.smartCounter = 0;
@@ -90,16 +89,16 @@ extends Module {
     @EventTarget
     public void onUpdate(EventUpdate event) {
         float adjustedTimerSpeed;
-        this.setSuffix(((mode)((Object)this.timerBoostMode.getValue())).name());
+        this.setSuffix(this.timerBoostMode.getValue().name());
         double timerboost = MathUtil.getRandomInRange(0.5, 0.56);
         double charged = MathUtil.getRandomInRange(0.75, 0.91);
         if (this.playerTicks <= 0) {
             this.timerReset();
             return;
         }
-        double tickProgress = (double)this.playerTicks / (Double)this.ticksValue.getValue();
-        float playerSpeed = (float)(tickProgress < timerboost ? (Double)this.timerBoostValue.getValue() : (tickProgress < charged ? (Double)this.timerChargedValue.getValue() : 1.0));
-        float speedAdjustment = playerSpeed >= 0.0f ? playerSpeed : (float)(1.0 + (Double)this.ticksValue.getValue() - (double)this.playerTicks);
+        double tickProgress = (double)this.playerTicks / this.ticksValue.getValue();
+        float playerSpeed = (float)(tickProgress < timerboost ? this.timerBoostValue.getValue() : (tickProgress < charged ? this.timerChargedValue.getValue() : 1.0));
+        float speedAdjustment = playerSpeed >= 0.0f ? playerSpeed : (float)(1.0 + this.ticksValue.getValue() - (double)this.playerTicks);
         TimerRange.mc.timer.timerSpeed = adjustedTimerSpeed = Math.max(speedAdjustment, 0.0f);
         --this.playerTicks;
     }
@@ -115,16 +114,16 @@ extends Module {
 
     @EventTarget
     public void onPacket(EventPacketReceive event) {
-        if (event.getPacket() instanceof S08PacketPlayerPosLook && ((Boolean)this.resetlagBack.getValue()).booleanValue() && this.confirmLagBack && !this.shouldResetTimer()) {
+        if (event.getPacket() instanceof S08PacketPlayerPosLook && this.resetlagBack.getValue().booleanValue() && this.confirmLagBack && !this.shouldResetTimer()) {
             this.confirmLagBack = false;
             this.timerReset();
             NotificationManager.post(NotificationType.WARNING, "TimerRange", "Lagback Detected | Timer Reset");
         }
     }
 
-    public static enum mode {
+    public enum mode {
         Normal,
-        Smart;
+        Smart
 
     }
 }

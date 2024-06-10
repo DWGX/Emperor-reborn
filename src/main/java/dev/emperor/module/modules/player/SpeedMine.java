@@ -35,7 +35,7 @@ extends Module {
         if (SpeedMine.mc.thePlayer == null) {
             return;
         }
-        if (((Boolean)this.speedCheckBypass.getValue()).booleanValue()) {
+        if (this.speedCheckBypass.getValue()) {
             SpeedMine.mc.thePlayer.removePotionEffect(Potion.digSpeed.id);
         }
     }
@@ -58,17 +58,17 @@ extends Module {
 
     @EventTarget
     private void onUpdate(EventUpdate e) {
-        if (((Boolean)this.speedCheckBypass.getValue()).booleanValue()) {
+        if (this.speedCheckBypass.getValue()) {
             SpeedMine.mc.thePlayer.addPotionEffect(new PotionEffect(Potion.digSpeed.id, 89640, 2));
         }
         if (SpeedMine.mc.playerController.extendedReach()) {
             SpeedMine.mc.playerController.blockHitDelay = 0;
         } else if (this.pos != null && this.boost) {
             IBlockState blockState = SpeedMine.mc.theWorld.getBlockState(this.pos);
-            this.damage = (float)((double)this.damage + (double)blockState.getBlock().getPlayerRelativeBlockHardness(SpeedMine.mc.thePlayer, SpeedMine.mc.theWorld, this.pos) * (Double)this.speed.getValue());
+            this.damage = (float)((double)this.damage + (double)blockState.getBlock().getPlayerRelativeBlockHardness(SpeedMine.mc.thePlayer, SpeedMine.mc.theWorld, this.pos) * this.speed.getValue());
             if (this.damage >= 1.0f) {
                 SpeedMine.mc.theWorld.setBlockState(this.pos, Blocks.air.getDefaultState(), 11);
-                if (((Boolean)this.abortPacketSpoof.getValue()).booleanValue()) {
+                if (this.abortPacketSpoof.getValue()) {
                     PacketUtil.sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.ABORT_DESTROY_BLOCK, this.pos, this.facing));
                 }
                 PacketUtil.sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, this.pos, this.facing));

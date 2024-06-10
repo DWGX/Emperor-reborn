@@ -17,7 +17,7 @@ import net.minecraft.potion.Potion;
 
 public class Step
 extends Module {
-    private final ModeValue<stepMode> mode = new ModeValue("Mode", (Enum[])stepMode.values(), (Enum)stepMode.Vanilla);
+    private final ModeValue<stepMode> mode = new ModeValue("Mode", stepMode.values(), stepMode.Vanilla);
     private final NumberValue height = new NumberValue("Height", 1.0, 1.0, 2.5, 0.1);
     private final NumberValue timer = new NumberValue("Timer", 0.5, 0.1, 1.0, 0.1);
     private final BoolValue reverse = new BoolValue("Reverse", false);
@@ -44,14 +44,14 @@ extends Module {
     @EventTarget
     public void onMotion(EventMotion event) {
         if (event.isPre()) {
-            switch ((stepMode)((Object)this.mode.getValue())) {
+            switch (this.mode.getValue()) {
                 case Jump: {
                     if (!Step.mc.thePlayer.onGround || !Step.mc.thePlayer.isCollidedHorizontally) break;
                     Step.mc.thePlayer.jump();
                     break;
                 }
                 case Matrix: {
-                    float f = Step.mc.thePlayer.stepHeight = (Boolean)this.twoBlockValue.getValue() != false ? 2.0f : 1.0f;
+                    float f = Step.mc.thePlayer.stepHeight = this.twoBlockValue.getValue() ? 2.0f : 1.0f;
                     if (!this.doJump) break;
                     if (this.ticks > 0 && Step.mc.thePlayer.onGround || this.ticks > 5) {
                         this.ticks = 0;
@@ -78,12 +78,12 @@ extends Module {
                     break;
                 }
                 case NCP: {
-                    Step.mc.thePlayer.stepHeight = Step.mc.thePlayer.onGround && !PlayerUtil.isInLiquid() ? ((Double)this.height.getValue()).floatValue() : 0.6f;
-                    if (!((Boolean)this.reverse.getValue()).booleanValue() || PlayerUtil.blockRelativeToPlayer(0.0, -(((Double)this.height.getValue()).intValue() + 1), 0.0) instanceof BlockAir || PlayerUtil.isInLiquid()) {
+                    Step.mc.thePlayer.stepHeight = Step.mc.thePlayer.onGround && !PlayerUtil.isInLiquid() ? this.height.getValue().floatValue() : 0.6f;
+                    if (!this.reverse.getValue().booleanValue() || PlayerUtil.blockRelativeToPlayer(0.0, -(this.height.getValue().intValue() + 1), 0.0) instanceof BlockAir || PlayerUtil.isInLiquid()) {
                         return;
                     }
-                    for (int i = 1; i < ((Double)this.height.getValue()).intValue() + 1; ++i) {
-                        Step.mc.thePlayer.motionY -= (double)i;
+                    for (int i = 1; i < this.height.getValue().intValue() + 1; ++i) {
+                        Step.mc.thePlayer.motionY -= i;
                     }
                     break;
                 }
@@ -103,26 +103,26 @@ extends Module {
                     }
                     if (y2 % 1.0 < 0.01 && this.offGroundTicks == 3) {
                         this.setMotion(mx, -0.784, mz);
-                        MoveUtil.setSpeed((Boolean)this.hypixelSmooth.getValue() != false ? 0.36 : 0.38);
+                        MoveUtil.setSpeed(this.hypixelSmooth.getValue() ? 0.36 : 0.38);
                         Step.mc.thePlayer.setPosition(x2, Math.floor(y2), z);
                     }
                     if (!Step.mc.thePlayer.isCollidedHorizontally || !Step.mc.thePlayer.onGround) break;
                     Step.mc.thePlayer.setPosition(x2, Math.floor(y2), z);
                     this.setMotion(mx, my, mz);
                     Step.mc.thePlayer.jump();
-                    MoveUtil.setSpeed((Boolean)this.hypixelSmooth.getValue() != false ? 0.41 : 0.43);
+                    MoveUtil.setSpeed(this.hypixelSmooth.getValue() ? 0.41 : 0.43);
                     break;
                 }
                 case Vanilla: {
-                    Step.mc.thePlayer.stepHeight = ((Double)this.height.getValue()).floatValue();
-                    if (!((Boolean)this.reverse.getValue()).booleanValue() || !PlayerUtil.isBlockUnder(((Double)this.height.getValue()).floatValue() + Step.mc.thePlayer.getEyeHeight()) || PlayerUtil.isInLiquid()) {
+                    Step.mc.thePlayer.stepHeight = this.height.getValue().floatValue();
+                    if (!this.reverse.getValue().booleanValue() || !PlayerUtil.isBlockUnder(this.height.getValue().floatValue() + Step.mc.thePlayer.getEyeHeight()) || PlayerUtil.isInLiquid()) {
                         return;
                     }
                     if (Step.mc.thePlayer.posY < Step.mc.thePlayer.lastGroundY && !Step.mc.thePlayer.onGround && Step.mc.thePlayer.offGroundTicks <= 1) {
-                        Step.mc.thePlayer.motionY = -((Double)this.height.getValue()).doubleValue();
+                        Step.mc.thePlayer.motionY = -this.height.getValue().doubleValue();
                     }
                     if (Step.mc.thePlayer.offGroundTicks != 1 || !(Step.mc.thePlayer.posY < Step.mc.thePlayer.lastLastGroundY)) break;
-                    Step.mc.timer.timerSpeed = ((Double)this.timer.getValue()).floatValue();
+                    Step.mc.timer.timerSpeed = this.timer.getValue().floatValue();
                     break;
                 }
                 case Vulcan: {
@@ -141,10 +141,10 @@ extends Module {
     @EventTarget
     public void onStep(EventStep event) {
         if (!event.isPre()) {
-            switch ((stepMode)((Object)this.mode.getValue())) {
+            switch (this.mode.getValue()) {
                 case Matrix: {
                     if (event.getStepHeight() > 1.0) {
-                        if (((Boolean)this.instantValue.getValue()).booleanValue()) {
+                        if (this.instantValue.getValue().booleanValue()) {
                             PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(Step.mc.thePlayer.posX, Step.mc.thePlayer.posY + 0.41999998688698, Step.mc.thePlayer.posZ, false));
                             PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(Step.mc.thePlayer.posX, Step.mc.thePlayer.posY + 0.7531999805212, Step.mc.thePlayer.posZ, false));
                             PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(Step.mc.thePlayer.posX, Step.mc.thePlayer.posY + 1.00133597911215, Step.mc.thePlayer.posZ, true));
@@ -174,7 +174,7 @@ extends Module {
                         return;
                     }
                     double[] values = height > 2.019 ? new double[]{0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652, 1.869, 2.019, 1.919} : (height > 1.869 ? new double[]{0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652, 1.869} : (height > 1.5 ? new double[]{0.425, 0.821, 0.699, 0.599, 1.022, 1.372, 1.652} : (height > 1.015 ? new double[]{0.42, 0.7532, 1.01, 1.093, 1.015} : (height > 0.875 ? new double[]{0.42, 0.7532} : new double[]{0.39, 0.6938}))));
-                    Step.mc.timer.timerSpeed = ((Double)this.timer.getValue()).floatValue();
+                    Step.mc.timer.timerSpeed = this.timer.getValue().floatValue();
                     for (double d2 : values) {
                         PacketUtil.send(new C03PacketPlayer.C04PacketPlayerPosition(Step.mc.thePlayer.posX, Step.mc.thePlayer.posY + (d2 + Math.random() / 2000.0), Step.mc.thePlayer.posZ, false));
                     }
@@ -182,7 +182,7 @@ extends Module {
                 }
                 case Vanilla: {
                     if (!(event.getStepHeight() > 0.6)) break;
-                    Step.mc.timer.timerSpeed = ((Double)this.timer.getValue()).floatValue();
+                    Step.mc.timer.timerSpeed = this.timer.getValue().floatValue();
                     break;
                 }
                 case Vulcan: {
@@ -194,14 +194,14 @@ extends Module {
         }
     }
 
-    public static enum stepMode {
+    public enum stepMode {
         Vanilla,
         NCP,
         Hypixel,
         NCP_PacketLess,
         Vulcan,
         Matrix,
-        Jump;
+        Jump
 
     }
 }

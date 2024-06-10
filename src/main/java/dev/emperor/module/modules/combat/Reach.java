@@ -94,7 +94,7 @@ extends Module {
     @EventTarget
     public void onClicked(EventClick ev) {
         BlockPos blocksReach;
-        if (((Boolean)this.weaponOnly.getValue()).booleanValue()) {
+        if (this.weaponOnly.getValue()) {
             if (Reach.mc.thePlayer.getCurrentEquippedItem() == null) {
                 return;
             }
@@ -102,16 +102,16 @@ extends Module {
                 return;
             }
         }
-        if (((Boolean)this.movingOnly.getValue()).booleanValue() && (double)Reach.mc.thePlayer.moveForward == 0.0 && (double)Reach.mc.thePlayer.moveStrafing == 0.0) {
+        if (this.movingOnly.getValue() && (double)Reach.mc.thePlayer.moveForward == 0.0 && (double)Reach.mc.thePlayer.moveStrafing == 0.0) {
             return;
         }
-        if (((Boolean)this.sprintOnly.getValue()).booleanValue() && !Reach.mc.thePlayer.isSprinting()) {
+        if (this.sprintOnly.getValue() && !Reach.mc.thePlayer.isSprinting()) {
             return;
         }
-        if (!((Boolean)this.hitThroughBlocks.getValue()).booleanValue() && Reach.mc.objectMouseOver != null && (blocksReach = Reach.mc.objectMouseOver.getBlockPos()) != null && Reach.mc.theWorld.getBlockState(blocksReach).getBlock() != Blocks.air) {
+        if (!this.hitThroughBlocks.getValue() && Reach.mc.objectMouseOver != null && (blocksReach = Reach.mc.objectMouseOver.getBlockPos()) != null && Reach.mc.theWorld.getBlockState(blocksReach).getBlock() != Blocks.air) {
             return;
         }
-        double Reach2 = (Boolean)this.RandomReach.getValue() != false ? Reach.getRandomDoubleInRange((Double)MinReach.getValue(), (Double)MaxReach.getValue()) + 0.1 : (Double)MinReach.getValue();
+        double Reach2 = this.RandomReach.getValue() ? Reach.getRandomDoubleInRange(MinReach.getValue(), MaxReach.getValue()) + 0.1 : MinReach.getValue();
         Object[] reach = Reach.doReach(Reach2, 0.0);
         Reach.doReach(Reach2, 0.0);
         if (reach == null) {

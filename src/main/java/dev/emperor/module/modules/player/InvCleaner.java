@@ -51,9 +51,9 @@ extends Module {
     public final NumberValue slotPearl = new NumberValue("Pearl Slot", 8.0, 1.0, 9.0, 1.0);
     public final String[] serverItems = new String[]{"\u9009\u62e9\u6e38\u620f", "\u52a0\u5165\u6e38\u620f", "\u804c\u4e1a\u9009\u62e9\u83dc\u5355", "\u79bb\u5f00\u5bf9\u5c40", "\u518d\u6765\u4e00\u5c40", "selector", "tracking compass", "(right click)", "tienda ", "perfil", "salir", "shop", "collectibles", "game", "profil", "lobby", "show all", "hub", "friends only", "cofre", "(click", "teleport", "play", "exit", "hide all", "jeux", "gadget", " (activ", "emote", "amis", "bountique", "choisir", "choose "};
     private final int[] bestArmorPieces = new int[4];
-    private final List<Integer> trash = new ArrayList<Integer>();
+    private final List<Integer> trash = new ArrayList<>();
     private final int[] bestToolSlots = new int[3];
-    private final List<Integer> gappleStackSlots = new ArrayList<Integer>();
+    private final List<Integer> gappleStackSlots = new ArrayList<>();
     private int bestSwordSlot;
     private int bestPearlSlot;
     private int bestBowSlot;

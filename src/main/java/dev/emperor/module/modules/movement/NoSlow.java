@@ -14,6 +14,8 @@ import dev.emperor.utils.client.PacketUtil;
 import dev.emperor.utils.client.TimeUtil;
 import java.util.Arrays;
 import java.util.List;
+
+import dev.emperor.utils.player.PlayerUtil;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemAppleGold;
 import net.minecraft.item.ItemBow;
@@ -39,7 +41,7 @@ extends Module {
     TimeUtil timer = new TimeUtil();
     long delay = 100L;
     boolean fasterDelay;
-    private final ModeValue<NoSlowMode> mode = new ModeValue("Mode", (Enum[])NoSlowMode.values(), (Enum)NoSlowMode.Vanilla);
+    private final ModeValue<NoSlowMode> mode = new ModeValue("Mode", NoSlowMode.values(), NoSlowMode.Vanilla);
     public static final BoolValue blockingDamageAmountDebug = new BoolValue("BlockingDamageAmountDebug", false);
     private boolean sent = false;
 
@@ -57,32 +59,14 @@ extends Module {
     }
 
     private boolean isHoldingPotionAndSword(ItemStack stack, boolean checkSword, boolean checkPotionFood) {
-        if (stack == null) {
-            return false;
-        }
-        if (stack.getItem() instanceof ItemAppleGold && checkPotionFood) {
-            return true;
-        }
-        if (stack.getItem() instanceof ItemPotion && checkPotionFood) {
-            return !ItemPotion.isSplash(stack.getMetadata());
-        }
-        if (stack.getItem() instanceof ItemFood && checkPotionFood) {
-            return true;
-        }
-        if (stack.getItem() instanceof ItemSword && checkSword) {
-            return true;
-        }
-        if (stack.getItem() instanceof ItemBow) {
-            return checkPotionFood;
-        }
-        return stack.getItem() instanceof ItemBucketMilk && checkPotionFood;
+        return PlayerUtil.isHoldingPotionAndSword(stack, checkSword, checkPotionFood);
     }
 
     @EventTarget
     public void onSlowDown(EventSlowDown e) {
         if (e.getType() == EventSlowDown.Type.Item) {
             ItemStack itemStack = NoSlow.mc.thePlayer.getHeldItem();
-            e.setCancelled(itemStack.getItem() instanceof ItemAppleGold && !((ItemAppleGold)itemStack.getItem()).hasEffect(itemStack) && !this.slow || this.isHoldingPotionAndSword(NoSlow.mc.thePlayer.getHeldItem(), true, false));
+            e.setCancelled(itemStack.getItem() instanceof ItemAppleGold && !itemStack.getItem().hasEffect(itemStack) && !this.slow || this.isHoldingPotionAndSword(NoSlow.mc.thePlayer.getHeldItem(), true, false));
             if (NoSlow.mc.thePlayer.isUsingItem() && NoSlow.mc.thePlayer.moveForward > 0.0f) {
                 NoSlow.mc.thePlayer.setSprinting(true);
             }
@@ -97,7 +81,7 @@ extends Module {
         if (NoSlow.mc.thePlayer == null || NoSlow.mc.theWorld == null || !NoSlow.mc.theWorld.isRemote || NoSlow.mc.thePlayer.getHeldItem() == null) {
             return;
         }
-        if (this.mode.is("Grim") && packet instanceof S2FPacketSetSlot && itemStack.getItem() instanceof ItemAppleGold && !((ItemAppleGold)itemStack.getItem()).hasEffect(itemStack) && (s2f = (S2FPacketSetSlot)packet).func_149175_c() == 0 && s2f.func_149174_e().getItem() == NoSlow.mc.thePlayer.getHeldItem().getItem()) {
+        if (this.mode.is("Grim") && packet instanceof S2FPacketSetSlot && itemStack.getItem() instanceof ItemAppleGold && !itemStack.getItem().hasEffect(itemStack) && (s2f = (S2FPacketSetSlot)packet).func_149175_c() == 0 && s2f.func_149174_e().getItem() == NoSlow.mc.thePlayer.getHeldItem().getItem()) {
             NoSlow.mc.thePlayer.inventory.getCurrentItem().stackSize = s2f.func_149174_e().stackSize;
             event.setCancelled(true);
             this.slow = false;
@@ -112,7 +96,7 @@ extends Module {
                 return;
             }
             ItemStack itemStack = NoSlow.mc.thePlayer.getHeldItem();
-            if (itemStack != null && itemStack.getItem() instanceof ItemAppleGold && !((ItemAppleGold)itemStack.getItem()).hasEffect(itemStack)) {
+            if (itemStack != null && itemStack.getItem() instanceof ItemAppleGold && !itemStack.getItem().hasEffect(itemStack)) {
                 if (packet instanceof C08PacketPlayerBlockPlacement && ((C08PacketPlayerBlockPlacement)packet).getPosition().getY() == -1 && !this.slow) {
                     mc.getNetHandler().addToSendQueue(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.DROP_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
                     this.slow = true;
@@ -127,8 +111,8 @@ extends Module {
 
     @EventTarget
     public void onUpdate(EventMotion e) {
-        this.setSuffix(((NoSlowMode)((Object)this.mode.getValue())).toString());
-        switch ((NoSlowMode)((Object)this.mode.getValue())) {
+        this.setSuffix(this.mode.getValue().toString());
+        switch ((NoSlowMode) this.mode.getValue()) {
             case Grim: {
                 if (e.isPre() && NoSlow.mc.thePlayer.isUsingItem() && this.isHoldingPotionAndSword(NoSlow.mc.thePlayer.getHeldItem(), true, false)) {
                     PacketUtil.send(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, BlockPos.ORIGIN, EnumFacing.DOWN));
@@ -170,14 +154,14 @@ extends Module {
         }
     }
 
-    static enum NoSlowMode {
+    enum NoSlowMode {
         Vanilla,
         OldGrim,
         Grim,
         Packet,
         AAC5,
         AAC4,
-        Intave;
+        Intave
 
     }
 }

@@ -28,7 +28,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Blink
 extends Module {
-    private final ModeValue<PacketModeValues> packetModeValue = new ModeValue("PacketMode", (Enum[])PacketModeValues.values(), (Enum)PacketModeValues.All);
+    private final ModeValue<PacketModeValues> packetModeValue = new ModeValue("PacketMode", PacketModeValues.values(), PacketModeValues.All);
     private final BoolValue pulseValue = new BoolValue("Pulse", false);
     private final NumberValue pulseDelayValue = new NumberValue("PulseDelay", 1000.0, 100.0, 5000.0, 100.0);
     private final BoolValue noC00C16 = new BoolValue("NoC00-C16", false);
@@ -53,7 +53,7 @@ extends Module {
         }
         if (this.packetModeValue.getValue() == PacketModeValues.OutGoing || this.packetModeValue.getValue() == PacketModeValues.All) {
             BlinkUtils.setBlinkState(false, false, true, false, false, false, false, false, false, false, false);
-            if (!((Boolean)this.pulseValue.getValue()).booleanValue()) {
+            if (!this.pulseValue.getValue().booleanValue()) {
                 fakePlayer = new EntityOtherPlayerMP(Blink.mc.theWorld, Blink.mc.thePlayer.gameProfile);
                 fakePlayer.clonePlayer(Blink.mc.thePlayer, true);
                 fakePlayer.copyLocationAndAnglesFrom(Blink.mc.thePlayer);
@@ -105,10 +105,10 @@ extends Module {
         synchronized (linkedList) {
             this.positions.add(new double[]{Blink.mc.thePlayer.posX, Blink.mc.thePlayer.getEntityBoundingBox().minY, Blink.mc.thePlayer.posZ});
         }
-        if (((Boolean)this.packetKickBypass.getValue()).booleanValue() && Blink.mc.thePlayer.ticksExisted % 2 == 1) {
+        if (this.packetKickBypass.getValue().booleanValue() && Blink.mc.thePlayer.ticksExisted % 2 == 1) {
             PacketUtil.sendPacketC0F(true);
         }
-        if (((Boolean)this.pulseValue.getValue()).booleanValue() && this.pulseTimer.hasReached(((Double)this.pulseDelayValue.getValue()).longValue())) {
+        if (this.pulseValue.getValue().booleanValue() && this.pulseTimer.hasReached(this.pulseDelayValue.getValue().longValue())) {
             linkedList = this.positions;
             synchronized (linkedList) {
                 this.positions.clear();
@@ -146,7 +146,7 @@ extends Module {
 
     @EventTarget
     public void onPacketSend(EventPacketSend event) {
-        if ((this.packetModeValue.getValue() == PacketModeValues.OutGoing || this.packetModeValue.getValue() == PacketModeValues.All) && (event.getPacket() instanceof C16PacketClientStatus || event.getPacket() instanceof C00PacketKeepAlive && ((Boolean)this.noC00C16.getValue()).booleanValue())) {
+        if ((this.packetModeValue.getValue() == PacketModeValues.OutGoing || this.packetModeValue.getValue() == PacketModeValues.All) && (event.getPacket() instanceof C16PacketClientStatus || event.getPacket() instanceof C00PacketKeepAlive && this.noC00C16.getValue().booleanValue())) {
             event.setCancelled();
         }
     }
@@ -160,36 +160,36 @@ extends Module {
             LinkedList<double[]> linkedList = this.positions;
             synchronized (linkedList) {
                 GL11.glPushMatrix();
-                GL11.glDisable((int)3553);
-                GL11.glBlendFunc((int)770, (int)771);
-                GL11.glEnable((int)2848);
-                GL11.glEnable((int)3042);
-                GL11.glDisable((int)2929);
+                GL11.glDisable(3553);
+                GL11.glBlendFunc(770, 771);
+                GL11.glEnable(2848);
+                GL11.glEnable(3042);
+                GL11.glDisable(2929);
                 Blink.mc.entityRenderer.disableLightmap();
-                GL11.glLineWidth((float)2.0f);
-                GL11.glBegin((int)3);
+                GL11.glLineWidth(2.0f);
+                GL11.glBegin(3);
                 RenderUtil.glColor(new Color(68, 131, 123, 255).getRGB());
                 double renderPosX = Blink.mc.getRenderManager().viewerPosX;
                 double renderPosY = Blink.mc.getRenderManager().viewerPosY;
                 double renderPosZ = Blink.mc.getRenderManager().viewerPosZ;
                 for (double[] pos : this.positions) {
-                    GL11.glVertex3d((double)(pos[0] - renderPosX), (double)(pos[1] - renderPosY), (double)(pos[2] - renderPosZ));
+                    GL11.glVertex3d(pos[0] - renderPosX, pos[1] - renderPosY, pos[2] - renderPosZ);
                 }
-                GL11.glColor4d((double)1.0, (double)1.0, (double)1.0, (double)1.0);
+                GL11.glColor4d(1.0, 1.0, 1.0, 1.0);
                 GL11.glEnd();
-                GL11.glEnable((int)2929);
-                GL11.glDisable((int)2848);
-                GL11.glDisable((int)3042);
-                GL11.glEnable((int)3553);
+                GL11.glEnable(2929);
+                GL11.glDisable(2848);
+                GL11.glDisable(3042);
+                GL11.glEnable(3553);
                 GL11.glPopMatrix();
             }
         }
     }
 
-    public static enum PacketModeValues {
+    public enum PacketModeValues {
         All,
         InBound,
-        OutGoing;
+        OutGoing
 
     }
 }

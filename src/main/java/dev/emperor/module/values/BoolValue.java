@@ -16,7 +16,7 @@ extends Value<Boolean> {
 
     @Override
     public Boolean getConfigValue() {
-        return (Boolean)this.value;
+        return this.value;
     }
 }
 

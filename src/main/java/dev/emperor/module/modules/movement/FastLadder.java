@@ -26,7 +26,7 @@ extends Module {
         }
         Block block = BlockUtil.getBlock(new BlockPos(FastLadder.mc.thePlayer.posX, FastLadder.mc.thePlayer.posY + 1.0, FastLadder.mc.thePlayer.posZ));
         if (block instanceof BlockLadder && FastLadder.mc.thePlayer.isCollidedHorizontally || block instanceof BlockVine || BlockUtil.getBlock(new BlockPos(FastLadder.mc.thePlayer.posX, FastLadder.mc.thePlayer.posY, FastLadder.mc.thePlayer.posZ)) instanceof BlockVine) {
-            FastLadder.mc.thePlayer.motionY = (Double)this.yMotionValue.getValue();
+            FastLadder.mc.thePlayer.motionY = this.yMotionValue.getValue();
             FastLadder.mc.thePlayer.motionX = 0.0;
             FastLadder.mc.thePlayer.motionZ = 0.0;
         }

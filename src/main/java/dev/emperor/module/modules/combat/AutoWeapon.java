@@ -42,16 +42,16 @@ extends Module {
             double maxDamage = 0.0;
             for (int i = 0; i < 9; ++i) {
                 double damage;
-                if (AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i) == null || !(AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i).getItem() instanceof ItemSword) && (!(AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i).getItem() instanceof ItemTool) || !((Boolean)this.itemTool.getValue()).booleanValue()) || !((damage = (AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i).getAttributeModifiers().get(((Object)"generic.attackDamage").toString()).stream().findFirst().orElse(null) != null ? ((AttributeModifier)Objects.requireNonNull(AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i).getAttributeModifiers().get((String) "generic.attackDamage").stream().findFirst().orElse(null))).getAmount() : 0.0) + 1.25 * (double)ItemUtils.getEnchantment(AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i), Enchantment.sharpness)) > maxDamage)) continue;
+                if (AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i) == null || !(AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i).getItem() instanceof ItemSword) && (!(AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i).getItem() instanceof ItemTool) || !this.itemTool.getValue().booleanValue()) || !((damage = (AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i).getAttributeModifiers().get(((Object)"generic.attackDamage").toString()).stream().findFirst().orElse(null) != null ? Objects.requireNonNull(AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i).getAttributeModifiers().get("generic.attackDamage").stream().findFirst().orElse(null)).getAmount() : 0.0) + 1.25 * (double)ItemUtils.getEnchantment(AutoWeapon.mc.thePlayer.inventory.getStackInSlot(i), Enchantment.sharpness)) > maxDamage)) continue;
                 maxDamage = damage;
                 slot = i;
             }
             if (slot == AutoWeapon.mc.thePlayer.inventory.currentItem || slot == -1) {
                 return;
             }
-            if (((Boolean)this.silentValue.getValue()).booleanValue()) {
+            if (this.silentValue.getValue().booleanValue()) {
                 mc.getNetHandler().addToSendQueue(new C09PacketHeldItemChange(slot));
-                this.spoofedSlot = ((Double)this.ticksValue.getValue()).intValue();
+                this.spoofedSlot = this.ticksValue.getValue().intValue();
             } else {
                 AutoWeapon.mc.thePlayer.inventory.currentItem = slot;
                 AutoWeapon.mc.playerController.updateController();

@@ -15,7 +15,7 @@ import net.vialoadingbase.ViaLoadingBase;
 
 public class Regen
 extends Module {
-    private final ModeValue<regenMode> modeValue = new ModeValue("Mode", (Enum[])regenMode.values(), (Enum)regenMode.Vanilla);
+    private final ModeValue<regenMode> modeValue = new ModeValue("Mode", regenMode.values(), regenMode.Vanilla);
     private final NumberValue healthValue = new NumberValue("Health", 18.0, 0.0, 20.0, 1.0);
     private final NumberValue foodValue = new NumberValue("Food", 18.0, 0.0, 20.0, 1.0);
     private final NumberValue speedValue = new NumberValue("Speed", 100.0, 1.0, 100.0, 1.0);
@@ -29,19 +29,19 @@ extends Module {
 
     @EventTarget
     public void onUpdate(EventUpdate event) {
-        this.setSuffix((Object)this.modeValue.get());
+        this.setSuffix(this.modeValue.get());
         if (this.resetTimer) {
             Regen.mc.timer.timerSpeed = 1.0f;
         }
         this.resetTimer = false;
-        if ((!((Boolean)this.noAirValue.getValue()).booleanValue() || Regen.mc.thePlayer.onGround) && !Regen.mc.thePlayer.capabilities.isCreativeMode && (double)Regen.mc.thePlayer.getFoodStats().getFoodLevel() > (Double)this.foodValue.getValue() && Regen.mc.thePlayer.isEntityAlive() && (double)Regen.mc.thePlayer.getHealth() < (Double)this.healthValue.getValue()) {
-            if (((Boolean)this.potionEffectValue.getValue()).booleanValue() && !Regen.mc.thePlayer.isPotionActive(Potion.regeneration)) {
+        if ((!(Boolean) this.noAirValue.getValue() || Regen.mc.thePlayer.onGround) && !Regen.mc.thePlayer.capabilities.isCreativeMode && (double)Regen.mc.thePlayer.getFoodStats().getFoodLevel() > this.foodValue.getValue() && Regen.mc.thePlayer.isEntityAlive() && (double)Regen.mc.thePlayer.getHealth() < this.healthValue.getValue()) {
+            if (this.potionEffectValue.getValue() && !Regen.mc.thePlayer.isPotionActive(Potion.regeneration)) {
                 return;
             }
             switch (this.modeValue.get()) {
                 case Vanilla: {
                     int i = 0;
-                    while ((double)i < (Double)this.speedValue.getValue()) {
+                    while ((double)i < this.speedValue.getValue()) {
                         PacketUtil.send(new C03PacketPlayer(Regen.mc.thePlayer.onGround));
                         ++i;
                     }
@@ -52,7 +52,7 @@ extends Module {
                         return;
                     }
                     int i = 0;
-                    while ((double)i < (Double)this.speedValue.getValue()) {
+                    while ((double)i < this.speedValue.getValue()) {
                         PacketUtil.send(new C03PacketPlayer.C06PacketPlayerPosLook(Regen.mc.thePlayer.posX, Regen.mc.thePlayer.posY, Regen.mc.thePlayer.posZ, Regen.mc.thePlayer.rotationYaw, Regen.mc.thePlayer.rotationPitch, Regen.mc.thePlayer.onGround));
                         ++i;
                     }
@@ -88,12 +88,12 @@ extends Module {
         }
     }
 
-    public static enum regenMode {
+    public enum regenMode {
         Vanilla,
         Grim1_17,
         OldSpartan,
         NewSpartan,
-        AAC4NoFire;
+        AAC4NoFire
 
     }
 }

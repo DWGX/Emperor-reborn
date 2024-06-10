@@ -30,14 +30,10 @@ extends Module {
     public static final ModeValue<velMode> modes = new ModeValue("Mode", velMode.values(), velMode.Cancel);
     public static final ModeValue<GrimVelocity.velMode> grimModes = new ModeValue("GrimMode", GrimVelocity.velMode.values(), GrimVelocity.velMode.Vertical, () -> modes.getValue().equals(velMode.Grim));
     public static final BoolValue grimRayCastValue = new BoolValue("Grim-RayCast", false, () -> ViaLoadingBase.getInstance().getTargetVersion().getVersion() > 47 && grimModes.getValue().equals(GrimVelocity.velMode.Vertical));
-    public static final BoolValue grimOnly0078 = new BoolValue("Grim-Only0.078", false, () -> ViaLoadingBase.getInstance().getTargetVersion().getVersion() > 47 && grimModes.getValue().equals(GrimVelocity.velMode.Vertical));
-    public static final NumberValue grimCheckRangeValue = new NumberValue("Grim-CheckRange", 4.0, 2.0, 6.0, 0.1, () -> ViaLoadingBase.getInstance().getTargetVersion().getVersion() > 47 && grimModes.getValue().equals(GrimVelocity.velMode.Vertical));
-    public static final NumberValue grimAttackPacketCountValue = new NumberValue("Grim-AttackPacket-Count", 12.0, 5.0, 50.0, 1.0, () -> ViaLoadingBase.getInstance().getTargetVersion().getVersion() > 47 && grimModes.getValue().equals(GrimVelocity.velMode.Vertical));
     public static final ModeValue<AACVelocity.velMode> aacModes = new ModeValue("AACMode", AACVelocity.velMode.values(), AACVelocity.velMode.AAC5, () -> modes.getValue().equals(velMode.AAC));
     public BoolValue OnlyMove = new BoolValue("OnlyMove", false);
     public BoolValue OnlyGround = new BoolValue("OnlyGround", false);
     private final BoolValue BlinkCheck = new BoolValue("BlinkCheck", false);
-    private final BoolValue FireCheckValue = new BoolValue("FireCheck", false);
     private final BoolValue WaterCheckValue = new BoolValue("WaterCheck", false);
     private final BoolValue S08FlagCheckValue = new BoolValue("S08FlagCheck", false);
     public NumberValue S08FlagTickValue = new NumberValue("S08FlagTicks", 6.0, 0.0, 30.0, 1.0);
@@ -159,7 +155,6 @@ extends Module {
         Cancel,
         JumpReset,
         Hypixel
-
     }
 }
 

@@ -19,7 +19,7 @@ import net.minecraft.network.play.client.C16PacketClientStatus;
 public class AutoArmor
 extends Module {
     public static NumberValue DELAY = new NumberValue("Delay", 1.0, 0.0, 10.0, 1.0);
-    public static ModeValue<EMode> MODE = new ModeValue("Mode", (Enum[])EMode.values(), (Enum)EMode.Basic);
+    public static ModeValue<EMode> MODE = new ModeValue("Mode", EMode.values(), EMode.Basic);
     private final BoolValue drop = new BoolValue("Drop", true);
     private final TimeUtil timer = new TimeUtil();
 
@@ -30,7 +30,7 @@ extends Module {
     @EventTarget
     public void onEvent(EventTick event) {
         this.setSuffix(MODE.getValue());
-        long delay = ((Double)DELAY.getValue()).longValue() * 50L;
+        long delay = DELAY.getValue().longValue() * 50L;
         if (MODE.getValue() == EMode.OpenInv && !(AutoArmor.mc.currentScreen instanceof GuiInventory)) {
             return;
         }
@@ -48,7 +48,7 @@ extends Module {
                     C16PacketClientStatus p = new C16PacketClientStatus(C16PacketClientStatus.EnumState.OPEN_INVENTORY_ACHIEVEMENT);
                     AutoArmor.mc.thePlayer.sendQueue.addToSendQueue(p);
                 }
-                if (((Boolean)this.drop.getValue()).booleanValue()) {
+                if (this.drop.getValue().booleanValue()) {
                     this.drop(4 + type);
                 }
             }
@@ -57,7 +57,7 @@ extends Module {
                 if (!AutoArmor.mc.thePlayer.inventoryContainer.getSlot(i).getHasStack() || !AutoArmor.isBestArmor(is = AutoArmor.mc.thePlayer.inventoryContainer.getSlot(i).getStack(), type) || !(AutoArmor.getProtection(is) > 0.0f)) continue;
                 this.shiftClick(i);
                 this.timer.reset();
-                if (((Double)DELAY.getValue()).longValue() <= 0L) continue;
+                if (DELAY.getValue().longValue() <= 0L) continue;
                 return;
             }
         }
@@ -107,8 +107,7 @@ extends Module {
 
     public static float getProtection(ItemStack stack) {
         float prot = 0.0f;
-        if (stack.getItem() instanceof ItemArmor) {
-            ItemArmor armor = (ItemArmor)stack.getItem();
+        if (stack.getItem() instanceof ItemArmor armor) {
             prot = (float)((double)prot + ((double)armor.damageReduceAmount + (double)((100 - armor.damageReduceAmount) * EnchantmentHelper.getEnchantmentLevel(Enchantment.protection.effectId, stack)) * 0.0075));
             prot = (float)((double)prot + (double)EnchantmentHelper.getEnchantmentLevel(Enchantment.blastProtection.effectId, stack) / 100.0);
             prot = (float)((double)prot + (double)EnchantmentHelper.getEnchantmentLevel(Enchantment.fireProtection.effectId, stack) / 100.0);
@@ -119,10 +118,10 @@ extends Module {
         return prot;
     }
 
-    public static enum EMode {
+    public enum EMode {
         Basic,
         OpenInv,
-        FakeInv;
+        FakeInv
 
     }
 }

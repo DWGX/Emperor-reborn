@@ -20,10 +20,10 @@ import net.minecraft.util.MathHelper;
 
 public class WallClimb
 extends Module {
-    private final ModeValue<WallClimbModes> modeValue = new ModeValue("Mode", (Enum[])WallClimbModes.values(), (Enum)WallClimbModes.Simple);
-    private final ModeValue<ClipMode> clipMode = new ModeValue("ClipMode", (Enum[])ClipMode.values(), (Enum)ClipMode.Fast, () -> this.modeValue.get().equals((Object)WallClimbModes.Clip));
-    private final NumberValue checkerClimbMotionValue = new NumberValue("CheckerClimbMotion", 0.0, 0.0, 1.0, 0.1, () -> this.modeValue.get().equals((Object)WallClimbModes.CheckerClimb));
-    private final NumberValue verusClimbSpeed = new NumberValue("VerusClimbSpeed", 0.0, 0.0, 1.0, 0.1, () -> this.modeValue.get().equals((Object)WallClimbModes.Verus));
+    private final ModeValue<WallClimbModes> modeValue = new ModeValue("Mode", WallClimbModes.values(), WallClimbModes.Simple);
+    private final ModeValue<ClipMode> clipMode = new ModeValue("ClipMode", ClipMode.values(), ClipMode.Fast, () -> this.modeValue.get().equals(WallClimbModes.Clip));
+    private final NumberValue checkerClimbMotionValue = new NumberValue("CheckerClimbMotion", 0.0, 0.0, 1.0, 0.1, () -> this.modeValue.get().equals(WallClimbModes.CheckerClimb));
+    private final NumberValue verusClimbSpeed = new NumberValue("VerusClimbSpeed", 0.0, 0.0, 1.0, 0.1, () -> this.modeValue.get().equals(WallClimbModes.Verus));
     private boolean glitch;
     private boolean canClimb;
     private int waited;
@@ -44,7 +44,7 @@ extends Module {
         if (!WallClimb.mc.thePlayer.isCollidedHorizontally || WallClimb.mc.thePlayer.isOnLadder() || WallClimb.mc.thePlayer.isInWater() || WallClimb.mc.thePlayer.isInLava()) {
             return;
         }
-        if (((WallClimbModes)((Object)this.modeValue.getValue())).equals((Object)WallClimbModes.Simple)) {
+        if (this.modeValue.getValue().equals(WallClimbModes.Simple)) {
             event.setY(0.2);
             WallClimb.mc.thePlayer.motionY = 0.0;
         }
@@ -52,7 +52,7 @@ extends Module {
 
     @EventTarget
     public void onJump(EventJump event) {
-        if (((WallClimbModes)((Object)this.modeValue.getValue())).equals((Object)WallClimbModes.Verus) && this.canClimb) {
+        if (this.modeValue.getValue().equals(WallClimbModes.Verus) && this.canClimb) {
             event.setCancelled();
         }
     }
@@ -62,7 +62,7 @@ extends Module {
         if (event.isPost()) {
             return;
         }
-        switch ((WallClimbModes)((Object)this.modeValue.getValue())) {
+        switch (this.modeValue.getValue()) {
             case Clip: {
                 if (WallClimb.mc.thePlayer.motionY < 0.0) {
                     this.glitch = true;
@@ -87,7 +87,7 @@ extends Module {
             }
             case CheckerClimb: {
                 boolean isInsideBlock = BlockUtil.collideBlockIntersects(WallClimb.mc.thePlayer.getEntityBoundingBox(), block -> !(block instanceof BlockAir));
-                float motion = ((Double)this.checkerClimbMotionValue.getValue()).floatValue();
+                float motion = this.checkerClimbMotionValue.getValue().floatValue();
                 if (!isInsideBlock || motion == 0.0f) break;
                 WallClimb.mc.thePlayer.motionY = motion;
                 break;
@@ -128,7 +128,7 @@ extends Module {
                     break;
                 }
                 this.canClimb = true;
-                WallClimb.mc.thePlayer.motionY = (Double)this.verusClimbSpeed.getValue();
+                WallClimb.mc.thePlayer.motionY = this.verusClimbSpeed.getValue();
                 WallClimb.mc.thePlayer.onGround = true;
             }
         }
@@ -137,8 +137,7 @@ extends Module {
     @EventTarget
     public void onPacket(EventPacketSend event) {
         Packet packet = event.getPacket();
-        if (packet instanceof C03PacketPlayer) {
-            C03PacketPlayer packetPlayer = (C03PacketPlayer)packet;
+        if (packet instanceof C03PacketPlayer packetPlayer) {
             if (this.glitch) {
                 float yaw = (float)MoveUtil.getDirection();
                 packetPlayer.x -= (double)MathHelper.sin(yaw) * 1.0E-8;
@@ -156,7 +155,7 @@ extends Module {
         if (WallClimb.mc.thePlayer == null) {
             return;
         }
-        switch ((WallClimbModes)((Object)this.modeValue.getValue())) {
+        switch (this.modeValue.getValue()) {
             case CheckerClimb: {
                 if (!((double)event.getY() > WallClimb.mc.thePlayer.posY)) break;
                 event.setBoundingBox(null);
@@ -169,19 +168,19 @@ extends Module {
         }
     }
 
-    public static enum ClipMode {
+    public enum ClipMode {
         Jump,
-        Fast;
+        Fast
 
     }
 
-    public static enum WallClimbModes {
+    public enum WallClimbModes {
         Simple,
         CheckerClimb,
         Clip,
         AAC_3_3_12,
         AACGlide,
-        Verus;
+        Verus
 
     }
 }

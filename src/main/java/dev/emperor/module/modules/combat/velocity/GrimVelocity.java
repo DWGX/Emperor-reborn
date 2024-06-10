@@ -148,9 +148,6 @@ public class GrimVelocity
                         velocityInput = false;
                     }
                 }
-            } else if (this.mc.thePlayer.hurtTime > 0 && this.mc.thePlayer.onGround) {
-                this.mc.thePlayer.addVelocity(-1.3E-10, -1.3E-10, -1.3E-10);
-                this.mc.thePlayer.setSprinting(false);
             }
         }
     }

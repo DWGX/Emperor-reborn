@@ -51,7 +51,7 @@ extends Module {
         if (this.blockPos == null || this.enumFacing == null) {
             return;
         }
-        this.canBreak = this.breakPercent * 50.0f >= 100.0f ? BlockUtil.getCenterDistance(this.blockPos) < (Double)this.range.getValue() : false;
+        this.canBreak = this.breakPercent * 50.0f >= 100.0f && BlockUtil.getCenterDistance(this.blockPos) < (Double) this.range.getValue();
         if (this.canBreak) {
             PacketUtil.sendPacketNoEvent(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.STOP_DESTROY_BLOCK, this.blockPos, this.enumFacing));
             this.blockPos = null;
