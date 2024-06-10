@@ -57,7 +57,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 
 public abstract class EntityLivingBase extends Entity
 {

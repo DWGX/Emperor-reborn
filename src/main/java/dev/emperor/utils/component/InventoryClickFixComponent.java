@@ -9,7 +9,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.network.play.client.C0EPacketClickWindow;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 
 public class InventoryClickFixComponent {
     @EventTarget

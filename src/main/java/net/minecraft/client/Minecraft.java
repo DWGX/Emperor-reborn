@@ -160,7 +160,7 @@ import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import net.optifine.shaders.Shaders;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 import net.viamcp.ViaMCP;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;

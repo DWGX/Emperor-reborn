@@ -1,10 +1,10 @@
 package dev.emperor.module.modules.combat;
 
+import com.viaversion.viarewind.utils.PacketUtil;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.type.Type;
-import de.gerrygames.viarewind.protocol.protocol1_8to1_9.Protocol1_8TO1_9;
-import de.gerrygames.viarewind.utils.PacketUtil;
+import com.viaversion.viarewind.protocol.protocol1_8to1_9.Protocol1_8To1_9;
 import dev.emperor.Client;
 import dev.emperor.event.EventManager;
 import dev.emperor.event.EventTarget;
@@ -68,7 +68,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 import net.viamcp.fixes.AttackOrder;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.input.Keyboard;
@@ -381,7 +381,6 @@ extends Module {
         this.randomYaw += (float)(Math.random() - 0.5);
         this.randomPitch += (float)(Math.random() - 0.5) * 2.0f;
     }
-
     private void doRotation(EntityLivingBase target) {
         if ((double)this.getDistanceToEntity(target, KillAura.mc.thePlayer) <= this.range.getValue()) {
             switch (RotationMode.getValue()) {
@@ -413,8 +412,8 @@ extends Module {
                     KaRotation = new float[]{new Vector2f(this.curYaw + (float)rand.nextInt(12) - 5.0f, this.curPitch).getX(), new Vector2f(this.curYaw + (float)rand.nextInt(12) - 5.0f, this.curPitch).getY()};
                     break;
                 }
-                case Smart: {
-                    KaRotation = RotationUtil.getRotationsNeeded(target);
+                case Emperor: {
+                    KaRotation = RotationUtil.getEmperorRotation(target, this.range.getValue()); // 使用自定义的 Emperor 模式算法
                     this.randomiseTargetRotations();
                     KaRotation[0] = KaRotation[0] + this.randomYaw;
                     KaRotation[1] = KaRotation[1] + this.randomPitch;
@@ -491,7 +490,7 @@ extends Module {
                     }
                     PacketWrapper useItemWD = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
                     useItemWD.write((Type)Type.VAR_INT, (Object)1);
-                    PacketUtil.sendToServer(useItemWD, Protocol1_8TO1_9.class, true, true);
+                    PacketUtil.sendToServer(useItemWD, Protocol1_8To1_9.class, true, true);
                     dev.emperor.utils.client.PacketUtil.sendPacketNoEvent(new C08PacketPlayerBlockPlacement(KillAura.mc.thePlayer.inventory.getCurrentItem()));
                     break;
                 }
@@ -518,7 +517,7 @@ extends Module {
                     }
                     PacketWrapper useItem_1_9 = PacketWrapper.create(29, null, Via.getManager().getConnectionManager().getConnections().iterator().next());
                     useItem_1_9.write((Type)Type.VAR_INT, (Object)1);
-                    PacketUtil.sendToServer(useItem_1_9, Protocol1_8TO1_9.class, true, true);
+                    PacketUtil.sendToServer(useItem_1_9, Protocol1_8To1_9.class, true, true);
                     KillAura.mc.playerController.sendUseItem(KillAura.mc.thePlayer, KillAura.mc.theWorld, KillAura.mc.thePlayer.getHeldItem(), true);
                 }
             }
@@ -761,8 +760,7 @@ extends Module {
         HvH,
         Rise,
         Hypixel,
-        Smart
-
+        Emperor
     }
 
     public enum AuraModes {

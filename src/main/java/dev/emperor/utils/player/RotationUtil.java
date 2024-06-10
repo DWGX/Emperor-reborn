@@ -214,18 +214,22 @@ public class RotationUtil {
         return new Vector2f(MathHelper.wrapAngleTo180_float((float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90.0f), MathHelper.wrapAngleTo180_float((float)(-Math.toDegrees(Math.atan2(diffY, Math.sqrt(diffX * diffX + diffZ * diffZ))))));
     }
 
-    public static float[] getRotationsNeeded(Entity target) {
+    public static float[] getEmperorRotation(Entity target, double range) { //dwgx
         double yDist = target.posY - RotationUtil.mc.thePlayer.posY;
-        Vec3 pos = yDist >= 1.7 ? new Vec3(target.posX, target.posY, target.posZ) : (yDist <= -1.7 ? new Vec3(target.posX, target.posY + (double)target.getEyeHeight(), target.posZ) : new Vec3(target.posX, target.posY + (double)(target.getEyeHeight() / 2.0f), target.posZ));
+        Vec3 pos = yDist >= 1.7 ? new Vec3(target.posX, target.posY, target.posZ) :
+                (yDist <= -1.7 ? new Vec3(target.posX, target.posY + (double)target.getEyeHeight(), target.posZ) :
+                        new Vec3(target.posX, target.posY + (double)(target.getEyeHeight() / 2.0f), target.posZ));
+
         Vec3 vec = new Vec3(RotationUtil.mc.thePlayer.posX, RotationUtil.mc.thePlayer.getEntityBoundingBox().minY + (double)RotationUtil.mc.thePlayer.getEyeHeight(), RotationUtil.mc.thePlayer.posZ);
-        double x2 = pos.xCoord - vec.xCoord;
-        double y2 = pos.yCoord - vec.yCoord;
-        double z = pos.zCoord - vec.zCoord;
-        double sqrt = Math.sqrt(x2 * x2 + z * z);
-        float yaw = (float)Math.toDegrees(Math.atan2(z, x2)) - 90.0f;
-        float pitch = (float)(-Math.toDegrees(Math.atan2(y2, sqrt)));
+        double xDist = pos.xCoord - vec.xCoord;
+        double yDist2 = pos.yCoord - vec.yCoord;
+        double zDist = pos.zCoord - vec.zCoord;
+        float yaw = (float)Math.toDegrees(Math.atan2(zDist, xDist)) - 90.0f;
+        float pitch = (float)(-Math.toDegrees(Math.atan2(yDist2, Math.sqrt(xDist * xDist + zDist * zDist))));
+
         return new float[]{yaw, Math.min(Math.max(pitch, -90.0f), 90.0f)};
     }
+
 
     public static float[] getHVHRotation(Entity entity, double maxRange) {
         if (entity == null) {
@@ -453,7 +457,7 @@ public class RotationUtil {
     }
 
     public static Vector2f applySensitivityPatch(Vector2f rotation) {
-        Vector2f previousRotation = RotationUtil.mc.thePlayer.getPreviousRotation();
+        javax.vecmath.Vector2f previousRotation = RotationUtil.mc.thePlayer.getPreviousRotation();
         float mouseSensitivity = (float)((double)RotationUtil.mc.gameSettings.mouseSensitivity * (1.0 + Math.random() / 1.0E7) * (double)0.6f + (double)0.2f);
         double multiplier = (double)(mouseSensitivity * mouseSensitivity * mouseSensitivity * 8.0f) * 0.15;
         float yaw = previousRotation.x + (float)((double)Math.round((double)(rotation.x - previousRotation.x) / multiplier) * multiplier);

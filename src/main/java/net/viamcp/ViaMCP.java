@@ -1,7 +1,7 @@
 package net.viamcp;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 import net.viamcp.gui.AsyncVersionSlider;
 
 import java.io.File;

@@ -14,6 +14,7 @@ import dev.emperor.module.modules.player.ChestStealer;
 import dev.emperor.module.modules.player.InvCleaner;
 import dev.emperor.module.modules.world.ChestAura;
 import dev.emperor.module.modules.world.PlayerWarn;
+import dev.emperor.module.modules.world.Scaffold;
 import dev.emperor.module.values.BoolValue;
 import dev.emperor.module.values.ModeValue;
 import dev.emperor.module.values.NumberValue;
@@ -121,6 +122,7 @@ public class AutoPlay
                 Client.instance.moduleManager.getModule(ChestStealer.class).setState(false);
                 Client.instance.moduleManager.getModule(KillAura.class).setState(false);
                 Client.instance.moduleManager.getModule(ChestAura.class).setState(false);
+                Client.instance.moduleManager.getModule(Scaffold.class).setState(false);
                 NotificationManager.post(NotificationType.SUCCESS, "Game Ending", "Sending you to next game in " + this.delayValue.getValue() + "s", 5.0f);
             }
             if (text.contains("[起床战争] Game 结束！感谢您的参与！") || text.contains("喜欢 一般 不喜欢")) {
@@ -137,15 +139,14 @@ public class AutoPlay
                     NotificationManager.post(NotificationType.INFO, "Skywars Starting", "喜报，主播你的脑子在正常工作", 5.0f);
                 }
                 if (this.toggleModule.getValue()) {
-                    Client.instance.moduleManager.getModule(KillAura.class).setState(true);
                     Client.instance.moduleManager.getModule(InvCleaner.class).setState(true);
                     Client.instance.moduleManager.getModule(ChestStealer.class).setState(true);
                     Client.instance.moduleManager.getModule(ChestAura.class).setState(true);
                 }
             }
-            if (text.contains("空岛战争")) {
-                NotificationManager.post(NotificationType.WARNING, "Bedwars Warning (Wait 15s)", "Using OldScaffold May Result In A Ban.", 5.0f);
-            }
+            //if (text.contains("空岛战争")) {
+              //  NotificationManager.post(NotificationType.WARNING, "Bedwars Warning (Wait 15s)", "Using OldScaffold May Result In A Ban.", 5.0f);
+            //}
         }
     }
     private void handleBannedPlayer() {

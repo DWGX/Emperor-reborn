@@ -10,6 +10,7 @@ import dev.emperor.event.world.EventTick;
 import dev.emperor.event.world.EventUpdate;
 import dev.emperor.module.Category;
 import dev.emperor.module.Module;
+import dev.emperor.module.modules.render.KillEffect;
 import dev.emperor.module.values.BoolValue;
 import dev.emperor.utils.InventoryUtil;
 import dev.emperor.utils.Rotation;
@@ -105,6 +106,7 @@ extends Module {
 
     @Override
     public void onEnable() {
+        Client.instance.moduleManager.getModule(KillEffect.class).setState(false);
         this.idkTick = 5;
         if (Scaffold.mc.thePlayer == null) {
             return;

@@ -11,7 +11,7 @@ import dev.emperor.utils.client.PacketUtil;
 import dev.emperor.utils.player.MoveUtil;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.potion.Potion;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 
 public class Regen
 extends Module {

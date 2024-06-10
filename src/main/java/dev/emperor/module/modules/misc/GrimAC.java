@@ -40,11 +40,10 @@ extends Module {
     public void onPacket(EventPacketReceive event) {
         if (GrimAC.mc.thePlayer.ticksExisted % 6 == 0) {
             S19PacketEntityStatus s19;
-            if (event.getPacket() instanceof S19PacketEntityStatus && ((Boolean)this.reachValue.getValue()).booleanValue() && (s19 = (S19PacketEntityStatus)event.getPacket()).getOpCode() == 2) {
+            if (event.getPacket() instanceof S19PacketEntityStatus && this.reachValue.getValue().booleanValue() && (s19 = (S19PacketEntityStatus)event.getPacket()).getOpCode() == 2) {
                 new Thread(() -> this.checkCombatHurt(s19.getEntity(GrimAC.mc.theWorld))).start();
             }
-            if (event.getPacket() instanceof S14PacketEntity && ((Boolean)this.noslowAValue.getValue()).booleanValue()) {
-                S14PacketEntity packet = (S14PacketEntity)event.getPacket();
+            if (event.getPacket() instanceof S14PacketEntity packet && this.noslowAValue.getValue().booleanValue()) {
                 Entity entity = packet.getEntity(GrimAC.mc.theWorld);
                 if (!(entity instanceof EntityPlayer)) {
                     return;
@@ -61,17 +60,17 @@ extends Module {
         Entity attacker = null;
         int attackerCount = 0;
         for (Entity worldEntity : GrimAC.mc.theWorld.getLoadedEntityList()) {
-            if (!(worldEntity instanceof EntityPlayer) || ((EntityPlayer)worldEntity).getDistanceToEntity(entity) > 7.0f || ((Object)worldEntity).equals(entity)) continue;
+            if (!(worldEntity instanceof EntityPlayer) || worldEntity.getDistanceToEntity(entity) > 7.0f || ((Object)worldEntity).equals(entity)) continue;
             ++attackerCount;
-            attacker = (EntityPlayer)worldEntity;
+            attacker = worldEntity;
         }
         if (attacker == null || attacker.equals(entity) || Teams.isSameTeam(attacker)) {
             return;
         }
         double reach = attacker.getDistanceToEntity(entity);
-        String prefix = (Object)((Object)EnumChatFormatting.GRAY) + "[" + (Object)((Object)EnumChatFormatting.AQUA) + "GrimAC" + (Object)((Object)EnumChatFormatting.GRAY) + "] " + (Object)((Object)EnumChatFormatting.RESET) + (Object)((Object)EnumChatFormatting.GRAY) + ((EntityPlayer)attacker).getName() + (Object)((Object)EnumChatFormatting.WHITE) + " failed ";
+        String prefix = EnumChatFormatting.GRAY + "[" + EnumChatFormatting.AQUA + "GrimAC" + EnumChatFormatting.GRAY + "] " + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + attacker.getName() + EnumChatFormatting.WHITE + " failed ";
         if (reach > 3.0) {
-            DebugUtil.log(prefix + (Object)((Object)EnumChatFormatting.AQUA) + "Reach" + (Object)((Object)EnumChatFormatting.WHITE) + " (vl:" + attackerCount + ".0)" + (Object)((Object)EnumChatFormatting.GRAY) + ": " + DF_1.format(reach) + " blocks");
+            DebugUtil.log(prefix + EnumChatFormatting.AQUA + "Reach" + EnumChatFormatting.WHITE + " (vl:" + attackerCount + ".0)" + EnumChatFormatting.GRAY + ": " + DF_1.format(reach) + " blocks");
         }
     }
 
@@ -79,9 +78,9 @@ extends Module {
         if (player.equals(GrimAC.mc.thePlayer) || Teams.isSameTeam(player)) {
             return;
         }
-        String prefix = (Object)((Object)EnumChatFormatting.GRAY) + "[" + (Object)((Object)EnumChatFormatting.AQUA) + "GrimAC" + (Object)((Object)EnumChatFormatting.GRAY) + "] " + (Object)((Object)EnumChatFormatting.RESET) + (Object)((Object)EnumChatFormatting.GRAY) + player.getName() + (Object)((Object)EnumChatFormatting.WHITE) + " failed ";
+        String prefix = EnumChatFormatting.GRAY + "[" + EnumChatFormatting.AQUA + "GrimAC" + EnumChatFormatting.GRAY + "] " + EnumChatFormatting.RESET + EnumChatFormatting.GRAY + player.getName() + EnumChatFormatting.WHITE + " failed ";
         if (player.isUsingItem() && (player.posX - player.lastTickPosX > 0.2 || player.posZ - player.lastTickPosZ > 0.2)) {
-            DebugUtil.log(prefix + (Object)((Object)EnumChatFormatting.AQUA) + "NoSlowA (Prediction)" + (Object)((Object)EnumChatFormatting.WHITE) + " (vl:" + this.vl + ".0)");
+            DebugUtil.log(prefix + EnumChatFormatting.AQUA + "NoSlowA (Prediction)" + EnumChatFormatting.WHITE + " (vl:" + this.vl + ".0)");
             ++this.vl;
         }
         if (!GrimAC.mc.theWorld.loadedEntityList.contains(player) || !player.isEntityAlive()) {

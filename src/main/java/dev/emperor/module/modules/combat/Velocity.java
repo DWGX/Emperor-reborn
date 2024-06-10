@@ -23,7 +23,7 @@ import net.minecraft.client.gui.GuiGameOver;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
 import net.minecraft.world.WorldSettings;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 
 public class Velocity
 extends Module {
