@@ -6,6 +6,7 @@ import dev.emperor.event.world.EventMotion;
 import dev.emperor.event.world.EventStep;
 import dev.emperor.module.Category;
 import dev.emperor.module.Module;
+import dev.emperor.module.modules.player.Blink;
 import dev.emperor.module.values.ModeValue;
 import dev.emperor.module.values.NumberValue;
 import dev.emperor.utils.client.MathUtil;
@@ -21,7 +22,16 @@ extends Module {
     private final ModeValue<modeEnums> modeValue = new ModeValue("Mode", modeEnums.values(), modeEnums.Hypixel);
     private final NumberValue hurtTimeValue = new NumberValue("HurtTime", 15.0, 0.0, 20.0, 1.0);
     private final NumberValue delayValue = new NumberValue("Delay", 3.0, 0.0, 10.0, 0.5);
+    private final NumberValue timervalue = new NumberValue("TimerValue", 1F, 0.1F, 1F, 0.1);
+    private final NumberValue jumpHeight = new NumberValue("JumpHeight", 0.42F, 0.1F, 1.0F, 0.01F);
+    private final NumberValue airTime = new NumberValue("AirTime", 10, 5, 20, 1);
     private int groundTicks;
+
+    private int blinktick = 0;
+    private int jump = 0;
+    private int airtick = 0;
+    private boolean dotimercri = false;
+
 
     public Criticals() {
         super("Criticals", Category.Combat);
@@ -43,6 +53,38 @@ extends Module {
         }
         if (this.modeValue.getValue() == modeEnums.NoGround) {
             event.setOnGround(false);
+        }
+        
+        if (this.modeValue.getValue() == modeEnums.Grim) {
+            Module blink = getModule(Blink.class);
+            if (!mc.thePlayer.onGround) {
+                airtick++;
+            } else {
+                airtick = 0;
+            }
+
+            if (blink.getState()) {
+                blinktick = 100;
+            } else {
+                blinktick--;
+            }
+
+            if (dotimercri && getModule(KillAura.class).getState()) {
+                if (airtick == 1) {
+                    mc.gameSettings.keyBindJump.pressed = false;
+                }
+
+                if (airtick >= 6 && airtick <= airTime.getValue().intValue() && !mc.thePlayer.onGround) {
+                    mc.timer.timerSpeed = timervalue.getValue().floatValue();
+                }
+
+                if (airtick > airTime.getValue().intValue() || airtick == 0 || mc.thePlayer.onGround) {
+                    mc.timer.timerSpeed = 1F;
+                    dotimercri = false;
+                }
+            }
+
+            jump++;
         }
     }
 
@@ -94,6 +136,23 @@ extends Module {
                     Criticals.mc.thePlayer.fallDistance = 0.1f;
                     Criticals.mc.thePlayer.onGround = false;
                 }
+                case "grin": {
+                    Module blink = getModule(Blink.class);
+                    if (!blink.getState() && blinktick <= 0 && getModule(KillAura.class).getState()) {
+                        if (mc.thePlayer.onGround && jump > 10 && airtick == 0 && !dotimercri && mc.thePlayer.hurtTime == 0) {
+                            mc.gameSettings.keyBindJump.pressed = true;
+                            jump = 0;
+                            airtick = 0;
+                            dotimercri = true;
+                            mc.timer.timerSpeed = 2f - timervalue.getValue().floatValue();
+                        }
+                    } else {
+                        if (mc.thePlayer.onGround && jump > 10) {
+                            mc.thePlayer.motionY = jumpHeight.getValue().floatValue();
+                            jump = 0;
+                        }
+                    }
+                }
             }
         }
     }
@@ -105,6 +164,7 @@ extends Module {
         Hop,
         Jump,
         Visual,
+        Grim,
         NoGround
 
     }

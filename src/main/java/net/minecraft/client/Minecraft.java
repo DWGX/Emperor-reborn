@@ -2134,7 +2134,7 @@ IPlayerUsage {
     }
 
     public static long getSystemTime() {
-        return Sys.getTime() * 1000L / Sys.getTimerResolution();
+        return System.currentTimeMillis();
     }
 
     public boolean isFullScreen() {

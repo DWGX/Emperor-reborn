@@ -12,8 +12,8 @@ import org.lwjgl.opengl.GL11;
 public class GuiButton
 extends Gui {
     protected static final ResourceLocation buttonTextures = new ResourceLocation("textures/gui/widgets.png");
-    protected int width = 200;
-    protected int height = 20;
+    protected int width;
+    protected int height;
     public int xPosition;
     public int yPosition;
     public String displayString;
@@ -59,22 +59,22 @@ extends Gui {
             this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 66, this.width / 2, this.height);
             if (this.hovered && this.enabled) {
                 GL11.glPushMatrix();
-                GL11.glEnable((int)3042);
-                GL11.glEnable((int)2848);
-                GL11.glBlendFunc((int)770, (int)771);
-                GL11.glDisable((int)3553);
-                GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-                GL11.glTranslatef((float)this.xPosition, (float)this.yPosition, (float)0.0f);
-                GL11.glLineWidth((float)3.0f);
-                GL11.glBegin((int)2);
-                GL11.glVertex2f((float)0.0f, (float)0.0f);
-                GL11.glVertex2f((float)this.width, (float)0.0f);
+                GL11.glEnable(3042);
+                GL11.glEnable(2848);
+                GL11.glBlendFunc(770, 771);
+                GL11.glDisable(3553);
+                GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                GL11.glTranslatef((float)this.xPosition, (float)this.yPosition, 0.0f);
+                GL11.glLineWidth(3.0f);
+                GL11.glBegin(2);
+                GL11.glVertex2f(0.0f, 0.0f);
+                GL11.glVertex2f((float)this.width, 0.0f);
                 GL11.glVertex2f((float)this.width, (float)this.height);
-                GL11.glVertex2f((float)0.0f, (float)this.height);
+                GL11.glVertex2f(0.0f, (float)this.height);
                 GL11.glEnd();
-                GL11.glEnable((int)3553);
-                GL11.glDisable((int)2848);
-                GL11.glDisable((int)3042);
+                GL11.glEnable(3553);
+                GL11.glDisable(2848);
+                GL11.glDisable(3042);
                 GL11.glPopMatrix();
             }
             this.mouseDragged(mc, mouseX, mouseY);
