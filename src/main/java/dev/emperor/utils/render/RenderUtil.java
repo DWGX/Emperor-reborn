@@ -45,7 +45,7 @@ public class RenderUtil {
     private static int lastScaledWidth;
     private static int lastScaledHeight;
     private static float lastGuiScale;
-    private static ScaledResolution scaledResolution;
+    public static ScaledResolution scaledResolution;
     private static final WorldRenderer worldrenderer;
     public static final Pattern COLOR_PATTERN;
     private static final Minecraft mc;

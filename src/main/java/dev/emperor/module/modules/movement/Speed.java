@@ -7,6 +7,7 @@ import dev.emperor.module.Module;
 import dev.emperor.module.modules.combat.KillAura;
 import dev.emperor.module.modules.player.Blink;
 import dev.emperor.module.values.ModeValue;
+import dev.emperor.module.values.NumberValue;
 import dev.emperor.utils.RotationComponent;
 import dev.emperor.utils.player.MoveUtil;
 import dev.emperor.utils.player.PlayerUtil;
@@ -22,16 +23,17 @@ import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 
-public class Speed
-extends Module {
+public class Speed extends Module {
     public static Speed INSTANCE;
     private static final ModeValue<speedMode> MODE;
+    private static final NumberValue speedValue = new NumberValue("Speed", 1.0, 0.1, 2.0,0.01);
     private static boolean wasOnGround;
 
     public Speed() {
         super("Speed", Category.Movement);
         INSTANCE = this;
     }
+
 
     @Override
     public void onDisable() {
@@ -43,23 +45,24 @@ extends Module {
         }
     }
 
-        @EventTarget
-        public void onMove(EventMotion event) {
-            this.setSuffix(((speedMode)((Object)MODE.getValue())).name());
-            if (event.isPre()) {
-                switch ((speedMode)((Object)MODE.getValue())) {
-                    case HvH: {
-                        if (MoveUtil.isMoving()) {
-                            if (Speed.mc.thePlayer.onGround) {
-                                Speed.mc.thePlayer.motionY = 0.42;
-                                wasOnGround = true;
-                            } else if (wasOnGround) {
-                                if (!Speed.mc.thePlayer.isCollidedHorizontally) {
-                                    Speed.mc.thePlayer.motionY = -0.0484000015258789;
-                                }
+    @EventTarget
+    public void onMove(EventMotion event) {
+        this.setSuffix(MODE.getValue().name());
+        if (event.isPre()) {
+            double speed = speedValue.getValue();
+            switch (MODE.getValue()) {
+                case HvH: {
+                    if (MoveUtil.isMoving()) {
+                        if (Speed.mc.thePlayer.onGround) {
+                            Speed.mc.thePlayer.motionY = 0.42;
+                            wasOnGround = true;
+                        } else if (wasOnGround) {
+                            if (!Speed.mc.thePlayer.isCollidedHorizontally) {
+                                Speed.mc.thePlayer.motionY = -0.0484000015258789;
+                            }
                             wasOnGround = false;
                         }
-                        MoveUtil.setMotion(0.63);
+                        MoveUtil.setMotion(0.63 * speed);
                         break;
                     }
                     Speed.mc.thePlayer.motionZ = 0.0;
@@ -71,20 +74,20 @@ extends Module {
                         case 0: {
                             Speed.mc.thePlayer.jump();
                             if (Speed.mc.thePlayer.isPotionActive(Potion.moveSpeed)) {
-                                MoveUtil.strafe(0.6);
+                                MoveUtil.strafe(0.6 * speed);
                                 break;
                             }
-                            MoveUtil.strafe(0.485);
+                            MoveUtil.strafe(0.485 * speed);
                             break;
                         }
                         case 9: {
                             if (PlayerUtil.blockRelativeToPlayer(0.0, Speed.mc.thePlayer.motionY, 0.0) instanceof BlockAir) break;
-                            MoveUtil.strafe();
+                            MoveUtil.strafe(speed);
                             break;
                         }
-                        case 1: 
+                        case 1:
                         case 2: {
-                            MoveUtil.strafe();
+                            MoveUtil.strafe(speed);
                             break;
                         }
                         case 5: {
@@ -95,15 +98,15 @@ extends Module {
                 }
                 case WatchDog: {
                     if (Speed.mc.thePlayer.hurtTime > 6) {
-                        Speed.mc.thePlayer.motionX *= 1.007;
-                        Speed.mc.thePlayer.motionZ *= 1.007;
+                        Speed.mc.thePlayer.motionX *= 1.007 * speed;
+                        Speed.mc.thePlayer.motionZ *= 1.007 * speed;
                     }
                     if ((Speed.mc.gameSettings.keyBindLeft.pressed || Speed.mc.gameSettings.keyBindRight.pressed) && Speed.mc.thePlayer.motionY < -0.05 && Speed.mc.thePlayer.motionY > -0.08) {
-                        MoveUtil.strafe(0.15);
+                        MoveUtil.strafe(0.15 * speed);
                     }
                     if (!Speed.mc.thePlayer.onGround || Speed.mc.thePlayer.moveForward == 0.0f && Speed.mc.thePlayer.moveStrafing == 0.0f) break;
                     Speed.mc.thePlayer.jump();
-                    MoveUtil.setSpeed((float)(0.46 + (double)PlayerUtil.getSpeedPotion() * 0.02));
+                    MoveUtil.setSpeed((float) (0.46 + PlayerUtil.getSpeedPotion() * 0.02 * speed));
                     break;
                 }
                 case AAC4: {
@@ -115,17 +118,18 @@ extends Module {
                             Speed.mc.gameSettings.keyBindJump.pressed = false;
                             Speed.mc.thePlayer.jump();
                         }
-                        if (!Speed.mc.thePlayer.onGround && (double)Speed.mc.thePlayer.fallDistance <= 0.1) {
-                            Speed.mc.thePlayer.speedInAir = 0.03f;
+                        if (!Speed.mc.thePlayer.onGround && (double) Speed.mc.thePlayer.fallDistance <= 0.1) {
+                            Speed.mc.thePlayer.speedInAir = 0.03f * (float) speed;
                             Speed.mc.timer.timerSpeed = 1.45f;
                         }
-                        if ((double)Speed.mc.thePlayer.fallDistance > 0.1 && (double)Speed.mc.thePlayer.fallDistance < 1.3) {
+                        if ((double) Speed.mc.thePlayer.fallDistance > 0.1 && (double) Speed.mc.thePlayer.fallDistance < 1.3) {
                             Speed.mc.thePlayer.speedInAir = 0.0105f;
                             Speed.mc.timer.timerSpeed = 0.7f;
                         }
-                        if (!((double)Speed.mc.thePlayer.fallDistance >= 1.3)) break;
-                        Speed.mc.timer.timerSpeed = 1.0f;
-                        Speed.mc.thePlayer.speedInAir = 0.0105f;
+                        if ((double) Speed.mc.thePlayer.fallDistance >= 1.3) {
+                            Speed.mc.timer.timerSpeed = 1.0f;
+                            Speed.mc.thePlayer.speedInAir = 0.0105f;
+                        }
                         break;
                     }
                     Speed.mc.thePlayer.motionX = 0.0;
@@ -140,7 +144,7 @@ extends Module {
                         ++c;
                     }
                     if (c > 0 && MoveUtil.isMoving()) {
-                        double strafeOffset = (double)Math.min(c, 3) * 0.08;
+                        double strafeOffset = (double) Math.min(c, 3) * 0.08 * speed;
                         float yaw = this.getMoveYaw();
                         double mx = -Math.sin(Math.toRadians(yaw));
                         double mz = Math.cos(Math.toRadians(yaw));
@@ -163,7 +167,7 @@ extends Module {
                         } else if (wasOnGround) {
                             wasOnGround = false;
                         }
-                        MoveUtil.setMotion(MoveUtil.getBaseMoveSpeed() * (double)0.6f, Speed.mc.thePlayer.getRotationYawHead());
+                        MoveUtil.setMotion(MoveUtil.getBaseMoveSpeed() * 0.6 * speed, Speed.mc.thePlayer.getRotationYawHead());
                         break;
                     }
                     Speed.mc.thePlayer.motionX *= 0.8;
@@ -182,10 +186,10 @@ extends Module {
         float moveYaw = thePlayer.rotationYaw;
         if (thePlayer.moveForward != 0.0f && thePlayer.moveStrafing == 0.0f) {
             moveYaw += thePlayer.moveForward > 0.0f ? 0.0f : 180.0f;
-        } else if (thePlayer.moveForward != 0.0f && thePlayer.moveStrafing != 0.0f) {
-            moveYaw = thePlayer.moveForward > 0.0f ? (moveYaw += thePlayer.moveStrafing > 0.0f ? -45.0f : 45.0f) : (moveYaw -= thePlayer.moveStrafing > 0.0f ? -45.0f : 45.0f);
+        } else if (thePlayer.moveForward != 0.0f) {
+            moveYaw = thePlayer.moveForward > 0.0f ? moveYaw + (thePlayer.moveStrafing > 0.0f ? -45.0f : 45.0f) : moveYaw - (thePlayer.moveStrafing > 0.0f ? -45.0f : 45.0f);
             moveYaw += thePlayer.moveForward > 0.0f ? 0.0f : 180.0f;
-        } else if (thePlayer.moveStrafing != 0.0f && thePlayer.moveForward == 0.0f) {
+        } else if (thePlayer.moveStrafing != 0.0f) {
             moveYaw += thePlayer.moveStrafing > 0.0f ? -70.0f : 70.0f;
         }
         if (KillAura.target != null && Speed.mc.gameSettings.keyBindJump.isKeyDown()) {
@@ -193,19 +197,18 @@ extends Module {
         }
         return moveYaw;
     }
-
     static {
-        MODE = new ModeValue("Mode", (Enum[])speedMode.values(), (Enum)speedMode.HvH);
+        MODE = new ModeValue("Mode", speedMode.values(), speedMode.HvH);
         wasOnGround = false;
     }
 
-    static enum speedMode {
+    enum speedMode {
         HvH,
         Pika,
         WatchDog,
         Grim,
         Vulcan,
-        AAC4;
+        AAC4
 
     }
 }

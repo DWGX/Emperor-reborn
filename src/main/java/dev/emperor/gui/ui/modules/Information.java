@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 
+import static dev.emperor.utils.render.RenderUtil.scaledResolution;
+
 public class Information
 extends UiModule {
     public Information() {
@@ -19,8 +21,8 @@ extends UiModule {
     @EventTarget
     public void onRender2D(EventRender2D event) {
         RapeMasterFontManager f18 = FontManager.arial18;
-        double positionX = this.getPosX();
-        double positionY = this.getPosY() + 12.0;
+        double positionX = 2; // 从左边缘的偏移量
+        double positionY = scaledResolution.getScaledHeight() - 10;
         ArrayList<Integer> positionLongList = new ArrayList<Integer>();
         positionLongList.add(f18.getStringWidth("X: " + (int)Information.mc.thePlayer.posX + " "));
         positionLongList.add(f18.getStringWidth("Y: " + (int)Information.mc.thePlayer.posY + " "));

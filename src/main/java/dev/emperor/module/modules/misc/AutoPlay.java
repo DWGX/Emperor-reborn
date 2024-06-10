@@ -127,7 +127,7 @@ public class AutoPlay
                 NotificationManager.post(NotificationType.SUCCESS, "Game Ending", "Your Health: " + MathUtil.DF_1.format(AutoPlay.mc.thePlayer.getHealth()), 5.0f);
             }
             if (text.contains("玩家") && text.contains("在本局游戏中行为异常")) {
-                mc.thePlayer.sendChatMessage("受害者食用了 RoBin Skyrim Xylitol XiaoDaSense QuickSand 等带后门性客户端导致被幕后操作者ban");
+                mc.thePlayer.sendChatMessage("受害者食用了 RoBin Skyrim Xylitol XiaoDaSense QuickSand 等带后门性客户端导致banned");
                 handleBannedPlayer();
             }
             if (text.contains("开始倒计时: 1 秒")) {

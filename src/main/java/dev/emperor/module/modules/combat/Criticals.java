@@ -18,7 +18,7 @@ public class Criticals
 extends Module {
     private final TimeUtil timer = new TimeUtil();
     private final TimeUtil prevent = new TimeUtil();
-    private final ModeValue<modeEnums> modeValue = new ModeValue("Mode", (Enum[])modeEnums.values(), (Enum)modeEnums.Hypixel);
+    private final ModeValue<modeEnums> modeValue = new ModeValue("Mode", modeEnums.values(), modeEnums.Hypixel);
     private final NumberValue hurtTimeValue = new NumberValue("HurtTime", 15.0, 0.0, 20.0, 1.0);
     private final NumberValue delayValue = new NumberValue("Delay", 3.0, 0.0, 10.0, 0.5);
     private int groundTicks;
@@ -36,7 +36,7 @@ extends Module {
 
     @EventTarget
     void onUpdate(EventMotion event) {
-        this.setSuffix(((modeEnums)((Object)this.modeValue.getValue())).toString());
+        this.setSuffix(this.modeValue.getValue().toString());
         this.groundTicks = PlayerUtil.isOnGround(0.01) ? ++this.groundTicks : 0;
         if (this.groundTicks > 20) {
             this.groundTicks = 20;
@@ -57,8 +57,8 @@ extends Module {
     void onAttack(EventAttack event) {
         boolean canCrit;
         boolean bl = canCrit = this.groundTicks > 3 && Criticals.mc.theWorld.getBlockState(new BlockPos(Criticals.mc.thePlayer.posX, Criticals.mc.thePlayer.posY - 1.0, Criticals.mc.thePlayer.posZ)).getBlock().isFullBlock() && !PlayerUtil.isInLiquid() && !PlayerUtil.isOnLiquid() && !Criticals.mc.thePlayer.isOnLadder() && Criticals.mc.thePlayer.ridingEntity == null && Criticals.mc.thePlayer.onGround;
-        if (event.isPre() && canCrit && event.getTarget().hurtResistantTime <= ((Double)this.hurtTimeValue.getValue()).intValue() && this.prevent.hasPassed(300L) && this.timer.hasPassed((long)((Double)this.delayValue.getValue()).intValue() * 100L)) {
-            switch (((modeEnums)((Object)this.modeValue.getValue())).toString().toLowerCase()) {
+        if (event.isPre() && canCrit && event.getTarget().hurtResistantTime <= this.hurtTimeValue.getValue().intValue() && this.prevent.hasPassed(300L) && this.timer.hasPassed((long) this.delayValue.getValue().intValue() * 100L)) {
+            switch (this.modeValue.getValue().toString().toLowerCase()) {
                 case "hypixel": {
                     double[] values;
                     for (double value : values = new double[]{0.0625 + Math.random() / 100.0, 0.03125 + Math.random() / 100.0}) {
@@ -98,14 +98,14 @@ extends Module {
         }
     }
 
-    private static enum modeEnums {
+    private enum modeEnums {
         Packet,
         Hypixel,
         HvH,
         Hop,
         Jump,
         Visual,
-        NoGround;
+        NoGround
 
     }
 }
