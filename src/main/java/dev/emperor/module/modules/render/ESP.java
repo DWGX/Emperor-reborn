@@ -53,7 +53,7 @@ extends Module {
     private static final FloatBuffer modelView = GLAllocation.createDirectFloatBuffer(16);
     private static final FloatBuffer projection = GLAllocation.createDirectFloatBuffer(16);
     private static final IntBuffer viewport = GLAllocation.createDirectIntBuffer(16);
-    private final List<Vec3> positions = new ArrayList<Vec3>();
+    private final List<Vec3> positions = new ArrayList<>();
 
     public ESP() {
         super("ESP", Category.Render);
@@ -69,7 +69,7 @@ extends Module {
 
     @EventTarget
     public void onRenderNameTag(EventRenderNameTag e) {
-        if (((Boolean)this.nameValue.getValue()).booleanValue() && e.getTarget() instanceof EntityPlayer) {
+        if (this.nameValue.getValue() && e.getTarget() instanceof EntityPlayer) {
             e.setCancelled(true);
         }
     }
@@ -92,23 +92,23 @@ extends Module {
             while (iterator2.hasNext()) {
                 Vec3 screenPosition = ESP.WorldToScreen(iterator2.next());
                 if (screenPosition == null || !(screenPosition.zCoord >= 0.0) || !(screenPosition.zCoord < 1.0)) continue;
-                maxLeft = (int)Math.min(screenPosition.xCoord, (double)maxLeft);
-                maxRight = (int)Math.max(screenPosition.xCoord, (double)maxRight);
-                maxBottom = (int)Math.max(screenPosition.yCoord, (double)maxBottom);
-                maxTop = (int)Math.min(screenPosition.yCoord, (double)maxTop);
+                maxLeft = (int)Math.min(screenPosition.xCoord, maxLeft);
+                maxRight = (int)Math.max(screenPosition.xCoord, maxRight);
+                maxBottom = (int)Math.max(screenPosition.yCoord, maxBottom);
+                maxTop = (int)Math.min(screenPosition.yCoord, maxTop);
                 canEntityBeSeen = true;
             }
             if (!canEntityBeSeen) continue;
-            if (((Boolean)this.healthValue.getValue()).booleanValue()) {
+            if (this.healthValue.getValue()) {
                 this.drawHealth(entity, maxLeft, maxTop, maxBottom);
             }
-            if (((Boolean)this.armorValue.getValue()).booleanValue()) {
+            if (this.armorValue.getValue()) {
                 this.drawArmor(entity, maxTop, maxRight, maxBottom);
             }
-            if (((Boolean)this.boxValue.getValue()).booleanValue()) {
+            if (this.boxValue.getValue()) {
                 this.drawBox(maxLeft, maxTop, maxRight, maxBottom);
             }
-            if (Client.instance.moduleManager.getModule(NameTags.class).state || !((Boolean)this.nameValue.getValue()).booleanValue()) continue;
+            if (Client.instance.moduleManager.getModule(NameTags.class).state || !this.nameValue.getValue()) continue;
             this.drawName(entity, maxLeft, maxTop, maxRight);
         }
         GlStateManager.popMatrix();
@@ -156,7 +156,7 @@ extends Module {
         float healthPercent = currentHealth / maxHealth;
         float MOVE = 2.0f;
         boolean line = true;
-        String healthStr = "\u00a7f" + this.decimalFormat.format(currentHealth) + "\u00a7c\u2764";
+        String healthStr = "§f" + this.decimalFormat.format(currentHealth) + "§c❤";
         float bottom2 = top + height * (1.0f - healthPercent) - 1.0f;
         float health = entityLivingBase.getHealth();
         float[] fractions = new float[]{0.0f, 0.5f, 1.0f};
@@ -183,8 +183,8 @@ extends Module {
     }
 
     private static Vec3 WorldToScreen(Vec3 position) {
-        FloatBuffer screenPositions = BufferUtils.createFloatBuffer((int)3);
-        boolean result = GLU.gluProject((float)((float)position.xCoord), (float)((float)position.yCoord), (float)((float)position.zCoord), (FloatBuffer)modelView, (FloatBuffer)projection, (IntBuffer)viewport, (FloatBuffer)screenPositions);
+        FloatBuffer screenPositions = BufferUtils.createFloatBuffer(3);
+        boolean result = GLU.gluProject((float)position.xCoord, (float)position.yCoord, (float)position.zCoord, modelView, projection, viewport, screenPositions);
         if (result) {
             return new Vec3(screenPositions.get(0), (float) Display.getHeight() - screenPositions.get(1), screenPositions.get(2));
         }
@@ -198,7 +198,7 @@ extends Module {
         double y2 = position.yCoord - entity.posY;
         double z = position.zCoord - entity.posZ;
         double height = entity instanceof EntityItem ? 0.5 : (double)entity.height + 0.1;
-        double width = entity instanceof EntityItem ? 0.25 : (Double)this.width2d.getValue();
+        double width = entity instanceof EntityItem ? 0.25 : this.width2d.getValue();
         AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - width + x2, entity.posY + y2, entity.posZ - width + z, entity.posX + width + x2, entity.posY + height + y2, entity.posZ + width + z);
         this.positions.add(new Vec3(aabb.minX, aabb.minY, aabb.minZ));
         this.positions.add(new Vec3(aabb.minX, aabb.minY, aabb.maxZ));
@@ -244,9 +244,12 @@ extends Module {
     }
 
     private static void updateView() {
-        GL11.glGetFloatv((int)2982, (FloatBuffer)modelView);
-        GL11.glGetFloatv((int)2983, (FloatBuffer)projection);
-        GL11.glGetIntegerv((int)2978, (IntBuffer)viewport);
+        GL11.glGetFloatv(2982, modelView);
+        GL11.glGetFloatv(2983, projection);
+        GL11.glGetIntegerv(2978, viewport);
     }
+
+
+
 }
 

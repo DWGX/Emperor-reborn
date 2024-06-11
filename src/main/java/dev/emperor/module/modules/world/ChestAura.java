@@ -97,11 +97,11 @@ public class ChestAura extends Module {
             double y = pos.getY() - ChestAura.mc.getRenderManager().viewerPosY + 1;
             double z = pos.getZ() - ChestAura.mc.getRenderManager().viewerPosZ + 0.5;
 
-            drawShorterRedTriangle(x, y, z, 0.6f);
+            drawInvertedRedTriangle(x, y, z, 0.6f);
         }
     }
 
-    private void drawShorterRedTriangle(double x, double y, double z, float alpha) {
+    private void drawInvertedRedTriangle(double x, double y, double z, float alpha) {
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -117,9 +117,9 @@ public class ChestAura extends Module {
 
         GL11.glBegin(GL11.GL_TRIANGLES);
 
-        GL11.glVertex3d(x, y + 0.5 / 2, z);
-        GL11.glVertex3d(x - 0.5 / 2, y - 0.5 / 2, z);
-        GL11.glVertex3d(x + 0.5 / 2, y - 0.5 / 2, z);
+        GL11.glVertex3d(x, y - 0.5 / 2, z);
+        GL11.glVertex3d(x - 0.5 / 2, y + 0.5 / 2, z);
+        GL11.glVertex3d(x + 0.5 / 2, y + 0.5 / 2, z);
 
         GL11.glEnd();
 
@@ -134,21 +134,13 @@ public class ChestAura extends Module {
         GL11.glPopMatrix();
     }
 
-
-
-
-
-
     public void sendClick(BlockPos pos) {
-        // Calculate the center of the block
         double x = pos.getX() + 0.5;
         double y = pos.getY() + 0.5;
         double z = pos.getZ() + 0.5;
 
-        // Get the player's rotation
         float[] rotations = RotationUtil.getRotationToBlock(pos);
 
-        // Calculate the player's position and rotation
         double diffX = x - ChestAura.mc.thePlayer.posX;
         double diffY = (y - ChestAura.mc.thePlayer.posY) - 1.7;
         double diffZ = z - ChestAura.mc.thePlayer.posZ;
@@ -156,17 +148,13 @@ public class ChestAura extends Module {
         float yaw = (float) (Math.atan2(diffZ, diffX) * 180.0D / Math.PI) - 90.0F;
         float pitch = (float) (-(Math.atan2(diffY, dist) * 180.0D / Math.PI));
 
-        // Set the player's rotation
         RotationComponent.setRotations(new Vector2f(yaw, pitch), 360.0f, true);
 
-        // Send the block placement packet
         C08PacketPlayerBlockPlacement packet = new C08PacketPlayerBlockPlacement(pos, 1, ChestAura.mc.thePlayer.getCurrentEquippedItem(), 0.0f, 0.0f, 0.0f);
         ChestAura.mc.thePlayer.sendQueue.addToSendQueue(packet);
 
-        // Reset timers and flags
         this.waitBoxOpenTimer.reset();
         isWaitingOpen = true;
         this.openingPos = pos;
     }
 }
-

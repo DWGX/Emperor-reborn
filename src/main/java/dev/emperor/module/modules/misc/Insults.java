@@ -87,10 +87,8 @@ public class Insults extends Module {
         }
         Entity target = event.getTarget();
         if (target instanceof EntityPlayer) {
-            this.target = (EntityPlayer) target;
+            this.target = (EntityPlayer)target;
             this.ticks = 0;
-            String targetName = this.target.getName();
-            insults.replaceAll(insult -> insult.replace("%%target%%", targetName));//なまえ
         }
     }
 

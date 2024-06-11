@@ -1,7 +1,7 @@
 package net.viamcp.fixes;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

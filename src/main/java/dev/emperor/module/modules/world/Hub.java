@@ -9,6 +9,9 @@ import dev.emperor.gui.notification.NotificationManager;
 import dev.emperor.gui.notification.NotificationType;
 import dev.emperor.module.Category;
 import dev.emperor.module.Module;
+import dev.emperor.module.modules.combat.KillAura;
+import dev.emperor.module.modules.player.ChestStealer;
+import dev.emperor.module.modules.player.InvCleaner;
 import dev.emperor.module.values.BoolValue;
 import dev.emperor.utils.client.PacketUtil;
 import javax.vecmath.Vector2f;
@@ -26,6 +29,11 @@ public class Hub
 
     @Override
     public void onEnable() {
+        Client.instance.moduleManager.getModule(InvCleaner.class).setState(false);
+        Client.instance.moduleManager.getModule(ChestStealer.class).setState(false);
+        Client.instance.moduleManager.getModule(KillAura.class).setState(false);
+        Client.instance.moduleManager.getModule(ChestAura.class).setState(false);
+        Client.instance.moduleManager.getModule(Scaffold.class).setState(false);
         mc.thePlayer.sendChatMessage("/hub");
         Client.instance.moduleManager.getModule(Hub.class).setState(false);
     }

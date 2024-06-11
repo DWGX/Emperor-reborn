@@ -5,119 +5,104 @@ import dev.emperor.event.rendering.EventRender2D;
 import dev.emperor.event.world.EventUpdate;
 import dev.emperor.module.Category;
 import dev.emperor.module.Module;
-import dev.emperor.utils.render.Colors;
-import java.awt.Color;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
-import java.util.Random;
+import dev.emperor.utils.render.fontRender.FontManager;
+import dev.emperor.utils.render.fontRender.RapeMasterFontManager;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.MathHelper;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.entity.EntityLivingBase;
 
-public final class Health
-extends Module {
-    private final DecimalFormat decimalFormat = new DecimalFormat("0.#", new DecimalFormatSymbols(Locale.ENGLISH));
-    private final Random random = new Random();
-    private int width;
+import java.awt.*;
 
+public final class Health extends Module {
+    private int prevHealth;
+    private int prevTargetHealth;
+    RapeMasterFontManager f16 = FontManager.arial16;
     public Health() {
         super("Health", Category.Render);
     }
 
     @EventTarget
-    public void onRenderGuiEvent(EventUpdate event) {
+    public void onUpdate(EventUpdate event) {
         if (Health.mc.currentScreen instanceof GuiInventory || Health.mc.currentScreen instanceof GuiChest || Health.mc.currentScreen instanceof GuiContainerCreative) {
-            this.renderHealth();
+            this.renderPlayerHealth();
+            this.renderTargetHealth();
         }
     }
 
     @EventTarget
-    public void onRender2DEvent(EventRender2D event) {
+    public void onRender2D(EventRender2D event) {
         if (!(Health.mc.currentScreen instanceof GuiInventory) && !(Health.mc.currentScreen instanceof GuiChest)) {
-            this.renderHealth();
+            this.renderPlayerHealth();
+            this.renderTargetHealth();
         }
     }
 
-    private void renderHealth() {
-        boolean flag;
+    private void renderPlayerHealth() {
         ScaledResolution scaledResolution = new ScaledResolution(mc);
-        GuiScreen screen = Health.mc.currentScreen;
-        float absorptionHealth = Health.mc.thePlayer.getAbsorptionAmount();
-        String string = this.decimalFormat.format(Health.mc.thePlayer.getHealth() / 2.0f) + "\u00a7c\u2764 " + (absorptionHealth <= 0.0f ? "" : "\u00a7e" + this.decimalFormat.format(absorptionHealth / 2.0f) + "\u00a76\u2764");
-        int offsetY = 0;
-        if (Health.mc.thePlayer.getHealth() >= 0.0f && Health.mc.thePlayer.getHealth() < 10.0f || Health.mc.thePlayer.getHealth() >= 10.0f && Health.mc.thePlayer.getHealth() < 100.0f) {
-            this.width = 3;
+        float healthPercent = Health.mc.thePlayer.getHealth() / Health.mc.thePlayer.getMaxHealth();
+        int barWidth = 100;
+        int barHeight = 10;
+        int barX = (scaledResolution.getScaledWidth() - barWidth) / 2;
+        int barY = scaledResolution.getScaledHeight() / 2 + 40;
+
+        drawRect(barX, barY, barX + barWidth, barY + barHeight, new Color(32, 32, 32, 200).getRGB());
+
+        int healthBarWidth = (int) (barWidth * healthPercent);
+        int animatedHealthBarWidth = interpolate(prevHealth, healthBarWidth);
+        Color healthColor = interpolateColor(healthPercent);
+        drawRect(barX, barY, barX + animatedHealthBarWidth, barY + barHeight, healthColor.getRGB());
+
+        String healthText = (int)(healthPercent * 100) + "%";
+        f16.drawStringWithShadow(healthText, barX + (float) (barWidth - Health.mc.fontRendererObj.getStringWidth(healthText)) / 2, barY + 2, Color.WHITE.getRGB());
+
+        prevHealth = animatedHealthBarWidth;
+    }
+
+    private void renderTargetHealth() {
+        EntityLivingBase target = Health.mc.pointedEntity instanceof EntityLivingBase ? (EntityLivingBase) Health.mc.pointedEntity : null;
+
+        if (target != null && target != Health.mc.thePlayer) {
+            ScaledResolution scaledResolution = new ScaledResolution(mc);
+            float targetHealthPercent = target.getHealth() / target.getMaxHealth();
+            int barWidth = 100;
+            int barHeight = 10;
+            int barX = (scaledResolution.getScaledWidth() - barWidth) / 2;
+            int barY = scaledResolution.getScaledHeight() / 2 - 10;
+
+            drawRect(barX, barY, barX + barWidth, barY + barHeight, new Color(32, 32, 32, 200).getRGB());
+
+            int healthBarWidth = (int) (barWidth * targetHealthPercent);
+            int animatedHealthBarWidth = interpolate(prevTargetHealth, healthBarWidth);
+            Color healthColor = interpolateColor(targetHealthPercent);
+            drawRect(barX, barY, barX + animatedHealthBarWidth, barY + barHeight, healthColor.getRGB());
+
+            String healthText = (int)(targetHealthPercent * 100) + "%";
+            f16.drawStringWithShadow(healthText, barX + (float) (barWidth - Health.mc.fontRendererObj.getStringWidth(healthText)) / 2, barY + 2, Color.WHITE.getRGB());
+
+            prevTargetHealth = animatedHealthBarWidth;
         }
-        if (screen instanceof GuiInventory) {
-            offsetY = 70;
-        } else if (screen instanceof GuiContainerCreative) {
-            offsetY = 80;
-        } else if (screen instanceof GuiChest) {
-            offsetY = ((GuiChest)screen).ySize / 2 - 15;
+    }
+
+    private void drawRect(int left, int top, int right, int bottom, int color) {
+        Gui.drawRect(left, top, right, bottom, color);
+    }
+
+    private Color interpolateColor(float ratio) {
+        int r = (int) (Color.RED.getRed() + (Color.GREEN.getRed() - Color.RED.getRed()) * ratio);
+        int g = (int) (Color.RED.getGreen() + (Color.GREEN.getGreen() - Color.RED.getGreen()) * ratio);
+        int b = (int) (Color.RED.getBlue() + (Color.GREEN.getBlue() - Color.RED.getBlue()) * ratio);
+        return new Color(r, g, b);
+    }
+
+    private int interpolate(int prevValue, int targetValue) {
+        if (prevValue < targetValue) {
+            prevValue += 1;
+        } else if (prevValue > targetValue) {
+            prevValue -= 1;
         }
-        int x2 = new ScaledResolution(mc).getScaledWidth() / 2 - this.width;
-        int y2 = new ScaledResolution(mc).getScaledHeight() / 2 + 25 + offsetY;
-        Color color = Colors.blendColors(new float[]{0.0f, 0.5f, 1.0f}, new Color[]{new Color(255, 37, 0), Color.YELLOW, Color.GREEN}, Health.mc.thePlayer.getHealth() / Health.mc.thePlayer.getMaxHealth());
-        Health.mc.fontRendererObj.drawString(string, absorptionHealth > 0.0f ? (float)x2 - 15.5f : (float)x2 - 3.5f, y2, color.getRGB(), true);
-        GL11.glPushMatrix();
-        mc.getTextureManager().bindTexture(Gui.icons);
-        this.random.setSeed((long)Health.mc.ingameGUI.updateCounter * 312871L);
-        float width = (float)scaledResolution.getScaledWidth() / 2.0f - Health.mc.thePlayer.getMaxHealth() / 2.5f * 10.0f / 2.0f;
-        float maxHealth = Health.mc.thePlayer.getMaxHealth();
-        int lastPlayerHealth = Health.mc.ingameGUI.lastPlayerHealth;
-        int healthInt = MathHelper.ceiling_float_int(Health.mc.thePlayer.getHealth());
-        int l2 = -1;
-        boolean bl = flag = Health.mc.ingameGUI.healthUpdateCounter > (long)Health.mc.ingameGUI.updateCounter && (Health.mc.ingameGUI.healthUpdateCounter - (long)Health.mc.ingameGUI.updateCounter) / 3L % 2L == 1L;
-        if (Health.mc.thePlayer.isPotionActive(Potion.regeneration)) {
-            l2 = Health.mc.ingameGUI.updateCounter % MathHelper.ceiling_float_int(maxHealth + 5.0f);
-        }
-        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        for (int i6 = MathHelper.ceiling_float_int(maxHealth / 2.0f) - 1; i6 >= 0; --i6) {
-            int xOffset = 16;
-            if (Health.mc.thePlayer.isPotionActive(Potion.poison)) {
-                xOffset += 36;
-            } else if (Health.mc.thePlayer.isPotionActive(Potion.wither)) {
-                xOffset += 72;
-            }
-            int k3 = 0;
-            if (flag) {
-                k3 = 1;
-            }
-            float renX = width + (float)(i6 % 10 * 8);
-            float renY = (float)scaledResolution.getScaledHeight() / 2.0f + 15.0f + (float)offsetY;
-            if (healthInt <= 4) {
-                renY += (float)this.random.nextInt(2);
-            }
-            if (i6 == l2) {
-                renY -= 2.0f;
-            }
-            int yOffset = 0;
-            if (Health.mc.theWorld.getWorldInfo().isHardcoreModeEnabled()) {
-                yOffset = 5;
-            }
-            Gui.drawTexturedModalRect(renX, renY, 16 + k3 * 9, 9 * yOffset, 9, 9);
-            if (flag) {
-                if (i6 * 2 + 1 < lastPlayerHealth) {
-                    Gui.drawTexturedModalRect(renX, renY, xOffset + 54, 9 * yOffset, 9, 9);
-                }
-                if (i6 * 2 + 1 == lastPlayerHealth) {
-                    Gui.drawTexturedModalRect(renX, renY, xOffset + 63, 9 * yOffset, 9, 9);
-                }
-            }
-            if (i6 * 2 + 1 < healthInt) {
-                Gui.drawTexturedModalRect(renX, renY, xOffset + 36, 9 * yOffset, 9, 9);
-            }
-            if (i6 * 2 + 1 != healthInt) continue;
-            Gui.drawTexturedModalRect(renX, renY, xOffset + 45, 9 * yOffset, 9, 9);
-        }
-        GL11.glPopMatrix();
+        return prevValue;
     }
 }
-

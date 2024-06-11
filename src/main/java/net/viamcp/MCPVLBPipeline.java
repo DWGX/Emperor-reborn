@@ -1,8 +1,7 @@
 package net.viamcp;
 
+import com.diaoling.client.viaversion.vialoadingbase.netty.VLBPipeline;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import net.vialoadingbase.netty.VLBPipeline;
-
 public class MCPVLBPipeline extends VLBPipeline {
    public MCPVLBPipeline(UserConnection user) {
       super(user);

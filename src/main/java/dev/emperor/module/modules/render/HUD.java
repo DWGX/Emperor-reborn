@@ -41,23 +41,23 @@ import org.lwjgl.input.Keyboard;
 
 public class HUD
 extends Module {
-    public final ModeValue<HUDmode> hudModeValue = new ModeValue("HUD Mode", (Enum[])HUDmode.values(), (Enum)HUDmode.Neon);
+    public final ModeValue<HUDmode> hudModeValue = new ModeValue("HUD Mode", HUDmode.values(), HUDmode.Neon);
     public static BoolValue arraylist = new BoolValue("Arraylist", true);
-    public static final BoolValue importantModules = new BoolValue("Arraylist-Important", false, () -> (Boolean)arraylist.getValue());
-    public static final BoolValue hLine = new BoolValue("Arraylist-HLine", true, () -> (Boolean)arraylist.getValue());
-    public static final NumberValue height = new NumberValue("Arraylist-Height", 11.0, 9.0, 20.0, 1.0, () -> (Boolean)arraylist.getValue());
-    public static final ModeValue<ModuleList.ANIM> animation = new ModeValue("Arraylist-Animation", (Enum[])ModuleList.ANIM.values(), (Enum)ModuleList.ANIM.ScaleIn, () -> (Boolean)arraylist.getValue());
-    public static final BoolValue background = new BoolValue("Arraylist-Background", true, () -> (Boolean)arraylist.getValue());
-    public static final NumberValue backgroundAlpha = new NumberValue("Arraylist-Background Alpha", 0.35, 0.01, 1.0, 0.01, () -> (Boolean)arraylist.getValue());
+    public static final BoolValue importantModules = new BoolValue("Arraylist-Important", false, () -> arraylist.getValue());
+    public static final BoolValue hLine = new BoolValue("Arraylist-HLine", true, () -> arraylist.getValue());
+    public static final NumberValue height = new NumberValue("Arraylist-Height", 11.0, 9.0, 20.0, 1.0, () -> arraylist.getValue());
+    public static final ModeValue<ModuleList.ANIM> animation = new ModeValue("Arraylist-Animation", ModuleList.ANIM.values(), ModuleList.ANIM.ScaleIn, () -> arraylist.getValue());
+    public static final BoolValue background = new BoolValue("Arraylist-Background", true, () -> arraylist.getValue());
+    public static final NumberValue backgroundAlpha = new NumberValue("Arraylist-Background Alpha", 0.35, 0.01, 1.0, 0.01, () -> arraylist.getValue());
     public static BoolValue tab = new BoolValue("TabGUI", false);
     public static BoolValue notifications = new BoolValue("Notification", false);
     public static BoolValue Debug = new BoolValue("Debug", false);
     public static BoolValue potionInfo = new BoolValue("Potion", false);
     public static BoolValue targetHud = new BoolValue("TargetHUD", true);
-    public static ModeValue<THUDMode> thudmodeValue = new ModeValue("THUD Style", (Enum[])THUDMode.values(), (Enum)THUDMode.Neon);
+    public static ModeValue<THUDMode> thudmodeValue = new ModeValue("THUD Style", THUDMode.values(), THUDMode.Neon);
     public static BoolValue multi_targetHUD = new BoolValue("Multi TargetHUD", true);
     public static BoolValue titleBar = new BoolValue("TitleBar", true);
-    private final ModeValue<TitleMode> modeValue = new ModeValue("Title Mode", (Enum[])TitleMode.values(), (Enum)TitleMode.Simple);
+    private final ModeValue<TitleMode> modeValue = new ModeValue("Title Mode", TitleMode.values(), TitleMode.Simple);
     public static BoolValue Information = new BoolValue("Information", false);
     public static NumberValue animationSpeed = new NumberValue("Animation Speed", 4.0, 1.0, 10.0, 0.1);
     public static NumberValue scoreBoardHeightValue = new NumberValue("Scoreboard Height", 0.0, 0.0, 300.0, 1.0);
@@ -74,8 +74,7 @@ extends Module {
     }
 
     public static Color color(int tick) {
-        Color textColor = new Color(RenderUtil.colorSwitch(mainColor.getColorC(), mainColor2.getColorC(), 2000.0f, -(tick *= 200) / 40, 75L, 2.0));
-        return textColor;
+        return new Color(RenderUtil.colorSwitch(mainColor.getColorC(), mainColor2.getColorC(), 2000.0f, -(tick * 200) / 40, 75L, 2.0));
     }
 
     public static RapeMasterFontManager getFont() {
@@ -85,12 +84,12 @@ extends Module {
     @EventTarget
     public void onShader(EventShader e) {
         String fps = String.valueOf(Minecraft.getDebugFPS());
-        if (((Boolean)titleBar.getValue()).booleanValue()) {
-            switch (((TitleMode)((Object)this.modeValue.getValue())).toString().toLowerCase()) {
+        if (titleBar.getValue()) {
+            switch (this.modeValue.getValue().toString().toLowerCase()) {
                 case "simple": {
-                    switch ((HUDmode)((Object)this.hudModeValue.getValue())) {
+                    switch (this.hudModeValue.getValue()) {
                         case Shit: {
-                            String str = (Object)((Object)EnumChatFormatting.DARK_GRAY) + " | " + (Object)((Object)EnumChatFormatting.WHITE) + Client.instance.USER + (Object)((Object)EnumChatFormatting.DARK_GRAY) + " | " + (Object)((Object)EnumChatFormatting.WHITE) + Minecraft.getDebugFPS() + "fps" + (Object)((Object)EnumChatFormatting.DARK_GRAY) + " | " + (Object)((Object)EnumChatFormatting.WHITE) + (mc.isSingleplayer() ? "SinglePlayer" : HUD.mc.getCurrentServerData().serverIP);
+                            String str = EnumChatFormatting.DARK_GRAY + " | " + EnumChatFormatting.WHITE + Client.instance.USER + EnumChatFormatting.DARK_GRAY + " | " + EnumChatFormatting.WHITE + Minecraft.getDebugFPS() + "fps" + EnumChatFormatting.DARK_GRAY + " | " + EnumChatFormatting.WHITE + (mc.isSingleplayer() ? "SinglePlayer" : HUD.mc.getCurrentServerData().serverIP);
                             RoundedUtils.drawRound(6.0f, 6.0f, FontManager.arial16.getStringWidth(str) + 8 + FontManager.bold22.getStringWidth(Client.NAME.toUpperCase()), 15.0f, 0.0f, new Color(0, 0, 0));
                             RoundedUtils.drawRound(6.0f, 6.0f, FontManager.arial16.getStringWidth(str) + 8 + FontManager.bold22.getStringWidth(Client.NAME.toUpperCase()), 1.0f, 1.0f, new Color(0, 0, 0));
                             break;
@@ -108,19 +107,19 @@ extends Module {
                     GlStateManager.resetColor();
                     GlStateManager.enableAlpha();
                     GlStateManager.disableBlend();
-                    RenderUtil.drawImage(0.0f, 0.0f, 64, 64, new ResourceLocation("express/ico.png"), mainColor.getColorC());
+                    RenderUtil.drawImage(10.0f, 10.0f, 66, 66, new ResourceLocation("express/ico.png"), mainColor.getColorC());
                 }
             }
         }
         this.drawNotificationsEffects(e.isBloom());
-        if (((Boolean)tab.getValue()).booleanValue()) {
+        if (tab.getValue()) {
             this.tabGUI.blur(this, this.leftY);
         }
     }
 
     @EventTarget
     public void onKey(EventKey e) {
-        if (((Boolean)tab.getValue()).booleanValue()) {
+        if (tab.getValue()) {
             this.tabGUI.onKey(e.getKey());
         }
     }
@@ -132,20 +131,20 @@ extends Module {
         int lengthName = FontManager.Tahoma16.getStringWidth(name);
         int nlRectX = lengthName + 74;
         UiModule DebugHud = Client.instance.uiManager.getModule(Debug.class);
-        DebugHud.setState((Boolean)Debug.getValue());
+        DebugHud.setState(Debug.getValue());
         UiModule Arraylist = Client.instance.uiManager.getModule(ModuleList.class);
-        Arraylist.setState((Boolean)arraylist.getValue());
+        Arraylist.setState(arraylist.getValue());
         UiModule InformationHUD = Client.instance.uiManager.getModule(Information.class);
-        InformationHUD.setState((Boolean)Information.getValue());
+        InformationHUD.setState(Information.getValue());
         UiModule potionHUD = Client.instance.uiManager.getModule(PotionsInfo.class);
-        potionHUD.setState((Boolean)potionInfo.getValue());
+        potionHUD.setState(potionInfo.getValue());
         this.drawNotifications();
-        if (((Boolean)titleBar.getValue()).booleanValue()) {
-            switch (((TitleMode)((Object)this.modeValue.getValue())).toString().toLowerCase()) {
+        if (titleBar.getValue()) {
+            switch (this.modeValue.getValue().toString().toLowerCase()) {
                 case "simple": {
-                    switch ((HUDmode)((Object)this.hudModeValue.getValue())) {
+                    switch (this.hudModeValue.getValue()) {
                         case Shit: {
-                            String str = (Object)((Object)EnumChatFormatting.DARK_GRAY) + " | " + (Object)((Object)EnumChatFormatting.WHITE) + Client.instance.USER + (Object)((Object)EnumChatFormatting.DARK_GRAY) + " | " + (Object)((Object)EnumChatFormatting.WHITE) + Minecraft.getDebugFPS() + "fps" + (Object)((Object)EnumChatFormatting.DARK_GRAY) + " | " + (Object)((Object)EnumChatFormatting.WHITE) + (mc.isSingleplayer() ? "SinglePlayer" : HUD.mc.getCurrentServerData().serverIP);
+                            String str = EnumChatFormatting.DARK_GRAY + " | " + EnumChatFormatting.WHITE + Client.instance.USER + EnumChatFormatting.DARK_GRAY + " | " + EnumChatFormatting.WHITE + Minecraft.getDebugFPS() + "fps" + EnumChatFormatting.DARK_GRAY + " | " + EnumChatFormatting.WHITE + (mc.isSingleplayer() ? "SinglePlayer" : HUD.mc.getCurrentServerData().serverIP);
                             RoundedUtils.drawRound(6.0f, 6.0f, FontManager.arial16.getStringWidth(str) + 8 + FontManager.bold22.getStringWidth(Client.NAME.toUpperCase()), 15.0f, 0.0f, new Color(19, 19, 19, 230));
                             RoundedUtils.drawRound(6.0f, 6.0f, FontManager.arial16.getStringWidth(str) + 8 + FontManager.bold22.getStringWidth(Client.NAME.toUpperCase()), 1.0f, 1.0f, HUD.color(8));
                             FontManager.arial16.drawString(str, 11 + FontManager.bold22.getStringWidth(Client.NAME.toUpperCase()), 11.5f, Color.WHITE.getRGB());
@@ -166,21 +165,28 @@ extends Module {
                     break;
                 }
                 case "neverlose": {
-                    Gui.drawRect(5.0, 5.0, nlRectX, 20.0, new Color(0, 0, 0, 190).getRGB());
-                    FontManager.Tahoma18.drawString(Client.NAME, 11.2f, 10.2f, new Color(71, 166, 253).getRGB());
-                    FontManager.Tahoma18.drawString(Client.NAME, 10.0f, 9.5f, new Color(255, 255, 255).getRGB());
-                    FontManager.Tahoma18.drawString("|", 43.0f, 9.5f, new Color(255, 255, 255).getRGB());
-                    FontManager.Tahoma16.drawString(fps, 48.5f, 10.3f, new Color(255, 255, 255).getRGB());
-                    FontManager.Tahoma18.drawString("|", 64.0f, 9.5f, new Color(255, 255, 255).getRGB());
-                    FontManager.Tahoma16.drawString(name, 70.0f, 10.3f, new Color(255, 255, 255).getRGB());
+                    int bgColor = new Color(30, 144, 255, 190).getRGB(); // 蓝色
+                    int textColor = new Color(255, 255, 255).getRGB(); // 白色
+                    double x = 5.0;
+                    double y = 5.0;
+                    double width = nlRectX;
+                    double height = 20.0;
+                    double cornerRadius = 5.0;
+                    RenderUtil.drawRoundedRect((float) x, (float) y, (float) width, (float) height, (int) cornerRadius, bgColor);
+                    FontManager.Tahoma18.drawString(Client.NAME, 10.0f, 10.0f, textColor);
+                    FontManager.Tahoma16.drawString("|", 43.0f, 10.0f, textColor);
+                    FontManager.Tahoma16.drawString(fps, 48.5f, 10.0f, textColor);
+                    FontManager.Tahoma16.drawString("|", 64.0f, 10.0f, textColor);
+                    FontManager.Tahoma16.drawString(name, 70.0f, 10.0f, textColor);
                     RenderUtil.drawShadow(5.0f, 5.0f, nlRectX, 20.0f);
                     break;
                 }
+
                 case "logo": {
                     GlStateManager.resetColor();
                     GlStateManager.enableAlpha();
                     GlStateManager.disableBlend();
-                    RenderUtil.drawImage(0.0f, 0.0f, 64, 64, new ResourceLocation("express/ico.png"), HUD.color(1));
+                    RenderUtil.drawImage(10.0f, 10.0f, 60, 60, new ResourceLocation("express/ico.png"), HUD.color(1));
                     break;
                 }
                 case "onetap": {
@@ -193,8 +199,8 @@ extends Module {
             }
         }
         UiModule Thud = Client.instance.uiManager.getModule(TargetHud.class);
-        Thud.setState((Boolean)targetHud.getValue());
-        if (((Boolean)tab.getValue()).booleanValue()) {
+        Thud.setState(targetHud.getValue());
+        if (tab.getValue()) {
             this.tabGUI.renderTabGUI(this, this.leftY);
         }
     }
@@ -242,7 +248,7 @@ extends Module {
         }
     }
 
-    public static enum THUDMode {
+    public enum THUDMode {
         Neon,
         Novoline,
         Exhibition,
@@ -252,31 +258,31 @@ extends Module {
         WTFNovo,
         Exire,
         Moon,
-        RiseNew;
+        RiseNew
 
     }
 
-    public static enum HUDmode {
+    public enum HUDmode {
         Neon,
-        Shit;
+        Shit
 
     }
 
-    public static enum TitleMode {
+    public enum TitleMode {
         Simple,
         NeverLose,
         OneTap,
-        Logo;
+        Logo
 
     }
 
-    public static enum Section {
+    public enum Section {
         TYPES,
-        MODULES;
+        MODULES
 
     }
 
-    public class TabGUI {
+    public static class TabGUI {
         private Section section = Section.TYPES;
         private Category selectedType = Category.values()[0];
         private Module selectedModule = null;
@@ -305,7 +311,7 @@ extends Module {
 
         public void blur(HUD hud, float y2) {
             float categoryY;
-            float moduleY = categoryY = y2;
+            float moduleY = categoryY = y2 + 80;
             int moduleWidth = 60;
             int moduleX = moduleWidth + 1;
             Gui.drawRect(4.0, categoryY, moduleWidth - 3, categoryY + (float)(12 * Category.values().length), new Color(0, 0, 0, 255).getRGB());
@@ -340,7 +346,7 @@ extends Module {
 
         public void renderTabGUI(HUD hud, float y2) {
             float categoryY;
-            float moduleY = categoryY = y2;
+            float moduleY = categoryY = y2 + 80;
             int moduleWidth = 60;
             int moduleX = moduleWidth + 1;
             Gui.drawRect(4.0, categoryY, moduleWidth - 3, categoryY + (float)(12 * Category.values().length), new Color(0, 0, 0, 100).getRGB());
@@ -375,6 +381,7 @@ extends Module {
                 this.horizonAnimation -= 5.0f;
             }
         }
+
 
         public void onKey(int key) {
             Minecraft mc = Minecraft.getMinecraft();

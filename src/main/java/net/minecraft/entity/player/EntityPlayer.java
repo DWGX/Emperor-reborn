@@ -80,7 +80,7 @@ import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 
 public abstract class EntityPlayer
 extends EntityLivingBase {

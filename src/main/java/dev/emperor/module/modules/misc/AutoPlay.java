@@ -14,6 +14,7 @@ import dev.emperor.module.modules.player.ChestStealer;
 import dev.emperor.module.modules.player.InvCleaner;
 import dev.emperor.module.modules.world.ChestAura;
 import dev.emperor.module.modules.world.PlayerWarn;
+import dev.emperor.module.modules.world.Scaffold;
 import dev.emperor.module.values.BoolValue;
 import dev.emperor.module.values.ModeValue;
 import dev.emperor.module.values.NumberValue;
@@ -121,13 +122,14 @@ public class AutoPlay
                 Client.instance.moduleManager.getModule(ChestStealer.class).setState(false);
                 Client.instance.moduleManager.getModule(KillAura.class).setState(false);
                 Client.instance.moduleManager.getModule(ChestAura.class).setState(false);
+                Client.instance.moduleManager.getModule(Scaffold.class).setState(false);
                 NotificationManager.post(NotificationType.SUCCESS, "Game Ending", "Sending you to next game in " + this.delayValue.getValue() + "s", 5.0f);
             }
             if (text.contains("[起床战争] Game 结束！感谢您的参与！") || text.contains("喜欢 一般 不喜欢")) {
                 NotificationManager.post(NotificationType.SUCCESS, "Game Ending", "Your Health: " + MathUtil.DF_1.format(AutoPlay.mc.thePlayer.getHealth()), 5.0f);
             }
             if (text.contains("玩家") && text.contains("在本局游戏中行为异常")) {
-                mc.thePlayer.sendChatMessage("受害者食用了 RoBin Skyrim Xylitol XiaoDaSense QuickSand 等带后门性客户端导致被幕后操作者ban");
+                mc.thePlayer.sendChatMessage("受害者食用了 RoBin Skyrim Xylitol XiaoDaSense QuickSand 等带后门性客户端导致banned");
                 handleBannedPlayer();
             }
             if (text.contains("开始倒计时: 1 秒")) {
@@ -137,15 +139,14 @@ public class AutoPlay
                     NotificationManager.post(NotificationType.INFO, "Skywars Starting", "喜报，主播你的脑子在正常工作", 5.0f);
                 }
                 if (this.toggleModule.getValue()) {
-                    Client.instance.moduleManager.getModule(KillAura.class).setState(true);
                     Client.instance.moduleManager.getModule(InvCleaner.class).setState(true);
                     Client.instance.moduleManager.getModule(ChestStealer.class).setState(true);
                     Client.instance.moduleManager.getModule(ChestAura.class).setState(true);
                 }
             }
-            if (text.contains("空岛战争")) {
-                NotificationManager.post(NotificationType.WARNING, "Bedwars Warning (Wait 15s)", "Using OldScaffold May Result In A Ban.", 5.0f);
-            }
+            //if (text.contains("空岛战争")) {
+              //  NotificationManager.post(NotificationType.WARNING, "Bedwars Warning (Wait 15s)", "Using OldScaffold May Result In A Ban.", 5.0f);
+            //}
         }
     }
     private void handleBannedPlayer() {

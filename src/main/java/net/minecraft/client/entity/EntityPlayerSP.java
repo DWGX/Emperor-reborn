@@ -1,5 +1,6 @@
 package net.minecraft.client.entity;
 
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 import dev.emperor.Client;
 import dev.emperor.command.Command;
 import dev.emperor.event.EventManager;
@@ -75,8 +76,8 @@ import net.minecraft.util.Util;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
-import net.vialoadingbase.ViaLoadingBase;
-import org.lwjgl.compatibility.util.vector.Vector2f;
+
+import javax.vecmath.Vector2f;
 
 public class EntityPlayerSP
 extends AbstractClientPlayer {

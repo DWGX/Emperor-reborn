@@ -41,7 +41,7 @@ public class Client {
     private ExecutorService executor;
     public static Minecraft mc = Minecraft.getMinecraft();
     public static Client instance;
-    public static String NAME;
+    public static String NAME = "Emperor";
     public static String VERSION;
     public static ResourceLocation cape;
     public String USER = "";
@@ -138,7 +138,6 @@ public class Client {
 
 
     public static void displayGuiScreen(GuiScreen guiScreenIn) {
-
     }
 
     /*
@@ -175,11 +174,5 @@ public class Client {
             IOUtils.closeQuietly(inputstream1);
         }
     }
-
-    public List<Float> getCGUIPosX() {
-        return this.cGUIPosX;
-    }
-
-
 }
 

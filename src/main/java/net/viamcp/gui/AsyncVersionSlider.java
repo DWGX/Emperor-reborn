@@ -1,7 +1,7 @@
 package net.viamcp.gui;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;

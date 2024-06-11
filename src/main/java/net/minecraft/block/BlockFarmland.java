@@ -19,7 +19,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.vialoadingbase.ViaLoadingBase;
+import com.diaoling.client.viaversion.vialoadingbase.ViaLoadingBase;
 
 public class BlockFarmland extends Block
 {
