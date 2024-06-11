@@ -12,12 +12,18 @@ import dev.emperor.module.values.NumberValue;
 import dev.emperor.utils.BlinkUtils;
 import dev.emperor.utils.DebugUtil;
 import dev.emperor.utils.client.MathUtil;
+import dev.emperor.utils.client.PacketUtil;
 import dev.emperor.utils.client.StopWatch;
 import dev.emperor.utils.component.BadPacketsComponent;
 import dev.emperor.utils.player.MoveUtil;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C03PacketPlayer;
+import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
 import net.minecraft.network.play.server.S08PacketPlayerPosLook;
+import net.minecraft.network.play.server.S18PacketEntityTeleport;
+
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Timer
 extends Module {
@@ -26,9 +32,12 @@ extends Module {
     private final BoolValue grimTimer = new BoolValue("Grim-Timer[Balance]", false);
     private final BoolValue spartanBypass = new BoolValue("Spartan-Grim-Timer[Balance-Bypass]", false);
     private final BoolValue timerDebug = new BoolValue("Grim-Timer[Balance-Debug]", false, this.grimTimer::getValue);
+    private final BoolValue storageTransaction = new BoolValue("Storage Transaction", false);
     int balance = 0;
     boolean blinkStart;
     private final StopWatch stopWatch = new StopWatch();
+
+    public static Queue<Packet<?>> incomingClientPackets = new ConcurrentLinkedQueue<>();
 
     public Timer() {
         super("Timer", Category.Movement);
@@ -73,9 +82,20 @@ extends Module {
             BlinkUtils.setBlinkState(false, false, false, false, true, true, false, false, false, false, false);
             this.blinkStart = true;
         }
+
+        if (grimTimer.getValue()) {
+            if (this.balance < 0) {
+                this.toggleAll();
+            }
+        }
     }
 
     private void reset() {
+        Packet<?> packet;
+        while ((packet = incomingClientPackets.poll()) != null) {
+            PacketUtil.sendPacketNoEvent(packet);
+        }
+
         this.balance = 0;
         this.stopWatch.reset();
     }
@@ -83,6 +103,18 @@ extends Module {
     @EventTarget
     public void onPacketReceive(EventPacketReceive event) {
         Packet<?> packet = event.getPacket();
+
+        if (this.grimTimer.getValue()) {
+            if (packet instanceof S18PacketEntityTeleport wrapper) {
+                if (wrapper.getEntityId() == mc.thePlayer.getEntityId()) {
+                    this.toggleAll();
+                }
+            }
+            if (packet instanceof S08PacketPlayerPosLook) {
+                this.toggleAll();
+            }
+        }
+
         if (packet instanceof S08PacketPlayerPosLook && this.grimTimer.getValue() && this.balance != 0) {
             this.balance = 0;
             if (this.blinkStart) {
@@ -108,6 +140,13 @@ extends Module {
             this.balance = (int)((long)this.balance + this.stopWatch.getElapsedTime());
             this.stopWatch.reset();
         }
+
+        if (event.getPacket() instanceof C0FPacketConfirmTransaction wrapper)  {
+            if (storageTransaction.getValue()) {
+                incomingClientPackets.add(wrapper);
+            }
+            event.setCancelled(true);
+        }
     }
 
     @EventTarget
@@ -115,5 +154,13 @@ extends Module {
         this.reset();
         this.state = false;
     }
+
+    public void toggleAll() {
+        this.toggle();
+        if (getModule(Timer.class).getState()) {
+            getModule(Timer.class).toggle();
+        }
+    }
+
 }
 
