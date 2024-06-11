@@ -40,7 +40,7 @@ public class PacketComponent {
     public static void releaseIncoming() {
         Client.instance.getExecutor().submit(() -> {
             Packet packet;
-            while((packet = (Packet)incomingClientPackets.poll()) != null) {
+            while((packet = incomingClientPackets.poll()) != null) {
                 PacketUtil.sendPacketNoEvent(packet);
                 lastReleasedIncomingPacket = packet;
             }
@@ -51,7 +51,7 @@ public class PacketComponent {
     public static void releaseOutgoing() {
         Client.instance.getExecutor().submit(() -> {
             Packet packet;
-            while((packet = (Packet)outgoingServerPackets.poll()) != null) {
+            while((packet = outgoingServerPackets.poll()) != null) {
                 PacketUtil.receivePacketNoEvent(packet);
                 lastReleasedOutgoingPacket = packet;
             }
@@ -61,7 +61,7 @@ public class PacketComponent {
 
     public static void releaseIncoming(int count) {
         for(int i = 0; i < count && !incomingClientPackets.isEmpty(); ++i) {
-            Packet<?> packet = (Packet)incomingClientPackets.poll();
+            Packet<?> packet = incomingClientPackets.poll();
             if (packet != null) {
                 PacketUtil.sendPacketNoEvent(packet);
                 lastReleasedIncomingPacket = packet;
@@ -72,7 +72,7 @@ public class PacketComponent {
 
     public static void releaseOutgoing(int count) {
         for(int i = 0; i < count && !outgoingServerPackets.isEmpty(); ++i) {
-            Packet<?> packet = (Packet)outgoingServerPackets.poll();
+            Packet<?> packet = outgoingServerPackets.poll();
             if (packet != null) {
                 PacketUtil.receivePacketNoEvent(packet);
                 lastReleasedOutgoingPacket = packet;
@@ -85,7 +85,7 @@ public class PacketComponent {
         int packetsToRelease = incomingClientPackets.size() / 2;
 
         for(int i = 0; i < packetsToRelease; ++i) {
-            Packet<?> packet = (Packet)incomingClientPackets.poll();
+            Packet<?> packet = incomingClientPackets.poll();
             if (packet != null) {
                 PacketUtil.sendPacketNoEvent(packet);
                 lastReleasedIncomingPacket = packet;
@@ -98,7 +98,7 @@ public class PacketComponent {
         int packetsToRelease = outgoingServerPackets.size() / 2;
 
         for(int i = 0; i < packetsToRelease; ++i) {
-            Packet<?> packet = (Packet)outgoingServerPackets.poll();
+            Packet<?> packet = outgoingServerPackets.poll();
             if (packet != null) {
                 PacketUtil.receivePacketNoEvent(packet);
                 lastReleasedOutgoingPacket = packet;
@@ -118,7 +118,7 @@ public class PacketComponent {
             } while(!timer.hasTimeElapsed(interval));
 
             for(int i = 0; i < 2 && !incomingClientPackets.isEmpty(); ++i) {
-                Packet<?> packet = (Packet)incomingClientPackets.poll();
+                Packet<?> packet = incomingClientPackets.poll();
                 if (packet != null) {
                     PacketUtil.sendPacketNoEvent(packet);
                     lastReleasedIncomingPacket = packet;
@@ -163,7 +163,7 @@ public class PacketComponent {
     }
 
     public static void addPacket(String queueId, Packet<?> packet) {
-        Queue<Packet<?>> queue = (Queue)customQueues.get(queueId);
+        Queue<Packet<?>> queue = customQueues.get(queueId);
         if (queue != null) {
             queue.add(packet);
         }
@@ -171,10 +171,10 @@ public class PacketComponent {
     }
 
     public static void releasePackets(String queueId) {
-        Queue<Packet<?>> queue = (Queue)customQueues.get(queueId);
+        Queue<Packet<?>> queue = customQueues.get(queueId);
         if (queue != null) {
             while(!queue.isEmpty()) {
-                Packet<?> packet = (Packet)queue.poll();
+                Packet<?> packet = queue.poll();
                 if (packet != null) {
                     PacketUtil.sendPacketNoEvent(packet);
                 }

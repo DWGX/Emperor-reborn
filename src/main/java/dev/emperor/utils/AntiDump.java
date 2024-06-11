@@ -48,19 +48,19 @@ public class AntiDump {
         ArrayList<MethodNode> methods = new ArrayList<MethodNode>();
         MethodNode methodNode = new MethodNode(9, "<clinit>", "()V", null, null);
         InsnList insn = new InsnList();
-        insn.add((AbstractInsnNode)new FieldInsnNode(178, "java/lang/System", "out", "Ljava/io/PrintStream;"));
-        insn.add((AbstractInsnNode)new LdcInsnNode((Object)"Nice try"));
-        insn.add((AbstractInsnNode)new MethodInsnNode(182, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false));
-        insn.add((AbstractInsnNode)new TypeInsnNode(187, "java/lang/Throwable"));
-        insn.add((AbstractInsnNode)new InsnNode(89));
-        insn.add((AbstractInsnNode)new LdcInsnNode((Object)"owned"));
-        insn.add((AbstractInsnNode)new MethodInsnNode(183, "java/lang/Throwable", "<init>", "(Ljava/lang/String;)V", false));
-        insn.add((AbstractInsnNode)new InsnNode(191));
+        insn.add(new FieldInsnNode(178, "java/lang/System", "out", "Ljava/io/PrintStream;"));
+        insn.add(new LdcInsnNode("Nice try"));
+        insn.add(new MethodInsnNode(182, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false));
+        insn.add(new TypeInsnNode(187, "java/lang/Throwable"));
+        insn.add(new InsnNode(89));
+        insn.add(new LdcInsnNode("owned"));
+        insn.add(new MethodInsnNode(183, "java/lang/Throwable", "<init>", "(Ljava/lang/String;)V", false));
+        insn.add(new InsnNode(191));
         methodNode.instructions = insn;
         methods.add(methodNode);
         classNode.methods = methods;
         ClassWriter classWriter = new ClassWriter(2);
-        classNode.accept((ClassVisitor)classWriter);
+        classNode.accept(classWriter);
         return classWriter.toByteArray();
     }
 
