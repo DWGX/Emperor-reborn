@@ -291,6 +291,16 @@ public enum EnumConnectionState
         return oclass == null ? null : (Packet)oclass.newInstance();
     }
 
+
+    public EnumPacketDirection getPacketDirection(Packet<?> packetIn) {
+        for (EnumPacketDirection direction : EnumPacketDirection.values()) {
+            if (((BiMap)this.directionMaps.get(direction)).inverse().containsKey(packetIn.getClass())) {
+                return direction;
+            }
+        }
+        return null;
+    }
+
     public int getId()
     {
         return this.id;

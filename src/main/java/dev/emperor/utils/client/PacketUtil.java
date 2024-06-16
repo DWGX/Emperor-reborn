@@ -3,8 +3,15 @@ package dev.emperor.utils.client;
 import dev.emperor.Client;
 import dev.emperor.event.world.EventPacketSend;
 import dev.emperor.module.modules.misc.Disabler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiDownloadTerrain;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.EnumConnectionState;
+import net.minecraft.network.EnumPacketDirection;
 import net.minecraft.network.Packet;
+import net.minecraft.network.login.server.S00PacketDisconnect;
+import net.minecraft.network.login.server.S01PacketEncryptionRequest;
+import net.minecraft.network.login.server.S02PacketLoginSuccess;
 import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
@@ -79,6 +86,7 @@ import net.minecraft.network.play.server.S46PacketSetCompressionLevel;
 import net.minecraft.network.play.server.S47PacketPlayerListHeaderFooter;
 import net.minecraft.network.play.server.S48PacketResourcePackSend;
 import net.minecraft.network.play.server.S49PacketUpdateEntityNBT;
+import net.minecraft.network.status.server.S00PacketServerInfo;
 
 public class PacketUtil {
     public static void send(Packet<?> packet) {
@@ -86,6 +94,42 @@ public class PacketUtil {
             Client.mc.getNetHandler().addToSendQueue(packet);
         }
     }
+
+    public static boolean isCPacket(Packet<?> packet) {
+        return EnumConnectionState.PLAY.getPacketDirection(packet) == EnumPacketDirection.SERVERBOUND;
+    }
+
+    public static boolean isSPacket(Packet<?> packet) {
+        return !isCPacket(packet);
+    }
+
+    public static boolean isEssential(Packet<?> packet) {
+        Minecraft mc = Minecraft.getMinecraft();
+
+        if (mc.thePlayer == null) return true;
+        if (mc.currentScreen instanceof GuiDownloadTerrain) return true;
+
+        // connection packets
+        if (packet instanceof S00PacketServerInfo) return true;
+        if (packet instanceof S01PacketEncryptionRequest) return true;
+        if (packet instanceof S38PacketPlayerListItem) return true;
+        if (packet instanceof S00PacketDisconnect) return true;
+        if (packet instanceof S21PacketChunkData) return true;
+        if (packet instanceof S01PacketJoinGame) return true;
+        if (packet instanceof S02PacketLoginSuccess) return true;
+        if (packet instanceof S34PacketMaps) return true;
+        if (packet instanceof S05PacketSpawnPosition) return true;
+
+        if (packet instanceof S02PacketChat) return true;
+        if (packet instanceof S45PacketTitle) return true;
+
+
+        if (mc.thePlayer.ticksExisted <= 60) return true;
+//        System.out.println(packet.getClass().getSimpleName());
+
+        return false;
+    }
+
     public static boolean isServerPacket(Packet<?> packet) {
         return packet.toString().toCharArray()[34] == 'S';
     }
